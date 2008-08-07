@@ -1,12 +1,13 @@
 """
-You might not expect two classes called "button" to inherit from two completely different
-things (text.Label and sprite.Sprite), but to create a single abstract superclass would
-be superfluous due to Python's duck typing. May as well let them share a few method
-names and treat them like similar things.
+You might not expect two classes called "button" to inherit from two
+completely different things (text.Label and sprite.Sprite), but to
+create a single abstract superclass would be superfluous due to Python's
+duck typing. May as well let them share a few method names and treat
+them like similar things.
 
-Button is just a text button that calls the action function when it is pressed.
-Header_Button is an image button that acts like a radio button when used the way GameWindow
-uses it.
+Button is just a text button that calls the action function when it is
+pressed. Header_Button is an image button that acts like a radio button
+when used the way GameWindow uses it.
 """
 
 import pyglet, resources
@@ -25,13 +26,18 @@ except:
 		def save_file(default_name=""):
 			cmd = ["zenity", "--file-selection", "--save"]
 			if default_name: cmd.append("--filename=" + default_name)
-			p = subprocess.Popen(cmd, stdout=PIPE)
+			p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
 			if p.wait():
 				return None
 			else:
 				return p.stdout.next().strip()
 		def open_file(type_list = []):
-			return "My Picture.png"
+			cmd = ["zenity", "--file-selection"]
+			p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+			if p.wait():
+				return None
+			else:
+				return p.stdout.next().strip()
 	except:
 		try:	#Windows
 			def save_file(default_name = ""):
