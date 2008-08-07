@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import pyglet, resources, gui, random, time, loader, resources, graphics
+import pyglet, resources, gui, random, time, loader, resources, graphics, selections
 from pyglet.gl import *
 from pyglet.window import key
 from settings import settings, save_settings
@@ -34,12 +34,12 @@ class Splatboard(pyglet.window.Window):
 		self.current_tool = None
 		self.load_tools()
 		
-		self.save_button = gui.Button('Save', self.save, 3, 3)
-		self.open_button = gui.Button('Open', self.open, 3, self.save_button.image.height+8)
+		self.save_button = gui.Button('Save', self.save, self.width-resources.Button.width-3, 3)
+		self.open_button = gui.Button('Open', self.open, self.save_button.x, resources.Button.height+8)
 		self.buttons = [self.save_button, self.open_button]
 		for button in self.buttons: self.push_handlers(button)
 		
-		self.colorpicker = gui.ColorPicker(300,5,250,90)
+		self.colorpicker = gui.ColorPicker(self.width-380,6,250,90,step=15)
 		
 		self.canvas_x = settings['window_width']-settings['canvas_width']
 		self.canvas_y = settings['window_height']-settings['canvas_height']
@@ -76,6 +76,8 @@ class Splatboard(pyglet.window.Window):
 						button2.selected = False
 					button.selected = True
 					button.action()
+			if self.colorpicker.coords_inside(x,y):
+				selections.fill_color = self.colorpicker.get_color(x,y)
 	
 	def on_mouse_drag(self, x, y, dx, dy, button, modifiers):
 		if self.drawing: self.current_tool.keep_drawing(x-self.canvas_x,y-self.canvas_y,dx,dy)

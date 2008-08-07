@@ -10,7 +10,7 @@ pressed. Header_Button is an image button that acts like a radio button
 when used the way GameWindow uses it.
 """
 
-import pyglet, resources, graphics
+import pyglet, resources, graphics, selections
 from settings import settings
 
 try:	#Mac
@@ -113,8 +113,14 @@ class ColorPicker():
 		self.width = float(width)
 		self.height = float(height)
 		self.step = step
+		self.rendered = False
+		self.image = None
 	
-	def draw(self):
+	def draw_initial(self):
+		pyglet.gl.glColor4f(1,1,1,1)
+		graphics.draw_rect(self.x,self.y+self.height/2,self.x+self.width,self.y+self.height)
+		pyglet.gl.glColor4f(0,0,0,1)
+		graphics.draw_rect(self.x,self.y,self.x+self.width,self.y+self.height/2)
 		points = []
 		tempwidth = self.width-self.step
 		for x in xrange(0,int(tempwidth),self.step):
@@ -155,7 +161,33 @@ class ColorPicker():
 			a = x/(self.width-self.step)
 			pyglet.gl.glColor4f(a,a,a,1)
 			graphics.draw_rect(self.x+x,self.y,self.x+x+self.step,self.y+self.step)
+		temp_image = graphics.get_snapshot()
+		self.image = temp_image.get_texture().get_region(self.x, self.y, int(self.width), int(self.height))
 	
+	def draw(self):
+		if self.rendered:
+			self.image.blit(self.x,self.y)
+		else:
+			self.rendered = True
+			self.draw_initial()
+		pyglet.gl.glColor4f(*selections.line_color)
+		graphics.draw_rect(self.x-20,self.y+self.height,self.x-5,self.y+self.height/2+2)
+		pyglet.gl.glColor4f(*selections.fill_color)
+		graphics.draw_rect(self.x-20,self.y,self.x-5,self.y+self.height/2-2)
+		pyglet.gl.glColor4f(0,0,0,1)
+		graphics.draw_rect_outline(self.x-20,self.y+self.height,self.x-5,self.y+self.height/2+2)
+		graphics.draw_rect_outline(self.x-20,self.y,self.x-5,self.y+self.height/2-2)
 	
 	def get_color(self, x, y):
-		pass
+		x -= self.x
+		y -= self.y
+		data = self.image.get_image_data()
+		data = data.get_data('RGB',len('RGB')*self.image.width)
+		data = map(ord, list(data))
+		r = data[y*self.image.width*3+x*3]
+		g = data[y*self.image.width*3+x*3+1]
+		b = data[y*self.image.width*3+x*3+2]
+		return (float(r)/255.0,float(g)/255.0,float(b)/255.0,1.0)
+	
+	def coords_inside(self, x, y):
+		return x >= self.x and y >= self.y and x <= self.x + self.width and y <= self.y + self.height
