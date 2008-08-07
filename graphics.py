@@ -16,5 +16,5 @@ def draw_rect_outline(x1, y1, x2, y2):
 	pyglet.graphics.draw(5, pyglet.gl.GL_LINE_STRIP, 
 		('v2f', (x1, y1, x1, y2, x2, y2, x2, y1, x1, y1)))
 
-def get_canvas():
+def get_snapshot():
 	return pyglet.image.get_buffer_manager().get_color_buffer().image_data
