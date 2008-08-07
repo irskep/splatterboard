@@ -10,7 +10,7 @@ pressed. Header_Button is an image button that acts like a radio button
 when used the way GameWindow uses it.
 """
 
-import pyglet, resources
+import pyglet, resources, graphics
 from settings import settings
 
 try:	#Mac
@@ -106,36 +106,56 @@ class Button():
 	def coords_in_button(self, x, y):
 		return x >= self.x and y >= self.y and x <= self.x + self.image.width and y <= self.y + self.image.height
 
-class TextButton(pyglet.text.Label):
-	def __init__(self, text, action, x, y, font_size=20,
-				color=(0,0,0,255), down_color=(100,100,100,255), over_color=(50,50,50,255)):
-		super(TextButton, self).__init__(text, font_size=font_size,
-										x=x, y=y, anchor_x = 'left', anchor_y = 'bottom', color=color)
-		self.font_size_base = font_size
-		self.action = action
-		self.original_color = color
-		self.down_color = down_color
-		self.over_color = over_color
+class ColorPicker():
+	def __init__(self, x, y, width, height, step=10):
+		self.x = x
+		self.y = y
+		self.width = float(width)
+		self.height = float(height)
+		self.step = step
 	
-	def on_mouse_motion(self, x, y, dx, dy):
-		if self.coords_in_button(x,y): self.color = self.over_color
-		else: self.color = self.original_color
+	def draw(self):
+		points = []
+		tempwidth = self.width-self.step
+		for x in xrange(0,int(tempwidth),self.step):
+			r, g, b = 0.0, 0.0, 0.0
+			if x < tempwidth/6:
+				r=1.0										#full
+				g = x/(tempwidth/6)							#increasing
+				b = 0										#zero
+			elif x < tempwidth/3:
+				r = 1.0 - (x-tempwidth/6)/(tempwidth/6)		#decreasing
+				g = 1.0										#full
+				b = 0										#zero
+			elif x < tempwidth/2:
+				r = 0										#zero
+				g = 1.0										#full
+				b = (x-tempwidth/3) / (tempwidth/6)			#increasing
+			elif x < tempwidth/3*2:
+				r = 0										#zero
+				g = 1.0 - (x-tempwidth/2)/(tempwidth/6)	#decreasing
+				b = 1.0										#full
+			elif x < tempwidth/6*5:
+				r = (x-tempwidth/3*2)/(tempwidth/6)		#increasing
+				g = 0										#zero
+				b = 1.0										#full
+			else:
+				r = 1.0										#full
+				g = 0										#zero
+				b = 1.0 - (x-tempwidth/6*5)/(tempwidth/6) #decreasing
+			for y in xrange(self.step,int(self.height),self.step):
+				a = (y-self.step) / self.height
+				if a <= 0.5:
+					a = a*2*0.8+0.2
+					pyglet.gl.glColor4f(r*a,g*a,b*a,1.0)
+				else:
+					a = (a-0.5)*2.1
+					pyglet.gl.glColor4f(r+(1-r)*a,g+(1-g)*a,b+(1-b)*a,1.0)
+				graphics.draw_rect(self.x+x,self.y+y,self.x+x+self.step,self.y+y+self.step)
+			a = x/(self.width-self.step)
+			pyglet.gl.glColor4f(a,a,a,1)
+			graphics.draw_rect(self.x+x,self.y,self.x+x+self.step,self.y+self.step)
 	
-	def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
-		self.on_mouse_press(x,y,None,None)
-		self.on_mouse_motion(x,y,dx,dy)
 	
-	def on_mouse_press(self, x, y, button, modifiers):
-		if self.coords_in_button(x,y):
-			self.color = self.down_color
-		else:
-			self.color = self.original_color
-	
-	def on_mouse_release(self, x, y, button, modifiers):
-		if self.coords_in_button(x,y): self.color = self.over_color
-		else: self.color = self.original_color
-		if self.coords_in_button(x,y):
-			self.action()
-	
-	def coords_in_button(self, x, y):
-		return x >= self.x and y >= self.y and x <= self.x + self.content_width and y <= self.y + self.content_height
+	def get_color(self, x, y):
+		pass
