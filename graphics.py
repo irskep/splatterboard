@@ -1,3 +1,4 @@
+import math
 import pyglet.graphics, pyglet.image, pyglet.gl
 
 _canvas_pre = None
@@ -15,6 +16,34 @@ def draw_rect(x1, y1, x2, y2):
 def draw_rect_outline(x1, y1, x2, y2):
 	pyglet.graphics.draw(5, pyglet.gl.GL_LINE_STRIP, 
 		('v2f', (x1, y1, x1, y2, x2, y2, x2, y1, x1, y1)))
+
+def concat(it):
+	return (y for x in it for y in x)
+
+def iter_ellipse(x1, y1, x2, y2):
+	xrad = abs((x2-x1) / 2.0)
+	yrad = abs((y2-y1) / 2.0)
+	x = (x1+x2) / 2.0
+	y = (y1+y2) / 2.0
+
+	# use the average of the radii to compute the angle step
+	step = 8.0
+	rad = (xrad+yrad)/2
+	rad_ = max(min(step / rad / 2.0, 1), -1)
+	da = 2 * math.asin(rad_)
+	a = 0.0
+	while a <= math.pi * 2:
+		yield (x + math.cos(a) * xrad, y + math.sin(a) * yrad)
+		a += da
+
+def draw_ellipse(x1, y1, x2, y2):
+	points = list(concat(iter_ellipse(x1, y1, x2, y2)))
+	pyglet.graphics.draw(len(points)/2, pyglet.gl.GL_TRIANGLE_FAN, ('v2f', points))
+
+def draw_ellipse_outline(x1, y1, x2, y2):
+	points = list(concat(iter_ellipse(x1, y1, x2, y2)))
+	points.extend(points[:2])
+	pyglet.graphics.draw(len(points)/2, pyglet.gl.GL_LINE_STRIP, ('v2f', points))
 
 def draw_quad(*args):
 	pyglet.graphics.draw(4, pyglet.gl.GL_QUADS, ('v2f', args))
