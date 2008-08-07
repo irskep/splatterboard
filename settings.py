@@ -15,8 +15,10 @@ save_settings()
 
 def default_settings():
 	return dict(
-					canvas_width=1024,
-					canvas_height=768,
+					window_width=1024,
+					window_height=768,
+					canvas_width=1024-51,
+					canvas_height=768-100,
 					fullscreen=False,
 					volume=1.0
 					)
