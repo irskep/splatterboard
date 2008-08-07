@@ -44,11 +44,13 @@ class Splatboard(pyglet.window.Window):
 		i = 0
 		if not self.drawing:
 			graphics.set_color(0.8, 0.8, 0.8, 1)
-			graphics.draw_rect(0,0,self.canvas_x,self.height)
-			graphics.draw_rect(self.canvas_x,0,self.width,self.canvas_y)
+			graphics.draw_rect(0,self.canvas_y,self.canvas_x,self.height)
+			graphics.draw_rect(0,0,self.width,self.canvas_y)
 			graphics.set_color(1,1,1,1)
-			for button in self.toolbar:
-				button.draw()
+			for button in self.toolbar: button.draw()
+			graphics.set_color(0,0,0,1)
+			graphics.draw_line(0, self.canvas_y, self.width, self.canvas_y)
+			graphics.draw_line(self.canvas_x, self.canvas_y, self.canvas_x, self.height)
 	
 	def on_key_press(self, symbol, modifiers):
 		if symbol == key.ESCAPE: return True	#stop Pyglet from quitting
