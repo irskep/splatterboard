@@ -27,11 +27,15 @@ def iter_ellipse(x1, y1, x2, y2):
 	y = (y1+y2) / 2.0
 
 	# use the average of the radii to compute the angle step
+	# shoot for segments that are 8 pixels long
 	step = 8.0
 	rad = max((xrad+yrad)/2, 0.01)
 	rad_ = max(min(step / rad / 2.0, 1), -1)
-	da = 2 * math.asin(rad_)
-	da = min(da, math.pi / 16)
+
+	# but if the circle is too small, that would be ridiculous
+	# use pi/16 instead.
+	da = min(2 * math.asin(rad_), math.pi / 16)
+
 	a = 0.0
 	while a <= math.pi * 2:
 		yield (x + math.cos(a) * xrad, y + math.sin(a) * yrad)
