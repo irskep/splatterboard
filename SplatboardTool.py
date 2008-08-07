@@ -12,11 +12,10 @@ class Tool:
 		pass
 	
 	def start_drawing(self, x, y):
-		self.canvas_pre = pyglet.image.get_buffer_manager().get_color_buffer().image_data
+		pass
 	
 	def keep_drawing(self, x, y, dx, dy):
-		pyglet.gl.glColor4f(1,1,1,1)
-		self.canvas_pre.blit(0,0)
+		pass
 	
 	def stop_drawing(self, x, y):
 		pass
