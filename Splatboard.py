@@ -34,8 +34,8 @@ class Splatboard(pyglet.window.Window):
 		self.current_tool = None
 		self.load_tools()
 		
-		self.save_button = gui.TextButton('Save', self.save, 5, 5)
-		self.open_button = gui.TextButton('Open', self.open, 5, self.save_button.content_height+10)
+		self.save_button = gui.Button('Save', self.save, 3, 3)
+		self.open_button = gui.Button('Open', self.open, 3, self.save_button.image.height+8)
 		self.buttons = [self.save_button, self.open_button]
 		
 		for button in self.buttons:
@@ -64,11 +64,11 @@ class Splatboard(pyglet.window.Window):
 		if symbol == key.ESCAPE: return True	#stop Pyglet from quitting
 	
 	def on_mouse_press(self, x, y, button, modifiers):
-		if x > self.toolbar_x:
+		if x > self.canvas_x and y > self.canvas_y:
 			self.drawing = True
 			self.enter_canvas_mode()
 			self.current_tool.start_drawing(x-self.canvas_x,y-self.canvas_y)
-		elif y > self.toolbar_y:
+		else:
 			for button in self.toolbar:
 				if button.coords_in_button(x,y):
 					for button2 in self.toolbar:

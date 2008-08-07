@@ -22,8 +22,8 @@ class Eraser(SplatboardTool.Tool):
 		x3, y3 = self.lastx+brush_size*math.cos(angle+math.pi/2), self.lasty+brush_size*math.sin(angle+math.pi/2)
 		x4, y4 = self.lastx+brush_size*math.cos(angle-math.pi/2), self.lasty+brush_size*math.sin(angle-math.pi/2)
 		graphics.draw_quad(x1, y1, x3, y3, x4, y4, x2, y2)
-		graphics.draw_line(x1, y1, x3, y3)
-		graphics.draw_line(x2, y2, x4, y4)
+		#graphics.draw_line(x1, y1, x3, y3)
+		#graphics.draw_line(x2, y2, x4, y4)
 		self.lastx, self.lasty = x, y
 	
 	def stop_drawing(self, x, y):	

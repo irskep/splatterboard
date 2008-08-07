@@ -55,10 +55,45 @@ class PaletteButton():
 		color = (1,1,1,1)
 		if self.selected: color = (0.8, 0.8, 0.8, 1)
 		pyglet.gl.glColor4f(*color)
-		resources.Button.blit(self.x,self.y)
+		resources.PaletteButton.blit(self.x,self.y)
 		pyglet.gl.glColor4f(1,1,1,1)
 		self.image.blit(self.x,self.y)
 	
+	def coords_in_button(self, x, y):
+		return x >= self.x and y >= self.y and x <= self.x + self.image.width and y <= self.y + self.image.height
+
+class Button():
+	def __init__(self, text, action, x, y):
+		self.action = action
+		self.x, self.y = x, y
+		self.selected = False
+		self.image = resources.Button
+		self.label = pyglet.text.Label(text, font_size=20, color=(0,0,0,255),
+										x=self.x+self.image.width/2, y=self.y+self.image.height/2,
+										anchor_x='center', anchor_y='center')
+
+	def draw(self):
+		color = (1,1,1,1)
+		if self.selected: color = (0.8, 0.8, 0.8, 1)
+		pyglet.gl.glColor4f(*color)
+		self.image.blit(self.x,self.y)
+		pyglet.gl.glColor4f(1,1,1,1)
+		self.label.draw()
+	
+	def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
+		self.on_mouse_press(x,y,None,None)
+	
+	def on_mouse_press(self, x, y, button, modifiers):
+		if self.coords_in_button(x,y):
+			self.selected = True
+		else:
+			self.selected = False
+	
+	def on_mouse_release(self, x, y, button, modifiers):
+		if self.selected:
+			self.action()
+		self.selected = False
+
 	def coords_in_button(self, x, y):
 		return x >= self.x and y >= self.y and x <= self.x + self.image.width and y <= self.y + self.image.height
 
