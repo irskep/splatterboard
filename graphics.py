@@ -28,7 +28,7 @@ def iter_ellipse(x1, y1, x2, y2):
 
 	# use the average of the radii to compute the angle step
 	step = 8.0
-	rad = (xrad+yrad)/2
+	rad = max((xrad+yrad)/2, 0.01)
 	rad_ = max(min(step / rad / 2.0, 1), -1)
 	da = 2 * math.asin(rad_)
 	da = min(da, math.pi / 16)
