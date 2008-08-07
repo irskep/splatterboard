@@ -59,6 +59,8 @@ class Splatboard(pyglet.window.Window):
 		elif y > self.toolbar_y:
 			for button in self.toolbar:
 				if button.coords_in_button(x,y):
+					for button2 in self.toolbar:
+						button2.selected = False
 					button.selected = True
 					button.action()
 	
