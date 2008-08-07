@@ -8,7 +8,7 @@ class Line(SplatboardTool.Tool):
 	
 	def start_drawing(self, x, y):	
 		self.x1, self.y1 = x, y
-		self.canvas_pre = graphics.get_canvas()
+		self.canvas_pre = graphics.get_snapsho()
 	
 	def keep_drawing(self, x, y, dx, dy):
 		self.x2, self.y2 = x, y
