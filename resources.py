@@ -9,6 +9,9 @@
 
 import pyglet, os
 
+supported_image_formats = [	'bmp','dds','exif','gif','jpg','jpeg','jp2','jpx',
+							'pcx','png','pnm','ras','tga','tif','tiff', 'xbm', 'xpm']
+
 #Change this to fit your folder structure
 pyglet.resource.path=['Tools','Resources']
 pyglet.resource.reindex()

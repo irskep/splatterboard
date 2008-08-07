@@ -34,6 +34,13 @@ class Splatboard(pyglet.window.Window):
 		self.current_tool = None
 		self.load_tools()
 		
+		self.save_button = gui.TextButton('Save', self.save, 5, 5)
+		self.open_button = gui.TextButton('Open', self.open, 5, self.save_button.content_height+10)
+		self.buttons = [self.save_button, self.open_button]
+		
+		for button in self.buttons:
+			self.push_handlers(button)
+		
 		self.canvas_x = settings['window_width']-settings['canvas_width']
 		self.canvas_y = settings['window_height']-settings['canvas_height']
 		
@@ -48,6 +55,7 @@ class Splatboard(pyglet.window.Window):
 			graphics.draw_rect(0,0,self.width,self.canvas_y)
 			graphics.set_color(1,1,1,1)
 			for button in self.toolbar: button.draw()
+			for button in self.buttons: button.draw()
 			graphics.set_color(0,0,0,1)
 			graphics.draw_line(0, self.canvas_y, self.width, self.canvas_y)
 			graphics.draw_line(self.canvas_x, self.canvas_y, self.canvas_x, self.height)
@@ -85,13 +93,15 @@ class Splatboard(pyglet.window.Window):
 		self.tools = loader.import_libs('Tools')
 		self.sorted_tools = self.tools.values()
 		self.sorted_tools.sort(key=lambda tool:tool.priority)
-		self.current_tool = self.sorted_tools[0].default
 		y = self.height
 		for tool in self.sorted_tools:
 			x = tool.image.width
 			y -= tool.image.height
 			new_button = gui.PaletteButton(tool.image, 0, y, self.get_gui_action(tool.default))
 			self.toolbar.append(new_button)
+		
+		self.current_tool = self.sorted_tools[0].default
+		self.toolbar[0].selected = True
 		
 		self.toolbar_x, self.toolbar_y = x, y
 	
@@ -113,6 +123,22 @@ class Splatboard(pyglet.window.Window):
 		glLoadIdentity()
 		glOrtho(0, self.width, 0, self.height, -1, 1)
 		glMatrixMode(gl.GL_MODELVIEW)
+	
+	def open(self):
+		path = gui.open_file(type_list = resources.supported_image_formats)
+		if path != None:
+			self.enter_canvas_mode()
+			glColor4f(1,1,1,1)
+			graphics.draw_rect(0,0,settings['canvas_width'],settings['canvas_height'])
+			pyglet.image.load(path).blit(0,0)
+			self.exit_canvas_mode()
+	
+	def save(self):
+		path = gui.save_file(default_name="My Picture.png")
+		if path != None:
+			self.enter_canvas_mode()
+			graphics.get_snapshot().save(path)
+			self.exit_canvas_mode()
 
 if __name__ == '__main__':
 	random.seed(time.time())

@@ -18,7 +18,7 @@ def default_settings():
 					window_width=1024,
 					window_height=768,
 					canvas_width=1024-52,
-					canvas_height=768-100,
+					canvas_height=768-102,
 					fullscreen=False,
 					volume=1.0
 					)

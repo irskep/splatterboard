@@ -12,6 +12,38 @@ uses it.
 import pyglet, resources
 from settings import settings
 
+try:	#Mac
+	import EasyDialogs
+	def save_file(default_name=""):
+		return EasyDialogs.AskFileForSave(savedFileName = default_name)
+	def open_file(type_list = []):
+		return EasyDialogs.AskFileForOpen()
+except:
+	try:	#GTK
+		import subprocess
+
+		def save_file(default_name=""):
+			cmd = ["zenity", "--file-selection", "--save"]
+			if default_name: cmd.append("--filename=" + default_name)
+			p = subprocess.Popen(cmd, stdout=PIPE)
+			if p.wait():
+				return None
+			else:
+				return p.stdout.next().strip()
+		def open_file(type_list = []):
+			return "My Picture.png"
+	except:
+		try:	#Windows
+			def save_file(default_name = ""):
+				return "My Picture.png"
+			def open_file(type_list = []):
+				return "My Picture.png"
+		except:	#Sad, sad default
+			def save_file(default_name = ""):
+				return "My Picture.png"
+			def open_file(type_list = []):
+				return "My Picture.png"
+
 class PaletteButton():
 	def __init__(self, image, x, y, action):
 		self.image = image
@@ -31,18 +63,19 @@ class PaletteButton():
 		return x >= self.x and y >= self.y and x <= self.x + self.image.width and y <= self.y + self.image.height
 
 class TextButton(pyglet.text.Label):
-	def __init__(self, text, action, x, y, font_size=40):
+	def __init__(self, text, action, x, y, font_size=20,
+				color=(0,0,0,255), down_color=(100,100,100,255), over_color=(50,50,50,255)):
 		super(TextButton, self).__init__(text, font_size=font_size,
-										x=x, y=y, anchor_x = 'center', anchor_y = 'center',
-										color=(100,100,100,255))
+										x=x, y=y, anchor_x = 'left', anchor_y = 'bottom', color=color)
 		self.font_size_base = font_size
 		self.action = action
+		self.original_color = color
+		self.down_color = down_color
+		self.over_color = over_color
 	
 	def on_mouse_motion(self, x, y, dx, dy):
-		if self.coords_in_button(x,y):
-			self.font_size = self.font_size_base * 1.1
-		else:
-			self.font_size = self.font_size_base
+		if self.coords_in_button(x,y): self.color = self.over_color
+		else: self.color = self.original_color
 	
 	def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
 		self.on_mouse_press(x,y,None,None)
@@ -50,14 +83,15 @@ class TextButton(pyglet.text.Label):
 	
 	def on_mouse_press(self, x, y, button, modifiers):
 		if self.coords_in_button(x,y):
-			self.color = (80,80,80,255)
+			self.color = self.down_color
 		else:
-			self.color = (100,100,100,255)
+			self.color = self.original_color
 	
 	def on_mouse_release(self, x, y, button, modifiers):
-		self.color = (100,100,100,255)
+		if self.coords_in_button(x,y): self.color = self.over_color
+		else: self.color = self.original_color
 		if self.coords_in_button(x,y):
 			self.action()
 	
 	def coords_in_button(self, x, y):
-		return abs(x-settings['game_offset_x']-self.x) < self.content_width/2 and abs(y-settings['game_offset_y']-self.y) < self.content_height/2
+		return x >= self.x and y >= self.y and x <= self.x + self.content_width and y <= self.y + self.content_height
