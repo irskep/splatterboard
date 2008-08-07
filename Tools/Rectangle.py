@@ -23,5 +23,5 @@ class Rectangle(SplatboardTool.Tool):
 		self.keep_drawing(x, y, 0, 0)
 
 default = Rectangle()
-priority = 70
+priority = 81
 image = resources.Rectangle

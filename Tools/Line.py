@@ -21,5 +21,5 @@ class Line(SplatboardTool.Tool):
 		self.keep_drawing(x, y, 0, 0)
 
 default = Line()
-priority = 50
+priority = 80
 image = resources.Line
