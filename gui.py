@@ -23,6 +23,9 @@ except:
 	try:	#GTK
 		import subprocess
 
+		test = subprocess.Popen(["zenity"], stderr=subprocess.PIPE)
+		test.wait()
+
 		def save_file(default_name=""):
 			cmd = ["zenity", "--file-selection", "--save"]
 			if default_name: cmd.append("--filename=" + default_name)
