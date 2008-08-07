@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import pyglet, resources, gui, random, time, loader, resources, graphics
 from pyglet.gl import *
 from pyglet.window import key
