@@ -31,6 +31,7 @@ def iter_ellipse(x1, y1, x2, y2):
 	rad = (xrad+yrad)/2
 	rad_ = max(min(step / rad / 2.0, 1), -1)
 	da = 2 * math.asin(rad_)
+	da = min(da, math.pi / 16)
 	a = 0.0
 	while a <= math.pi * 2:
 		yield (x + math.cos(a) * xrad, y + math.sin(a) * yrad)
