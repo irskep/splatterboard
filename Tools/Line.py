@@ -24,3 +24,4 @@ default = Line()
 priority = 80
 group = 'Primitives'
 image = resources.Line
+cursor = graphics.cursor['CURSOR_CROSSHAIR']

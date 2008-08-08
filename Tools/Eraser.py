@@ -34,3 +34,4 @@ default = Eraser()
 priority = 61
 group = 'Drawing'
 image = resources.Eraser
+cursor = None

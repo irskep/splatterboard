@@ -26,3 +26,4 @@ default = Ellipse()
 priority = 82
 group = 'Primitives'
 image = resources.Ellipse
+cursor = graphics.cursor['CURSOR_CROSSHAIR']

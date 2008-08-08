@@ -8,3 +8,4 @@ default = Eyedropper()
 priority = 100
 group = 'Drawing'
 image = resources.Eyedropper
+cursor = None

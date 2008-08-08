@@ -1,10 +1,13 @@
-import random, SplatboardTool, selections, resources, graphics
+import random, SplatboardTool, selections, resources, graphics, pyglet
 
 class Rectangle(SplatboardTool.Tool):
 	"""Simple rect tool"""
 	
 	canvas_pre = None
 	x1, y1, x2, y2 = 0.0, 0.0, 0.0, 0.0
+	
+	def select(self):
+		pyglet.window.set_mouse_cursor(cursor)
 	
 	def start_drawing(self, x, y):	
 		self.x1, self.y1 = x, y
@@ -26,3 +29,4 @@ default = Rectangle()
 priority = 81
 group = 'Primitives'
 image = resources.Rectangle
+cursor = graphics.cursor['CURSOR_CROSSHAIR']

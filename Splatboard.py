@@ -9,19 +9,35 @@ from collections import defaultdict
 class Splatboard(pyglet.window.Window):
 	
 	def __init__(self):
-		super(Splatboard, self).__init__(	width=settings['window_width'],
-											height=settings['window_height'],
-											resizable=False, vsync=False
-										)
+		
+		#Init window. Fullscreen disabled because it is broken due to double buffering.
+		screen = pyglet.window.get_platform().get_default_display().get_default_screen()
+		
+		if screen.width <= 1024 or screen.height <= 768:
+			settings['fullscreen'] = True
+			settings['fit_window_to_screen'] = True
+		if settings['fit_window_to_screen']:
+			settings['window_width'] = screen.width-100
+			settings['window_height'] = screen.height-100
+		settings['fullscreen'] = False
+		if not settings['fullscreen']:
+			super(Splatboard, self).__init__(	width=settings['window_width'],
+												height=settings['window_height'],
+												resizable=False, vsync=False
+											)
+		else:
+			super(Splatboard, self).__init__( fullscreen=True, resizable=False, vsync=True)
+		
 		
 		self.set_caption('Splatboard')
-		self.set_fullscreen(settings['fullscreen'])
 		
 		#enable alpha blending, line smoothing
 		glEnable(GL_BLEND)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 		glEnable(GL_LINE_SMOOTH)
 		glHint(GL_LINE_SMOOTH_HINT,GL_NICEST)
+		
+		self.init_cursors()
 		
 		#white background
 		glClearColor(1,1,1,1);
@@ -55,13 +71,19 @@ class Splatboard(pyglet.window.Window):
 		self.max_undo = 5	#arbitrary
 		
 		#shortcuts
-		self.canvas_x = settings['window_width']-settings['canvas_width']
-		self.canvas_y = settings['window_height']-settings['canvas_height']
+		self.canvas_x = settings['toolbar_width']
+		self.canvas_y = settings['buttonbar_height']
 		
 		#so that mouse handling methods know what to do
 		self.drawing = False
 		
 		pyglet.clock.schedule(self.on_draw)
+	
+	def init_cursors(self):
+		graphics.cursor['CURSOR_CROSSHAIR'] = self.get_system_mouse_cursor(self.CURSOR_CROSSHAIR)
+		graphics.cursor['CURSOR_HAND'] = self.get_system_mouse_cursor(self.CURSOR_HAND)
+		graphics.cursor['CURSOR_TEXT'] = self.get_system_mouse_cursor(self.CURSOR_TEXT)
+		graphics.cursor['CURSOR_WAIT'] = self.get_system_mouse_cursor(self.CURSOR_WAIT)
 	
 	#------------EVENT HANDLING------------#
 	def on_draw(self, dt=0):
@@ -86,6 +108,15 @@ class Splatboard(pyglet.window.Window):
 	def on_key_press(self, symbol, modifiers):
 		if symbol == key.ESCAPE: return True	#stop Pyglet from quitting
 	
+	def on_mouse_motion(self, x, y, dx, dy):
+		lastx, lasty = x-dx, y-dy
+		if x > self.canvas_x and y > self.canvas_y:
+			if not (lastx > self.canvas_x and lasty > self.canvas_y) and self.current_tool.cursor != None:
+				self.set_mouse_cursor(self.current_tool.cursor)
+		else:
+			if lastx > self.canvas_x and lasty > self.canvas_y:
+				self.set_mouse_cursor(self.get_system_mouse_cursor(self.CURSOR_DEFAULT))
+	
 	def on_mouse_press(self, x, y, button, modifiers):
 		if x > self.canvas_x and y > self.canvas_y:
 			self.drawing = True
@@ -106,6 +137,7 @@ class Splatboard(pyglet.window.Window):
 				selections.set_color(self.colorpicker.get_color(x,y))
 	
 	def on_mouse_drag(self, x, y, dx, dy, button, modifiers):
+		self.on_mouse_motion(x,y,dx,dy)
 		if self.drawing: self.current_tool.keep_drawing(x-self.canvas_x,y-self.canvas_y,dx,dy)
 	
 	def on_mouse_release(self, x, y, button, modifiers):
@@ -141,6 +173,7 @@ class Splatboard(pyglet.window.Window):
 			
 			i = 0
 			for tool in self.grouped_tools[group]:
+				tool.default.cursor = tool.cursor
 				i += 1
 				x = self.toolsize
 				#two to a row
@@ -160,10 +193,11 @@ class Splatboard(pyglet.window.Window):
 	
 	def enter_canvas_mode(self):
 		print "Entering drawing mode"
-		glViewport(self.canvas_x,self.canvas_y,settings['canvas_width'],settings['canvas_height'])
+		glViewport(self.canvas_x,self.canvas_y,
+			settings['window_width']-self.canvas_x,settings['window_height']-self.canvas_y)
 		glMatrixMode(gl.GL_PROJECTION)
 		glLoadIdentity()
-		glOrtho(0, settings['canvas_width'], 0, settings['canvas_height'], -1, 1)
+		glOrtho(0, settings['window_width']-self.canvas_x, 0, settings['window_height']-self.canvas_y, -1, 1)
 		glMatrixMode(gl.GL_MODELVIEW)
 	
 	def exit_canvas_mode(self):
@@ -180,7 +214,7 @@ class Splatboard(pyglet.window.Window):
 		if path != None:
 			self.enter_canvas_mode()
 			glColor4f(1,1,1,1)
-			graphics.draw_rect(0,0,settings['canvas_width'],settings['canvas_height'])
+			graphics.draw_rect(0,0,settings['window_width']-self.canvas_x,settings['window_height']-self.canvas_y)
 			pyglet.image.load(path).blit(0,0)
 			self.exit_canvas_mode()
 	

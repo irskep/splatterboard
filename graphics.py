@@ -3,6 +3,8 @@ import pyglet.graphics, pyglet.image, pyglet.gl
 
 _canvas_pre = None
 
+cursor = {}	#set by Splatboard.py - pyglet stores cursors in an instance of Window.
+
 def set_color(r=0.0, g=0.0, b=0.0, a=1.0, color=None):
 	if color is not None: pyglet.gl.glColor4f(*color)
 	else: pyglet.gl.glColor4f(r,g,b,a)
@@ -56,9 +58,9 @@ def draw_quad(*args):
 def get_snapshot():
 	if sys.platform == 'Linux':
 		return pyglet.image.get_buffer_manager().get_color_buffer().get_region(
-			settings.settings['window_width']-settings['canvas_width'],
-			settings.settings['window_height']-settings['canvas_height'],
-			settings['canvas_width'], settings['canvas_height']
+			settings['toolbar_width'], settings['buttonbar_height'],
+			settings['window_width']-settings['toolbar_width'],
+			settings['window_height']-settings['buttonbar_height']
 		)
 	return pyglet.image.get_buffer_manager().get_color_buffer().image_data
 
