@@ -6,9 +6,6 @@ class Rectangle(SplatboardTool.Tool):
 	canvas_pre = None
 	x1, y1, x2, y2 = 0.0, 0.0, 0.0, 0.0
 	
-	def select(self):
-		pyglet.window.set_mouse_cursor(cursor)
-	
 	def start_drawing(self, x, y):	
 		self.x1, self.y1 = x, y
 		self.canvas_pre = graphics.get_snapshot()
