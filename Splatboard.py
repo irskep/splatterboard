@@ -67,15 +67,18 @@ class Splatboard(pyglet.window.Window):
 	def on_draw(self, dt=0):
 		i = 0
 		if not self.drawing:
+			#toolbar background
 			graphics.set_color(0.8, 0.8, 0.8, 1)
 			graphics.draw_rect(0,self.canvas_y,self.canvas_x,self.height)
 			graphics.draw_rect(0,0,self.width,self.canvas_y)
+			#buttons
 			graphics.set_color(1,1,1,1)
-			for button in self.toolbar: button.draw()
-			for button in self.buttons: button.draw()
-			for label in self.labels: label.draw()
-			self.colorpicker.draw()
-			self.colordisplay.draw()
+			for button in self.toolbar: button.draw()	#toolbar buttons
+			for button in self.buttons: button.draw()	#bottom buttons
+			for label in self.labels: label.draw()		#text labels
+			self.colorpicker.draw()						#color picker
+			self.colordisplay.draw()					#line/fill color selector
+			#divider lines
 			graphics.set_color(0,0,0,1)
 			graphics.draw_line(0, self.canvas_y, self.width, self.canvas_y)
 			graphics.draw_line(self.canvas_x, self.canvas_y, self.canvas_x, self.height)
@@ -91,11 +94,14 @@ class Splatboard(pyglet.window.Window):
 			self.current_tool.start_drawing(x-self.canvas_x,y-self.canvas_y)
 		else:
 			for button in self.toolbar:
+				#clear selection
 				if button.coords_in_button(x,y):
 					for button2 in self.toolbar:
 						button2.selected = False
+					#select proper button
 					button.selected = True
 					button.action()
+			#pick a color if click was in color picker
 			if self.colorpicker.coords_inside(x,y):
 				selections.set_color(self.colorpicker.get_color(x,y))
 	
@@ -114,39 +120,43 @@ class Splatboard(pyglet.window.Window):
 	
 	#------------TOOL THINGS------------#
 	def load_tools(self):
+		#Import everything in the Tools directory, shove them in a dictionary
 		self.tools = loader.import_libs('Tools')
-		self.sorted_tools = self.tools.values()
-		self.sorted_tools.sort(key=lambda tool:tool.priority)
+		#Sort them by their priority property
+		self.sorted_tools = sorted(self.tools.values(), key=lambda tool:tool.priority)
+		
+		#Categorize them by group - remain sorted
 		self.grouped_tools = defaultdict(list)
 		for tool in self.sorted_tools:
 			self.grouped_tools[tool.group].append(tool)
 		
+		#Create appropriate buttons in appropriate locations
 		y = self.height
 		for group in sorted(self.grouped_tools.keys()):
+			#group label
 			self.labels.append(pyglet.text.Label(group, x=self.toolsize, y=y-self.toolsize/3-3,
 								font_size=self.toolsize/4, anchor_x='center',anchor_y='bottom',
 								color=(0,0,0,255)))
 			y -= self.toolsize/3+3
+			
 			i = 0
 			for tool in self.grouped_tools[group]:
 				i += 1
 				x = self.toolsize
+				#two to a row
 				if i % 2 != 0:
 					x = 0
 					y -= self.toolsize
-				new_button = gui.PaletteButton(tool.image, x, y, self.get_gui_action(tool.default))
+				new_button = gui.PaletteButton(tool.image, x, y, self.get_toolbar_button_action(tool.default))
 				self.toolbar.append(new_button)
-		
+		#select pencil
 		self.current_tool = self.sorted_tools[0].default
 		self.toolbar[0].selected = True
 	
-	def get_gui_action(self, tool):
+	def get_toolbar_button_action(self, tool):	#decorator for toolbar buttons
 		def action():
 			self.current_tool = tool
 		return action
-	
-	def swap_colors(self):
-		selections.fill_color, selections.line_color = selections.line_color, selections.fill_color
 	
 	def enter_canvas_mode(self):
 		print "Entering drawing mode"
@@ -183,12 +193,15 @@ class Splatboard(pyglet.window.Window):
 	
 	def undo(self):
 		if len(self.undo_stack) > 0:
-			self.current_tool.unselect()
+			self.current_tool.unselect()	#exit current tool, just in case
 			self.enter_canvas_mode()
 			glColor4f(1,1,1,1)
 			self.undo_stack.pop().blit(0,0)
 			self.exit_canvas_mode()
-			self.current_tool.select()
+			self.current_tool.select()		#go back into tool
+	
+	def swap_colors(self):
+		selections.fill_color, selections.line_color = selections.line_color, selections.fill_color
 	
 
 if __name__ == '__main__':
