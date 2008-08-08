@@ -1,4 +1,4 @@
-import pyglet, SplatboardTool, selections, resources, graphics
+import SplatboardTool, selections, resources, graphics
 
 class Line(SplatboardTool.Tool):
 	"""Simple line tool"""

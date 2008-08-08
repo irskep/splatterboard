@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import pyglet, resources, gui, random, time, loader, resources, graphics, selections
-from pyglet.gl import *
 from pyglet.window import key
 from settings import settings, save_settings
 from collections import defaultdict
@@ -10,10 +9,10 @@ class Splatboard(pyglet.window.Window):
 	
 	def __init__(self):
 		
-		#Init window. Fullscreen disabled because it is broken due to double buffering.
+		#Init window. Fullscreen disabled due to buggyness.
 		screen = pyglet.window.get_platform().get_default_display().get_default_screen()
 		
-		if screen.width <= 1024 or screen.height <= 768:
+		if screen.width <= settings['window_width'] or screen.height <= settings['window_height']:
 			settings['fullscreen'] = True
 			settings['fit_window_to_screen'] = True
 		if settings['fit_window_to_screen']:
@@ -27,21 +26,22 @@ class Splatboard(pyglet.window.Window):
 											)
 		else:
 			super(Splatboard, self).__init__( fullscreen=True, resizable=False, vsync=True)
+			settings['window_width'] = self.width
+			settings['window_height'] = self.height
 		
 		
 		self.set_caption('Splatboard')
 		
 		#enable alpha blending, line smoothing
-		glEnable(GL_BLEND)
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-		glEnable(GL_LINE_SMOOTH)
-		glHint(GL_LINE_SMOOTH_HINT,GL_NICEST)
+		pyglet.gl.glEnable(pyglet.gl.GL_BLEND)
+		pyglet.gl.glBlendFunc(pyglet.gl.GL_SRC_ALPHA, pyglet.gl.GL_ONE_MINUS_SRC_ALPHA)
+		pyglet.gl.glEnable(pyglet.gl.GL_LINE_SMOOTH)
+		pyglet.gl.glHint(pyglet.gl.GL_LINE_SMOOTH_HINT,pyglet.gl.GL_NICEST)
 		
 		self.init_cursors()
 		
 		#white background
-		glClearColor(1,1,1,1);
-		self.clear()
+		graphics.clear(1,1,1,1);
 		
 		#load tools, make toolbar
 		self.tools = {}
@@ -190,28 +190,26 @@ class Splatboard(pyglet.window.Window):
 		return action
 	
 	def enter_canvas_mode(self):
-		print "Entering drawing mode"
-		glViewport(self.canvas_x,self.canvas_y,
+		pyglet.gl.glViewport(self.canvas_x,self.canvas_y,
 			settings['window_width']-self.canvas_x,settings['window_height']-self.canvas_y)
-		glMatrixMode(gl.GL_PROJECTION)
-		glLoadIdentity()
-		glOrtho(0, settings['window_width']-self.canvas_x, 0, settings['window_height']-self.canvas_y, -1, 1)
-		glMatrixMode(gl.GL_MODELVIEW)
+		pyglet.gl.glMatrixMode(pyglet.gl.GL_PROJECTION)
+		pyglet.gl.glLoadIdentity()
+		pyglet.gl.glOrtho(0, settings['window_width']-self.canvas_x, 0, settings['window_height']-self.canvas_y, -1, 1)
+		pyglet.gl.glMatrixMode(pyglet.gl.GL_MODELVIEW)
 	
 	def exit_canvas_mode(self):
-		print "Exiting drawing mode"
-		glViewport(0,0,self.width,self.height)
-		glMatrixMode(gl.GL_PROJECTION)
-		glLoadIdentity()
-		glOrtho(0, self.width, 0, self.height, -1, 1)
-		glMatrixMode(gl.GL_MODELVIEW)
+		pyglet.gl.glViewport(0,0,self.width,self.height)
+		pyglet.gl.glMatrixMode(pyglet.gl.GL_PROJECTION)
+		pyglet.gl.glLoadIdentity()
+		pyglet.gl.glOrtho(0, self.width, 0, self.height, -1, 1)
+		pyglet.gl.glMatrixMode(pyglet.gl.GL_MODELVIEW)
 	
 	#------------BUTTON THINGS------------#
 	def open(self):
 		path = gui.open_file(type_list = resources.supported_image_formats)
 		if path != None:
 			self.enter_canvas_mode()
-			glColor4f(1,1,1,1)
+			graphics.set_color(1,1,1,1)
 			graphics.draw_rect(0,0,settings['window_width']-self.canvas_x,settings['window_height']-self.canvas_y)
 			pyglet.image.load(path).blit(0,0)
 			self.exit_canvas_mode()
@@ -227,7 +225,7 @@ class Splatboard(pyglet.window.Window):
 		if len(self.undo_stack) > 0:
 			self.current_tool.unselect()	#exit current tool, just in case
 			self.enter_canvas_mode()
-			glColor4f(1,1,1,1)
+			graphics.set_color(1,1,1,1)
 			self.undo_stack.pop().blit(0,0)
 			self.exit_canvas_mode()
 			self.current_tool.select()		#go back into tool

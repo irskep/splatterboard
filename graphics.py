@@ -10,6 +10,12 @@ def set_color(r=0.0, g=0.0, b=0.0, a=1.0, color=None):
 	if color is not None: pyglet.gl.glColor4f(*color)
 	else: pyglet.gl.glColor4f(r,g,b,a)
 
+def clear(r=0.0, g=0.0, b=0.0, a=1.0, color=None):	
+	if color is not None: pyglet.gl.glClearColor(*color)
+	else: pyglet.gl.glClearColor(1,1,1,1);
+	for window in pyglet.app.windows.__iter__():
+		window.clear()
+
 def draw_line(x1, y1, x2, y2):
 	pyglet.graphics.draw(2, pyglet.gl.GL_LINES, ('v2f', (x1, y1, x2, y2)))
 

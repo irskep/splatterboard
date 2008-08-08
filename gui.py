@@ -63,9 +63,9 @@ class PaletteButton():
 	def draw(self):
 		color = (1,1,1,1)
 		if self.selected: color = (0.8, 0.8, 0.8, 1)
-		pyglet.gl.glColor4f(*color)
+		graphics.set_color(color=color)
 		resources.PaletteButton.blit(self.x,self.y)
-		pyglet.gl.glColor4f(1,1,1,1)
+		graphics.set_color(1,1,1,1)
 		self.image.blit(self.x,self.y)
 	
 	def coords_in_button(self, x, y):
@@ -84,9 +84,9 @@ class Button():
 	def draw(self):
 		color = (1,1,1,1)
 		if self.selected: color = (0.8, 0.8, 0.8, 1)
-		pyglet.gl.glColor4f(*color)
+		graphics.set_color(color=color)
 		self.image.blit(self.x,self.y)
-		pyglet.gl.glColor4f(1,1,1,1)
+		graphics.set_color(1,1,1,1)
 		self.label.draw()
 	
 	def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
@@ -116,7 +116,7 @@ class ImageButton(Button):
 	def draw(self):
 		color = (1,1,1,1)
 		if self.selected: color = (0.8, 0.8, 0.8, 1)
-		pyglet.gl.glColor4f(*color)
+		graphics.set_color(color=color)
 		self.image.blit(self.x,self.y)
 
 class ColorPicker():
@@ -130,9 +130,9 @@ class ColorPicker():
 		self.image = None
 	
 	def draw_initial(self):
-		pyglet.gl.glColor4f(1,1,1,1)
+		graphics.set_color(1,1,1,1)
 		graphics.draw_rect(self.x,self.y+self.height/2,self.x+self.width,self.y+self.height)
-		pyglet.gl.glColor4f(0,0,0,1)
+		graphics.set_color(0,0,0,1)
 		graphics.draw_rect(self.x,self.y,self.x+self.width,self.y+self.height/2)
 		points = []
 		tempwidth = self.width
@@ -166,25 +166,25 @@ class ColorPicker():
 				a = (y-15) / self.height
 				if a <= 0.5:
 					a = a*2*0.8+0.2
-					pyglet.gl.glColor4f(r*a,g*a,b*a,1.0)
+					graphics.set_color(r*a,g*a,b*a,1.0)
 				else:
 					a = (a-0.5)*2.1
-					pyglet.gl.glColor4f(r+(1-r)*a,g+(1-g)*a,b+(1-b)*a,1.0)
+					graphics.set_color(r+(1-r)*a,g+(1-g)*a,b+(1-b)*a,1.0)
 				graphics.draw_rect(self.x+x,self.y+y,self.x+x+self.step,self.y+y+self.step)
 			a = x/(self.width-self.step)
-			pyglet.gl.glColor4f(a,a,a,1)
+			graphics.set_color(a,a,a,1)
 			graphics.draw_rect(self.x+x,self.y,self.x+x+15,self.y+15)
 		temp_image = graphics.get_snapshot()
 		self.image = temp_image.get_texture().get_region(self.x, self.y, int(self.width), int(self.height))
 	
 	def draw(self):
 		if self.rendered:
-			pyglet.gl.glColor4f(1,1,1,1)
+			graphics.set_color(1,1,1,1)
 			self.image.blit(self.x,self.y)
 		else:
 			self.rendered = True
 			self.draw_initial()
-		pyglet.gl.glColor4f(0,0,0,1)
+		graphics.set_color(0,0,0,1)
 		graphics.draw_rect_outline(self.x,self.y,self.x+self.width,self.y+self.height)
 	
 	def get_color(self, x, y):
@@ -201,17 +201,17 @@ class ColorDisplay():
 		self.height = height
 	
 	def draw(self):
-		pyglet.gl.glColor4f(*selections.line_color)
+		graphics.set_color(color=selections.line_color)
 		graphics.draw_rect(self.x,self.y+self.height,self.x+self.width,self.y+self.height/2+2)
-		pyglet.gl.glColor4f(*selections.fill_color)
+		graphics.set_color(color=selections.fill_color)
 		graphics.draw_rect(self.x,self.y,self.x+self.width,self.y+self.height/2-2)
 		if selections.selected_color == 0: pyglet.gl.glLineWidth(2.0)
 		else: pyglet.gl.glLineWidth(1.0)
-		pyglet.gl.glColor4f(*selections.fill_color)
+		graphics.set_color(color=selections.fill_color)
 		graphics.draw_rect_outline(self.x,self.y+self.height,self.x+self.width,self.y+self.height/2+2)
 		if selections.selected_color == 1: pyglet.gl.glLineWidth(2.0)
 		else: pyglet.gl.glLineWidth(1.0)
-		pyglet.gl.glColor4f(*selections.line_color)
+		graphics.set_color(color=selections.line_color)
 		graphics.draw_rect_outline(self.x,self.y,self.x+self.width,self.y+self.height/2-2)
 		pyglet.gl.glLineWidth(1.0)
 	
