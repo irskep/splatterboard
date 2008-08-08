@@ -76,8 +76,6 @@ class Splatboard(pyglet.window.Window):
 		
 		#so that mouse handling methods know what to do
 		self.drawing = False
-		
-		pyglet.clock.schedule(self.on_draw)
 	
 	def init_cursors(self):
 		graphics.cursor['CURSOR_CROSSHAIR'] = self.get_system_mouse_cursor(self.CURSOR_CROSSHAIR)
