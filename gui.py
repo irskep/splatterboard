@@ -106,6 +106,19 @@ class Button():
 	def coords_in_button(self, x, y):
 		return x >= self.x and y >= self.y and x <= self.x + self.image.width and y <= self.y + self.image.height
 
+class ImageButton(Button):
+	def __init__(self, image, action, x, y):
+		self.action = action
+		self.x, self.y = x, y
+		self.selected = False
+		self.image = image
+
+	def draw(self):
+		color = (1,1,1,1)
+		if self.selected: color = (0.8, 0.8, 0.8, 1)
+		pyglet.gl.glColor4f(*color)
+		self.image.blit(self.x,self.y)
+
 class ColorPicker():
 	def __init__(self, x, y, width, height, step=10):
 		self.x = x
@@ -166,6 +179,7 @@ class ColorPicker():
 	
 	def draw(self):
 		if self.rendered:
+			pyglet.gl.glColor4f(1,1,1,1)
 			self.image.blit(self.x,self.y)
 		else:
 			self.rendered = True
@@ -198,12 +212,13 @@ class ColorDisplay():
 		graphics.draw_rect(self.x,self.y+self.height,self.x+self.width,self.y+self.height/2+2)
 		pyglet.gl.glColor4f(*selections.fill_color)
 		graphics.draw_rect(self.x,self.y,self.x+self.width,self.y+self.height/2-2)
-		pyglet.gl.glColor4f(0,0,0,1)
 		if self.selection == 0: pyglet.gl.glLineWidth(1.0)
 		else: pyglet.gl.glLineWidth(0.5)
+		pyglet.gl.glColor4f(*selections.fill_color)
 		graphics.draw_rect_outline(self.x,self.y+self.height,self.x+self.width,self.y+self.height/2+2)
 		if self.selection == 1: pyglet.gl.glLineWidth(1.0)
 		else: pyglet.gl.glLineWidth(0.5)
+		pyglet.gl.glColor4f(*selections.line_color)
 		graphics.draw_rect_outline(self.x,self.y,self.x+self.width,self.y+self.height/2-2)
 		pyglet.gl.glLineWidth(1.0)
 	

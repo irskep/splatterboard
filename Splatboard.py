@@ -36,7 +36,9 @@ class Splatboard(pyglet.window.Window):
 		
 		self.save_button = gui.Button('Save', self.save, self.width-resources.Button.width-3, 3)
 		self.open_button = gui.Button('Open', self.open, self.save_button.x, resources.Button.height+8)
-		self.buttons = [self.save_button, self.open_button]
+		self.swap_button = gui.ImageButton(resources.ColorSwitch, self.swap_colors,
+											self.width-440, 50-resources.ColorSwitch.height/2)
+		self.buttons = [self.save_button, self.open_button, self.swap_button]
 		for button in self.buttons: self.push_handlers(button)
 		
 		self.colorpicker = gui.ColorPicker(self.width-380,6,250,90,step=15)
@@ -122,6 +124,9 @@ class Splatboard(pyglet.window.Window):
 		def action():
 			self.current_tool = tool
 		return action
+	
+	def swap_colors(self):
+		selections.fill_color, selections.line_color = selections.line_color, selections.fill_color
 	
 	def enter_canvas_mode(self):	
 		glViewport(self.canvas_x,self.canvas_y,settings['canvas_width'],settings['canvas_height'])
