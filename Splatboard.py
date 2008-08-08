@@ -4,6 +4,7 @@ import pyglet, resources, gui, random, time, loader, resources, graphics, select
 from pyglet.gl import *
 from pyglet.window import key
 from settings import settings, save_settings
+from collections import defaultdict
 
 class Splatboard(pyglet.window.Window):
 	
@@ -16,37 +17,49 @@ class Splatboard(pyglet.window.Window):
 		self.set_caption('Splatboard')
 		self.set_fullscreen(settings['fullscreen'])
 		
-		#enable alpha blending
+		#enable alpha blending, line smoothing
 		glEnable(GL_BLEND)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 		glEnable(GL_LINE_SMOOTH)
 		glHint(GL_LINE_SMOOTH_HINT,GL_NICEST)
-			
+		
+		#white background
 		glClearColor(1,1,1,1);
 		self.clear()
 		
-		self.toolbar_x, self.toolbar_y = 0, 0
-		self.drawing = False
-		
+		#load tools, make toolbar
 		self.tools = {}
 		self.sorted_tools = []
 		self.toolbar = []
+		self.labels = []
 		self.current_tool = None
+		self.toolsize = resources.PaletteButton.width
 		self.load_tools()
 		
+		#load buttons
 		self.save_button = gui.Button('Save', self.save, self.width-resources.Button.width-3, 3)
 		self.open_button = gui.Button('Open', self.open, self.save_button.x, resources.Button.height+8)
 		self.swap_button = gui.ImageButton(resources.ColorSwitch, self.swap_colors,
 											self.width-440, 50-resources.ColorSwitch.height/2)
-		self.buttons = [self.save_button, self.open_button, self.swap_button]
+		self.undo_button = gui.ImageButton(resources.Rewind, self.undo, 5, 5)
+		self.buttons = [self.save_button, self.open_button, self.swap_button, self.undo_button]
 		for button in self.buttons: self.push_handlers(button)
 		
-		self.colorpicker = gui.ColorPicker(self.width-380,6,250,90,step=15)
+		#color picker stuff
+		self.colorpicker = gui.ColorPicker(self.width-370,6,240,90,step=15)
 		self.colordisplay = gui.ColorDisplay(self.width-410, 6, 25, 90)
 		self.push_handlers(self.colorpicker, self.colordisplay)
 		
+		#set up undo stack
+		self.undo_stack = []
+		self.max_undo = 5	#arbitrary
+		
+		#shortcuts
 		self.canvas_x = settings['window_width']-settings['canvas_width']
 		self.canvas_y = settings['window_height']-settings['canvas_height']
+		
+		#so that mouse handling methods know what to do
+		self.drawing = False
 		
 		pyglet.clock.schedule(self.on_draw)
 	
@@ -60,6 +73,7 @@ class Splatboard(pyglet.window.Window):
 			graphics.set_color(1,1,1,1)
 			for button in self.toolbar: button.draw()
 			for button in self.buttons: button.draw()
+			for label in self.labels: label.draw()
 			self.colorpicker.draw()
 			self.colordisplay.draw()
 			graphics.set_color(0,0,0,1)
@@ -73,6 +87,7 @@ class Splatboard(pyglet.window.Window):
 		if x > self.canvas_x and y > self.canvas_y:
 			self.drawing = True
 			self.enter_canvas_mode()
+			self.undo_stack.append(graphics.get_snapshot())
 			self.current_tool.start_drawing(x-self.canvas_x,y-self.canvas_y)
 		else:
 			for button in self.toolbar:
@@ -82,10 +97,7 @@ class Splatboard(pyglet.window.Window):
 					button.selected = True
 					button.action()
 			if self.colorpicker.coords_inside(x,y):
-				if self.colordisplay.selection == 0:
-					selections.line_color = self.colorpicker.get_color(x,y)
-				else:
-					selections.fill_color = self.colorpicker.get_color(x,y)
+				selections.set_color(self.colorpicker.get_color(x,y))
 	
 	def on_mouse_drag(self, x, y, dx, dy, button, modifiers):
 		if self.drawing: self.current_tool.keep_drawing(x-self.canvas_x,y-self.canvas_y,dx,dy)
@@ -100,25 +112,33 @@ class Splatboard(pyglet.window.Window):
 		save_settings()
 		pyglet.app.exit()
 	
+	#------------TOOL THINGS------------#
 	def load_tools(self):
 		self.tools = loader.import_libs('Tools')
 		self.sorted_tools = self.tools.values()
 		self.sorted_tools.sort(key=lambda tool:tool.priority)
-		y = self.height
-		i = 0
+		self.grouped_tools = defaultdict(list)
 		for tool in self.sorted_tools:
-			i += 1
-			x = tool.image.width
-			if i % 2 != 0:
-				x = 0
-				y -= tool.image.height
-			new_button = gui.PaletteButton(tool.image, x, y, self.get_gui_action(tool.default))
-			self.toolbar.append(new_button)
+			self.grouped_tools[tool.group].append(tool)
+		
+		y = self.height
+		for group in sorted(self.grouped_tools.keys()):
+			self.labels.append(pyglet.text.Label(group, x=self.toolsize, y=y-self.toolsize/3-3,
+								font_size=self.toolsize/4, anchor_x='center',anchor_y='bottom',
+								color=(0,0,0,255)))
+			y -= self.toolsize/3+3
+			i = 0
+			for tool in self.grouped_tools[group]:
+				i += 1
+				x = self.toolsize
+				if i % 2 != 0:
+					x = 0
+					y -= self.toolsize
+				new_button = gui.PaletteButton(tool.image, x, y, self.get_gui_action(tool.default))
+				self.toolbar.append(new_button)
 		
 		self.current_tool = self.sorted_tools[0].default
 		self.toolbar[0].selected = True
-		
-		self.toolbar_x, self.toolbar_y = x, y
 	
 	def get_gui_action(self, tool):
 		def action():
@@ -128,20 +148,23 @@ class Splatboard(pyglet.window.Window):
 	def swap_colors(self):
 		selections.fill_color, selections.line_color = selections.line_color, selections.fill_color
 	
-	def enter_canvas_mode(self):	
+	def enter_canvas_mode(self):
+		print "Entering drawing mode"
 		glViewport(self.canvas_x,self.canvas_y,settings['canvas_width'],settings['canvas_height'])
 		glMatrixMode(gl.GL_PROJECTION)
 		glLoadIdentity()
 		glOrtho(0, settings['canvas_width'], 0, settings['canvas_height'], -1, 1)
 		glMatrixMode(gl.GL_MODELVIEW)
-
+	
 	def exit_canvas_mode(self):
+		print "Exiting drawing mode"
 		glViewport(0,0,self.width,self.height)
 		glMatrixMode(gl.GL_PROJECTION)
 		glLoadIdentity()
 		glOrtho(0, self.width, 0, self.height, -1, 1)
 		glMatrixMode(gl.GL_MODELVIEW)
 	
+	#------------BUTTON THINGS------------#
 	def open(self):
 		path = gui.open_file(type_list = resources.supported_image_formats)
 		if path != None:
@@ -157,6 +180,16 @@ class Splatboard(pyglet.window.Window):
 			self.enter_canvas_mode()
 			graphics.get_snapshot().save(path)
 			self.exit_canvas_mode()
+	
+	def undo(self):
+		if len(self.undo_stack) > 0:
+			self.current_tool.unselect()
+			self.enter_canvas_mode()
+			glColor4f(1,1,1,1)
+			self.undo_stack.pop().blit(0,0)
+			self.exit_canvas_mode()
+			self.current_tool.select()
+	
 
 if __name__ == '__main__':
 	random.seed(time.time())

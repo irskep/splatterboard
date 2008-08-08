@@ -61,3 +61,12 @@ def get_snapshot():
 			settings['canvas_width'], settings['canvas_height']
 		)
 	return pyglet.image.get_buffer_manager().get_color_buffer().image_data
+
+def get_pixel_from_image(image, x, y):	
+	data = image.get_region(x,y,1,1).get_image_data()
+	data = data.get_data('RGB',3)	#3 is len('RGB')
+	data = map(ord, list(data))
+	r = data[0]
+	g = data[1]
+	b = data[2]
+	return (float(r)/255.0,float(g)/255.0,float(b)/255.0,1.0)

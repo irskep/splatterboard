@@ -135,7 +135,7 @@ class ColorPicker():
 		pyglet.gl.glColor4f(0,0,0,1)
 		graphics.draw_rect(self.x,self.y,self.x+self.width,self.y+self.height/2)
 		points = []
-		tempwidth = self.width-self.step
+		tempwidth = self.width
 		for x in xrange(0,int(tempwidth),self.step):
 			r, g, b = 0.0, 0.0, 0.0
 			if x < tempwidth/6:
@@ -162,8 +162,8 @@ class ColorPicker():
 				r = 1.0										#full
 				g = 0										#zero
 				b = 1.0 - (x-tempwidth/6*5)/(tempwidth/6) #decreasing
-			for y in xrange(self.step,int(self.height),self.step):
-				a = (y-self.step) / self.height
+			for y in xrange(15,int(self.height),self.step):
+				a = (y-15) / self.height
 				if a <= 0.5:
 					a = a*2*0.8+0.2
 					pyglet.gl.glColor4f(r*a,g*a,b*a,1.0)
@@ -173,7 +173,7 @@ class ColorPicker():
 				graphics.draw_rect(self.x+x,self.y+y,self.x+x+self.step,self.y+y+self.step)
 			a = x/(self.width-self.step)
 			pyglet.gl.glColor4f(a,a,a,1)
-			graphics.draw_rect(self.x+x,self.y,self.x+x+self.step,self.y+self.step)
+			graphics.draw_rect(self.x+x,self.y,self.x+x+15,self.y+15)
 		temp_image = graphics.get_snapshot()
 		self.image = temp_image.get_texture().get_region(self.x, self.y, int(self.width), int(self.height))
 	
@@ -184,17 +184,11 @@ class ColorPicker():
 		else:
 			self.rendered = True
 			self.draw_initial()
+		pyglet.gl.glColor4f(0,0,0,1)
+		graphics.draw_rect_outline(self.x,self.y,self.x+self.width,self.y+self.height)
 	
 	def get_color(self, x, y):
-		x -= self.x
-		y -= self.y
-		data = self.image.get_image_data()
-		data = data.get_data('RGB',len('RGB')*self.image.width)
-		data = map(ord, list(data))
-		r = data[y*self.image.width*3+x*3]
-		g = data[y*self.image.width*3+x*3+1]
-		b = data[y*self.image.width*3+x*3+2]
-		return (float(r)/255.0,float(g)/255.0,float(b)/255.0,1.0)
+		return graphics.get_pixel_from_image(self.image, x-self.x, y-self.y)
 	
 	def coords_inside(self, x, y):
 		return x >= self.x and y >= self.y and x <= self.x + self.width and y <= self.y + self.height
@@ -205,18 +199,17 @@ class ColorDisplay():
 		self.y = y
 		self.width = width
 		self.height = height
-		self.selection = 1
 	
 	def draw(self):
 		pyglet.gl.glColor4f(*selections.line_color)
 		graphics.draw_rect(self.x,self.y+self.height,self.x+self.width,self.y+self.height/2+2)
 		pyglet.gl.glColor4f(*selections.fill_color)
 		graphics.draw_rect(self.x,self.y,self.x+self.width,self.y+self.height/2-2)
-		if self.selection == 0: pyglet.gl.glLineWidth(1.0)
+		if selections.selected_color == 0: pyglet.gl.glLineWidth(1.0)
 		else: pyglet.gl.glLineWidth(0.5)
 		pyglet.gl.glColor4f(*selections.fill_color)
 		graphics.draw_rect_outline(self.x,self.y+self.height,self.x+self.width,self.y+self.height/2+2)
-		if self.selection == 1: pyglet.gl.glLineWidth(1.0)
+		if selections.selected_color == 1: pyglet.gl.glLineWidth(1.0)
 		else: pyglet.gl.glLineWidth(0.5)
 		pyglet.gl.glColor4f(*selections.line_color)
 		graphics.draw_rect_outline(self.x,self.y,self.x+self.width,self.y+self.height/2-2)
@@ -225,9 +218,9 @@ class ColorDisplay():
 	def on_mouse_press(self, x, y, button, modifiers):
 		if self.coords_inside(x,y):
 			if y < self.y + self.height/2:
-				self.selection = 1
+				selections.selected_color = 1
 			else:
-				self.selection = 0
+				selections.selected_color = 0
 	
 	def coords_inside(self, x, y):
 		return x >= self.x and y >= self.y and x <= self.x + self.width and y <= self.y + self.height

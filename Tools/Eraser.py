@@ -32,4 +32,5 @@ class Eraser(SplatboardTool.Tool):
 
 default = Eraser()
 priority = 61
+group = 'Drawing'
 image = resources.Eraser

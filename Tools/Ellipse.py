@@ -24,4 +24,5 @@ class Ellipse(SplatboardTool.Tool):
 
 default = Ellipse()
 priority = 82
+group = 'Primitives'
 image = resources.Ellipse

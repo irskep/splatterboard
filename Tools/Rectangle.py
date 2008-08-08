@@ -24,4 +24,5 @@ class Rectangle(SplatboardTool.Tool):
 
 default = Rectangle()
 priority = 81
+group = 'Primitives'
 image = resources.Rectangle

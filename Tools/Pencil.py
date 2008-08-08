@@ -14,4 +14,5 @@ class Pencil(SplatboardTool.Tool):
 
 default = Pencil()
 priority = 60
+group = 'Drawing'
 image = resources.Pencil

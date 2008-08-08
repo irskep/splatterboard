@@ -22,4 +22,5 @@ class Line(SplatboardTool.Tool):
 
 default = Line()
 priority = 80
+group = 'Primitives'
 image = resources.Line

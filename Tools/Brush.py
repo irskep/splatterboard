@@ -33,4 +33,5 @@ class Brush(SplatboardTool.Tool):
 
 default = Brush()
 priority = 61
+group = 'Drawing'
 image = resources.Brush
