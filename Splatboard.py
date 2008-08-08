@@ -40,6 +40,8 @@ class Splatboard(pyglet.window.Window):
 		for button in self.buttons: self.push_handlers(button)
 		
 		self.colorpicker = gui.ColorPicker(self.width-380,6,250,90,step=15)
+		self.colordisplay = gui.ColorDisplay(self.width-410, 6, 25, 90)
+		self.push_handlers(self.colorpicker, self.colordisplay)
 		
 		self.canvas_x = settings['window_width']-settings['canvas_width']
 		self.canvas_y = settings['window_height']-settings['canvas_height']
@@ -57,6 +59,7 @@ class Splatboard(pyglet.window.Window):
 			for button in self.toolbar: button.draw()
 			for button in self.buttons: button.draw()
 			self.colorpicker.draw()
+			self.colordisplay.draw()
 			graphics.set_color(0,0,0,1)
 			graphics.draw_line(0, self.canvas_y, self.width, self.canvas_y)
 			graphics.draw_line(self.canvas_x, self.canvas_y, self.canvas_x, self.height)
@@ -77,7 +80,10 @@ class Splatboard(pyglet.window.Window):
 					button.selected = True
 					button.action()
 			if self.colorpicker.coords_inside(x,y):
-				selections.fill_color = self.colorpicker.get_color(x,y)
+				if self.colordisplay.selection == 0:
+					selections.line_color = self.colorpicker.get_color(x,y)
+				else:
+					selections.fill_color = self.colorpicker.get_color(x,y)
 	
 	def on_mouse_drag(self, x, y, dx, dy, button, modifiers):
 		if self.drawing: self.current_tool.keep_drawing(x-self.canvas_x,y-self.canvas_y,dx,dy)
@@ -97,10 +103,14 @@ class Splatboard(pyglet.window.Window):
 		self.sorted_tools = self.tools.values()
 		self.sorted_tools.sort(key=lambda tool:tool.priority)
 		y = self.height
+		i = 0
 		for tool in self.sorted_tools:
+			i += 1
 			x = tool.image.width
-			y -= tool.image.height
-			new_button = gui.PaletteButton(tool.image, 0, y, self.get_gui_action(tool.default))
+			if i % 2 != 0:
+				x = 0
+				y -= tool.image.height
+			new_button = gui.PaletteButton(tool.image, x, y, self.get_gui_action(tool.default))
 			self.toolbar.append(new_button)
 		
 		self.current_tool = self.sorted_tools[0].default

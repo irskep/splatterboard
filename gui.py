@@ -170,13 +170,6 @@ class ColorPicker():
 		else:
 			self.rendered = True
 			self.draw_initial()
-		pyglet.gl.glColor4f(*selections.line_color)
-		graphics.draw_rect(self.x-20,self.y+self.height,self.x-5,self.y+self.height/2+2)
-		pyglet.gl.glColor4f(*selections.fill_color)
-		graphics.draw_rect(self.x-20,self.y,self.x-5,self.y+self.height/2-2)
-		pyglet.gl.glColor4f(0,0,0,1)
-		graphics.draw_rect_outline(self.x-20,self.y+self.height,self.x-5,self.y+self.height/2+2)
-		graphics.draw_rect_outline(self.x-20,self.y,self.x-5,self.y+self.height/2-2)
 	
 	def get_color(self, x, y):
 		x -= self.x
@@ -188,6 +181,38 @@ class ColorPicker():
 		g = data[y*self.image.width*3+x*3+1]
 		b = data[y*self.image.width*3+x*3+2]
 		return (float(r)/255.0,float(g)/255.0,float(b)/255.0,1.0)
+	
+	def coords_inside(self, x, y):
+		return x >= self.x and y >= self.y and x <= self.x + self.width and y <= self.y + self.height
+
+class ColorDisplay():
+	def __init__(self, x, y, width, height):
+		self.x = x
+		self.y = y
+		self.width = width
+		self.height = height
+		self.selection = 1
+	
+	def draw(self):
+		pyglet.gl.glColor4f(*selections.line_color)
+		graphics.draw_rect(self.x,self.y+self.height,self.x+self.width,self.y+self.height/2+2)
+		pyglet.gl.glColor4f(*selections.fill_color)
+		graphics.draw_rect(self.x,self.y,self.x+self.width,self.y+self.height/2-2)
+		pyglet.gl.glColor4f(0,0,0,1)
+		if self.selection == 0: pyglet.gl.glLineWidth(1.0)
+		else: pyglet.gl.glLineWidth(0.5)
+		graphics.draw_rect_outline(self.x,self.y+self.height,self.x+self.width,self.y+self.height/2+2)
+		if self.selection == 1: pyglet.gl.glLineWidth(1.0)
+		else: pyglet.gl.glLineWidth(0.5)
+		graphics.draw_rect_outline(self.x,self.y,self.x+self.width,self.y+self.height/2-2)
+		pyglet.gl.glLineWidth(1.0)
+	
+	def on_mouse_press(self, x, y, button, modifiers):
+		if self.coords_inside(x,y):
+			if y < self.y + self.height/2:
+				self.selection = 1
+			else:
+				self.selection = 0
 	
 	def coords_inside(self, x, y):
 		return x >= self.x and y >= self.y and x <= self.x + self.width and y <= self.y + self.height
