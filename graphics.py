@@ -1,5 +1,6 @@
-import math, sys, settings
+import math, sys
 import pyglet.graphics, pyglet.image, pyglet.gl
+from settings import *
 
 _canvas_pre = None
 
@@ -56,13 +57,7 @@ def draw_quad(*args):
 	pyglet.graphics.draw(4, pyglet.gl.GL_QUADS, ('v2f', args))
 
 def get_snapshot():
-	if sys.platform == 'Linux':
-		return pyglet.image.get_buffer_manager().get_color_buffer().get_region(
-			settings['toolbar_width'], settings['buttonbar_height'],
-			settings['window_width']-settings['toolbar_width'],
-			settings['window_height']-settings['buttonbar_height']
-		)
-	return pyglet.image.get_buffer_manager().get_color_buffer().image_data
+	return pyglet.image.get_buffer_manager().get_color_buffer().get_image_data()
 
 def get_pixel_from_image(image, x, y):	
 	data = image.get_region(x,y,1,1).get_image_data()
