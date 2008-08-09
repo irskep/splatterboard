@@ -76,8 +76,6 @@ class Splatboard(pyglet.window.Window):
 		self.canvas_x = settings['toolbar_width']
 		self.canvas_y = settings['buttonbar_height']
 		
-		#so that mouse handling methods know what to do
-		self.drawing = False
 		self.frame_countdown = 2
 	
 	def init_cursors(self):
@@ -92,7 +90,7 @@ class Splatboard(pyglet.window.Window):
 			graphics.draw_all_again()
 			self.frame_countdown -= 1
 		i = 0
-		if not self.drawing:
+		if not selections.drawing:
 			#toolbar background
 			graphics.set_color(0.8, 0.8, 0.8, 1)
 			graphics.draw_rect(0,self.canvas_y,self.canvas_x,self.height)
@@ -126,7 +124,7 @@ class Splatboard(pyglet.window.Window):
 	def on_mouse_press(self, x, y, button, modifiers):
 		graphics.draw_all_again()
 		if x > self.canvas_x and y > self.canvas_y:
-			self.drawing = True
+			selections.drawing = True
 			self.enter_canvas_mode()
 			self.undo_stack.append(graphics.get_snapshot())
 			self.current_tool.start_drawing(x-self.canvas_x,y-self.canvas_y)
@@ -146,13 +144,13 @@ class Splatboard(pyglet.window.Window):
 	def on_mouse_drag(self, x, y, dx, dy, button, modifiers):
 		graphics.draw_all_again()
 		self.on_mouse_motion(x,y,dx,dy)
-		if self.drawing: self.current_tool.keep_drawing(x-self.canvas_x,y-self.canvas_y,dx,dy)
+		if selections.drawing: self.current_tool.keep_drawing(x-self.canvas_x,y-self.canvas_y,dx,dy)
 	
 	def on_mouse_release(self, x, y, button, modifiers):
-		if self.drawing:
+		if selections.drawing:
 			self.current_tool.stop_drawing(x-self.canvas_x,y-self.canvas_y)
 			self.exit_canvas_mode()
-		self.drawing = False
+		selections.drawing = False
 	
 	def on_close(self):
 		save_settings()
@@ -196,7 +194,9 @@ class Splatboard(pyglet.window.Window):
 	
 	def get_toolbar_button_action(self, tool):	#decorator for toolbar buttons
 		def action():
+			self.current_tool.unselect()
 			self.current_tool = tool
+			self.current_tool.select()
 		return action
 	
 	def enter_canvas_mode(self):

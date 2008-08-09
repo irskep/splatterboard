@@ -1,4 +1,4 @@
-import math, sys
+import math, sys, selections
 import pyglet.graphics, pyglet.image, pyglet.gl
 from settings import *
 
@@ -28,8 +28,18 @@ def triplecall_wrapper(func):
 		function_stack_2.append((func, args, kwargs))
 	return new_func
 
+def call_twice(func, *args, **kwargs):
+	func(*args,**kwargs)
+	function_stack.append((func,args,kwargs))
+
 def get_snapshot():
-	return pyglet.image.get_buffer_manager().get_color_buffer().get_image_data()
+	img = pyglet.image.get_buffer_manager().get_color_buffer().get_image_data()
+	if selections.drawing == True:
+		return img
+	else:
+		x, y = settings['toolbar_width'], settings['buttonbar_height']
+		w, h = settings['window_width']-x, settings['window_height']-y
+		return img.get_region(x, y, w, h)
 
 def get_pixel_from_image(image, x, y):
 	data = image.get_region(x,y,1,1).get_image_data()
@@ -39,10 +49,6 @@ def get_pixel_from_image(image, x, y):
 	g = data[1]
 	b = data[2]
 	return (float(r)/255.0,float(g)/255.0,float(b)/255.0,1.0)
-
-def call_twice(func, *args, **kwargs):
-	func(*args,**kwargs)
-	function_stack.append((func,args,kwargs))
 
 @doublecall_wrapper
 def set_color(r=0.0, g=0.0, b=0.0, a=1.0, color=None):

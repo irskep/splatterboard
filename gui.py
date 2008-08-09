@@ -189,7 +189,7 @@ class ColorPicker():
 			a = x/(self.width-self.step)
 			graphics.set_color(a,a,a,1)
 			graphics.draw_rect(self.x+x,self.y,self.x+x+15,self.y+15)
-		temp_image = graphics.get_snapshot()
+		temp_image = pyglet.image.get_buffer_manager().get_color_buffer().get_image_data()
 		self.image = temp_image.get_texture().get_region(self.x, self.y, int(self.width), int(self.height))
 	
 	def draw(self):
@@ -220,11 +220,11 @@ class ColorDisplay():
 		graphics.draw_rect(self.x,self.y+self.height,self.x+self.width,self.y+self.height/2+2)
 		graphics.set_color(color=selections.fill_color)
 		graphics.draw_rect(self.x,self.y,self.x+self.width,self.y+self.height/2-2)
-		if selections.selected_color == 0: pyglet.gl.glLineWidth(2.0)
+		if selections.selected_color == 0: pyglet.gl.glLineWidth(3.0)
 		else: pyglet.gl.glLineWidth(1.0)
 		graphics.set_color(color=selections.fill_color)
 		graphics.draw_rect_outline(self.x,self.y+self.height,self.x+self.width,self.y+self.height/2+2)
-		if selections.selected_color == 1: pyglet.gl.glLineWidth(2.0)
+		if selections.selected_color == 1: pyglet.gl.glLineWidth(3.0)
 		else: pyglet.gl.glLineWidth(1.0)
 		graphics.set_color(color=selections.line_color)
 		graphics.draw_rect_outline(self.x,self.y,self.x+self.width,self.y+self.height/2-2)

@@ -2,13 +2,15 @@ import SplatboardTool, selections, resources, graphics
 
 class Line(SplatboardTool.Tool):
 	"""Simple line tool"""
-	def __init__(self):
-		self.canvas_pre = None
-		self.x1, self.y1, self.x2, self.y2 = 0.0, 0.0, 0.0, 0.0
 	
-	def start_drawing(self, x, y):
-		self.x1, self.y1 = x, y
+	canvas_pre = None
+	x1, y1, x2, y2 = 0.0, 0.0, 0.0, 0.0
+	
+	def select(self):
 		self.canvas_pre = graphics.get_snapshot()
+		
+	def start_drawing(self, x, y):	
+		self.x1, self.y1 = x, y
 	
 	def keep_drawing(self, x, y, dx, dy):
 		self.x2, self.y2 = x, y
@@ -19,6 +21,7 @@ class Line(SplatboardTool.Tool):
 	
 	def stop_drawing(self, x, y):
 		self.keep_drawing(x, y, 0, 0)
+		self.canvas_pre = graphics.get_snapshot()
 
 default = Line()
 priority = 80
