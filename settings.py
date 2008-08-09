@@ -19,9 +19,10 @@ def default_settings():
 					window_height=768,
 					toolbar_width=102,
 					buttonbar_height=102,
-					fullscreen=True,
+					fullscreen=False,
 					fit_window_to_screen=False,
 					volume=1.0,
+					disable_buffer_fix_in_windowed=True
 					)
 
 import pyglet.resource, os, pickle

@@ -8,11 +8,12 @@ function_stack = []	#[(function, args, kwargs)]
 function_stack_2 = []
 
 def draw_all_again():
-	global function_stack, function_stack_2
-	for func, args, kwargs in function_stack:
-		func(*args,**kwargs)
-	function_stack = function_stack_2
-	function_stack_2 = []
+	if settings['fullscreen'] == True or settings['disable_buffer_fix_in_windowed'] == False:
+		global function_stack, function_stack_2
+		for func, args, kwargs in function_stack:
+			func(*args,**kwargs)
+		function_stack = function_stack_2
+		function_stack_2 = []
 
 def doublecall_wrapper(func):
 	def new_func(*args, **kwargs):
