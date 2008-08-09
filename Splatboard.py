@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
-import pyglet, resources, gui, random, time, loader, resources, graphics, selections
+import pyglet
+import resources, gui, random, time, loader, resources, graphics, selections
+import sys, time
 from pyglet.window import key
 from settings import settings, save_settings
 from collections import defaultdict
@@ -18,7 +20,7 @@ class Splatboard(pyglet.window.Window):
 		if settings['fit_window_to_screen']:
 			settings['window_width'] = screen.width-100
 			settings['window_height'] = screen.height-100
-		settings['fullscreen'] = False
+			
 		if not settings['fullscreen']:
 			super(Splatboard, self).__init__(	width=settings['window_width'],
 												height=settings['window_height'],
@@ -76,6 +78,7 @@ class Splatboard(pyglet.window.Window):
 		
 		#so that mouse handling methods know what to do
 		self.drawing = False
+		self.frame_countdown = 2
 	
 	def init_cursors(self):
 		graphics.cursor['CURSOR_CROSSHAIR'] = self.get_system_mouse_cursor(self.CURSOR_CROSSHAIR)
@@ -85,6 +88,9 @@ class Splatboard(pyglet.window.Window):
 	
 	#------------EVENT HANDLING------------#
 	def on_draw(self, dt=0):
+		if self.frame_countdown > 0:
+			graphics.draw_all_again()
+			self.frame_countdown -= 1
 		i = 0
 		if not self.drawing:
 			#toolbar background
@@ -95,7 +101,7 @@ class Splatboard(pyglet.window.Window):
 			graphics.set_color(1,1,1,1)
 			for button in self.toolbar: button.draw()	#toolbar buttons
 			for button in self.buttons: button.draw()	#bottom buttons
-			for label in self.labels: label.draw()		#text labels
+			for label in self.labels: graphics.draw_label(label) #text labels
 			self.colorpicker.draw()						#color picker
 			self.colordisplay.draw()					#line/fill color selector
 			#divider lines
@@ -104,9 +110,11 @@ class Splatboard(pyglet.window.Window):
 			graphics.draw_line(self.canvas_x, self.canvas_y, self.canvas_x, self.height)
 	
 	def on_key_press(self, symbol, modifiers):
+		graphics.draw_all_again()
 		if symbol == key.ESCAPE: return True	#stop Pyglet from quitting
 	
 	def on_mouse_motion(self, x, y, dx, dy):
+		graphics.draw_all_again()
 		lastx, lasty = x-dx, y-dy
 		if x > self.canvas_x and y > self.canvas_y:
 			if not (lastx > self.canvas_x and lasty > self.canvas_y) and self.current_tool.cursor != None:
@@ -116,6 +124,7 @@ class Splatboard(pyglet.window.Window):
 				self.set_mouse_cursor(self.get_system_mouse_cursor(self.CURSOR_DEFAULT))
 	
 	def on_mouse_press(self, x, y, button, modifiers):
+		graphics.draw_all_again()
 		if x > self.canvas_x and y > self.canvas_y:
 			self.drawing = True
 			self.enter_canvas_mode()
@@ -135,6 +144,7 @@ class Splatboard(pyglet.window.Window):
 				selections.set_color(self.colorpicker.get_color(x,y))
 	
 	def on_mouse_drag(self, x, y, dx, dy, button, modifiers):
+		graphics.draw_all_again()
 		self.on_mouse_motion(x,y,dx,dy)
 		if self.drawing: self.current_tool.keep_drawing(x-self.canvas_x,y-self.canvas_y,dx,dy)
 	
@@ -190,6 +200,7 @@ class Splatboard(pyglet.window.Window):
 		return action
 	
 	def enter_canvas_mode(self):
+		graphics.draw_all_again()
 		pyglet.gl.glViewport(self.canvas_x,self.canvas_y,
 			settings['window_width']-self.canvas_x,settings['window_height']-self.canvas_y)
 		pyglet.gl.glMatrixMode(pyglet.gl.GL_PROJECTION)
@@ -198,6 +209,7 @@ class Splatboard(pyglet.window.Window):
 		pyglet.gl.glMatrixMode(pyglet.gl.GL_MODELVIEW)
 	
 	def exit_canvas_mode(self):
+		graphics.draw_all_again()
 		pyglet.gl.glViewport(0,0,self.width,self.height)
 		pyglet.gl.glMatrixMode(pyglet.gl.GL_PROJECTION)
 		pyglet.gl.glLoadIdentity()
@@ -206,28 +218,32 @@ class Splatboard(pyglet.window.Window):
 	
 	#------------BUTTON THINGS------------#
 	def open(self):
+		self.set_fullscreen(False)
 		path = gui.open_file(type_list = resources.supported_image_formats)
+		self.set_fullscreen(settings['fullscreen'])
 		if path != None:
 			self.enter_canvas_mode()
 			graphics.set_color(1,1,1,1)
 			graphics.draw_rect(0,0,settings['window_width']-self.canvas_x,settings['window_height']-self.canvas_y)
-			pyglet.image.load(path).blit(0,0)
+			graphics.draw_image(pyglet.image.load(path),0,0)
 			self.exit_canvas_mode()
 	
 	def save(self):
 		path = gui.save_file(default_name="My Picture.png")
 		if path != None:
 			self.enter_canvas_mode()
-			graphics.get_snapshot().save(path)
+			img = graphics.get_snapshot()
 			self.exit_canvas_mode()
+			self.set_fullscreen(fullscreen=False)
+			img.save(path)
+			self.set_fullscreen(settings['fullscreen'])
 	
 	def undo(self):
 		if len(self.undo_stack) > 0:
 			self.current_tool.unselect()	#exit current tool, just in case
-			self.enter_canvas_mode()
 			graphics.set_color(1,1,1,1)
-			self.undo_stack.pop().blit(0,0)
-			self.exit_canvas_mode()
+			img = self.undo_stack.pop()
+			graphics.draw_image(img,self.canvas_x,self.canvas_y)
 			self.current_tool.select()		#go back into tool
 	
 	def swap_colors(self):

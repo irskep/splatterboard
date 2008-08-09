@@ -13,7 +13,7 @@ class Ellipse(SplatboardTool.Tool):
 	def keep_drawing(self, x, y, dx, dy):
 		self.x2, self.y2 = x, y
 		graphics.set_color(1,1,1,1)
-		self.canvas_pre.blit(0,0)
+		graphics.draw_image(self.canvas_pre,0,0)
 		graphics.set_color(color=selections.fill_color)
 		graphics.draw_ellipse(self.x1, self.y1, self.x2, self.y2)
 		graphics.set_color(color=selections.line_color)

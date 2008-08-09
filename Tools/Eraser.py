@@ -9,11 +9,11 @@ class Eraser(SplatboardTool.Tool):
 		self.lastx, self.lasty = x, y
 		self.brush_image = resources.Hard_Brush_30
 		graphics.set_color(color=self.color)
-		self.brush_image.blit(x-self.brush_image.width/2, y-self.brush_image.height/2)
+		graphics.draw_image(self.brush_image,x-self.brush_image.width/2, y-self.brush_image.height/2)
 		
 	def keep_drawing(self, x, y, dx, dy):	
 		graphics.set_color(color=self.color)
-		self.brush_image.blit(x-self.brush_image.width/2, y-self.brush_image.height/2)
+		graphics.draw_image(self.brush_image,x-self.brush_image.width/2, y-self.brush_image.height/2)
 		angle = math.atan2(dy,dx)
 		dist = math.sqrt(math.pow(x-self.lastx,2)+math.pow(y-self.lasty,2))
 		brush_size = self.brush_image.width*0.5*0.95
@@ -28,7 +28,7 @@ class Eraser(SplatboardTool.Tool):
 	
 	def stop_drawing(self, x, y):	
 		graphics.set_color(color=self.color)
-		self.brush_image.blit(x-self.brush_image.width/2, y-self.brush_image.height/2)
+		graphics.draw_image(self.brush_image,x-self.brush_image.width/2, y-self.brush_image.height/2)
 
 default = Eraser()
 priority = 61

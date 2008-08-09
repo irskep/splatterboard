@@ -12,7 +12,21 @@ when used the way GameWindow uses it.
 
 import pyglet, resources, graphics, selections
 from settings import settings
+import wx
 
+app = wx.App(False)
+
+def open_file(type_list=[]):
+	wildcard = '|'.join(z for y in ((x,x) for x in type_list) for z in y)
+	dlg = wx.FileDialog(None,style=wx.FD_OPEN,wildcard=wildcard)
+	dlg.ShowModal()
+	return dlg.GetPath() if dlg.GetFilename() else None
+
+def save_file(default_name=""):
+	dlg = wx.FileDialog(None,style=wx.FD_SAVE)
+	dlg.ShowModal()
+	return dlg.GetPath() if dlg.GetFilename() else None
+"""
 try:	#Mac
 	import EasyDialogs
 	def save_file(default_name=""):
@@ -52,6 +66,7 @@ except:
 				return "My Picture.png"
 			def open_file(type_list = []):
 				return "My Picture.png"
+"""
 
 class PaletteButton():
 	def __init__(self, image, x, y, action):
@@ -64,9 +79,9 @@ class PaletteButton():
 		color = (1,1,1,1)
 		if self.selected: color = (0.8, 0.8, 0.8, 1)
 		graphics.set_color(color=color)
-		resources.PaletteButton.blit(self.x,self.y)
+		graphics.draw_image(resources.PaletteButton,self.x,self.y)
 		graphics.set_color(1,1,1,1)
-		self.image.blit(self.x,self.y)
+		graphics.draw_image(self.image,self.x,self.y)
 	
 	def coords_in_button(self, x, y):
 		return x >= self.x and y >= self.y and x <= self.x + self.image.width and y <= self.y + self.image.height
@@ -85,9 +100,9 @@ class Button():
 		color = (1,1,1,1)
 		if self.selected: color = (0.8, 0.8, 0.8, 1)
 		graphics.set_color(color=color)
-		self.image.blit(self.x,self.y)
+		graphics.draw_image(self.image,self.x,self.y)
 		graphics.set_color(1,1,1,1)
-		self.label.draw()
+		graphics.draw_label(self.label)
 	
 	def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
 		self.on_mouse_press(x,y,None,None)
@@ -117,7 +132,7 @@ class ImageButton(Button):
 		color = (1,1,1,1)
 		if self.selected: color = (0.8, 0.8, 0.8, 1)
 		graphics.set_color(color=color)
-		self.image.blit(self.x,self.y)
+		graphics.draw_image(self.image,self.x,self.y)
 
 class ColorPicker():
 	def __init__(self, x, y, width, height, step=10):
@@ -180,7 +195,7 @@ class ColorPicker():
 	def draw(self):
 		if self.rendered:
 			graphics.set_color(1,1,1,1)
-			self.image.blit(self.x,self.y)
+			graphics.draw_image(self.image,self.x,self.y)
 		else:
 			self.rendered = True
 			self.draw_initial()
