@@ -22,7 +22,7 @@ def default_settings():
 					fullscreen=False,
 					fit_window_to_screen=False,
 					volume=1.0,
-					disable_buffer_fix_in_windowed=True
+					disable_buffer_fix_in_windowed=False
 					)
 
 import pyglet.resource, os, pickle
@@ -36,6 +36,9 @@ settings = default_settings()
 if os.path.exists(settings_path):
 	try: pass #settings = pickle.load(open(settings_path,'r'))
 	except: print "Failed to load settings. Reverting to defaults."
+
+from sys import platform
+if platform == 'darwin': settings['disable_buffer_fix_in_windowed'] = True
 
 def save_settings():
 	"""Pickle settings dictionary to the appropriate location"""
