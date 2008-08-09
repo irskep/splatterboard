@@ -6,7 +6,7 @@ class Line(SplatboardTool.Tool):
 		self.canvas_pre = None
 		self.x1, self.y1, self.x2, self.y2 = 0.0, 0.0, 0.0, 0.0
 	
-	def start_drawing(self, x, y):	
+	def start_drawing(self, x, y):
 		self.x1, self.y1 = x, y
 		self.canvas_pre = graphics.get_snapshot()
 	

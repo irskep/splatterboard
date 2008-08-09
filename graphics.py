@@ -31,7 +31,7 @@ def triplecall_wrapper(func):
 def get_snapshot():
 	return pyglet.image.get_buffer_manager().get_color_buffer().get_image_data()
 
-def get_pixel_from_image(image, x, y):	
+def get_pixel_from_image(image, x, y):
 	data = image.get_region(x,y,1,1).get_image_data()
 	data = data.get_data('RGB',3)	#3 is len('RGB')
 	data = map(ord, list(data))
@@ -50,7 +50,7 @@ def set_color(r=0.0, g=0.0, b=0.0, a=1.0, color=None):
 	else: pyglet.gl.glColor4f(r,g,b,a)
 
 @doublecall_wrapper
-def clear(r=0.0, g=0.0, b=0.0, a=1.0, color=None):	
+def clear(r=0.0, g=0.0, b=0.0, a=1.0, color=None):
 	if color is not None: pyglet.gl.glClearColor(*color)
 	else: pyglet.gl.glClearColor(1,1,1,1);
 	for window in pyglet.app.windows.__iter__():
@@ -69,12 +69,12 @@ def draw_line(x1, y1, x2, y2):
 	pyglet.graphics.draw(2, pyglet.gl.GL_LINES, ('v2f', (x1, y1, x2, y2)))
 
 @doublecall_wrapper
-def draw_rect(x1, y1, x2, y2):	
+def draw_rect(x1, y1, x2, y2):
 	pyglet.graphics.draw(4, pyglet.gl.GL_QUADS, ('v2f', (x1, y1, x1, y2, x2, y2, x2, y1)))
 
 @doublecall_wrapper
 def draw_rect_outline(x1, y1, x2, y2):
-	pyglet.graphics.draw(5, pyglet.gl.GL_LINE_STRIP, 
+	pyglet.graphics.draw(5, pyglet.gl.GL_LINE_STRIP,
 		('v2f', (x1, y1, x1, y2, x2, y2, x2, y1, x1, y1)))
 
 def concat(it):

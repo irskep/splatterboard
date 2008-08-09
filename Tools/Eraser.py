@@ -11,7 +11,7 @@ class Eraser(SplatboardTool.Tool):
 		graphics.set_color(color=self.color)
 		graphics.draw_image(self.brush_image,x-self.brush_image.width/2, y-self.brush_image.height/2)
 		
-	def keep_drawing(self, x, y, dx, dy):	
+	def keep_drawing(self, x, y, dx, dy):
 		graphics.set_color(color=self.color)
 		graphics.draw_image(self.brush_image,x-self.brush_image.width/2, y-self.brush_image.height/2)
 		angle = math.atan2(dy,dx)
@@ -26,7 +26,7 @@ class Eraser(SplatboardTool.Tool):
 		#graphics.draw_line(x2, y2, x4, y4)
 		self.lastx, self.lasty = x, y
 	
-	def stop_drawing(self, x, y):	
+	def stop_drawing(self, x, y):
 		graphics.set_color(color=self.color)
 		graphics.draw_image(self.brush_image,x-self.brush_image.width/2, y-self.brush_image.height/2)
 

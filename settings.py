@@ -2,7 +2,7 @@
 1. Put your game's name as the parameter in the settings_dir line
 2. List your game's options and saved state necessities in the settings dict
 3. "from settings import *" in other files and refer to settings['screen_width']
-	or something.
+   or something.
 4. Call save_settings() whenever you update the settings dictionary.
 5. There is no step 5, because everything is loaded automatically at startup.
 
@@ -44,7 +44,7 @@ def save_settings():
 	"""Pickle settings dictionary to the appropriate location"""
 
 	if not os.path.exists(settings_dir):
-	    os.makedirs(settings_dir)
+		os.makedirs(settings_dir)
 	settings_file = open(settings_path,'w')
 	pickle.dump(settings,settings_file)
 	settings_file.close()
