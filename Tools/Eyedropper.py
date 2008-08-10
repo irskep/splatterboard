@@ -6,6 +6,6 @@ class Eyedropper(SplatboardTool.Tool):
 
 default = Eyedropper()
 priority = 100
-group = 'Drawing'
+group = 'Selection'
 image = resources.Eyedropper
 cursor = None
