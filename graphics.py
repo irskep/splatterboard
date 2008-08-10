@@ -78,7 +78,7 @@ def enable_line_stipple():
 
 @doublecall_wrapper
 def disable_line_stipple():
-	pyglet.gl.glEnable(pyglet.gl.GL_LINE_STIPPLE)
+	pyglet.gl.glDisable(pyglet.gl.GL_LINE_STIPPLE)
 
 @doublecall_wrapper
 def set_color(r=0.0, g=0.0, b=0.0, a=1.0, color=None):
