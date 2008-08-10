@@ -23,7 +23,7 @@ class Splatboard(pyglet.window.Window):
 		if not settings['fullscreen']:
 			super(Splatboard, self).__init__(	width=settings['window_width'],
 												height=settings['window_height'],
-												resizable=False, vsync=False
+												resizable=False, vsync=True
 											)
 		else:
 			super(Splatboard, self).__init__( fullscreen=True, resizable=False, vsync=True)
