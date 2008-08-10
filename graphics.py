@@ -52,6 +52,7 @@ def get_pixel_from_image(image, x, y):
 
 @doublecall_wrapper
 def set_line_width(width):
+	pyglet.gl.glPointSize(width)
 	pyglet.gl.glLineWidth(width)
 
 @doublecall_wrapper
@@ -84,8 +85,10 @@ def draw_rect(x1, y1, x2, y2):
 
 @doublecall_wrapper
 def draw_rect_outline(x1, y1, x2, y2):
-	pyglet.graphics.draw(5, pyglet.gl.GL_LINE_STRIP,
-		('v2f', (x1, y1, x1, y2, x2, y2, x2, y1, x1, y1)))
+	pyglet.graphics.draw(4, pyglet.gl.GL_LINE_LOOP,
+		('v2f', (x1, y1, x1, y2, x2, y2, x2, y1)))
+	pyglet.graphics.draw(4, pyglet.gl.GL_POINTS,
+		('v2f', (x1, y1, x1, y2, x2, y2, x2, y1)))
 
 def concat(it):
 	return (y for x in it for y in x)
