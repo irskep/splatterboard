@@ -200,6 +200,7 @@ class ColorPicker():
 			self.rendered = True
 			self.draw_initial()
 		graphics.set_color(0,0,0,1)
+		graphics.set_line_width(1)
 		graphics.draw_rect_outline(self.x,self.y,self.x+self.width,self.y+self.height)
 	
 	def get_color(self, x, y):

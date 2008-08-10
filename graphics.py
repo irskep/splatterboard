@@ -51,6 +51,10 @@ def get_pixel_from_image(image, x, y):
 	return (float(r)/255.0,float(g)/255.0,float(b)/255.0,1.0)
 
 @doublecall_wrapper
+def set_line_width(width):
+	pyglet.gl.glLineWidth(width)
+
+@doublecall_wrapper
 def set_color(r=0.0, g=0.0, b=0.0, a=1.0, color=None):
 	if color is not None: pyglet.gl.glColor4f(*color)
 	else: pyglet.gl.glColor4f(r,g,b,a)
