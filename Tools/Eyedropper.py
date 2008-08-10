@@ -1,4 +1,4 @@
-import SplatboardTool, selections, graphics, resources
+import SplatboardTool, graphics, resources
 
 class Eyedropper(SplatboardTool.Tool):
 	def start_drawing(self, x, y):

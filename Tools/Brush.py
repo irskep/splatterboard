@@ -1,4 +1,4 @@
-import SplatboardTool, selections, resources, graphics, math
+import SplatboardTool, resources, graphics, math
 
 class Brush(SplatboardTool.Tool):
 	"""Simple brush tool"""

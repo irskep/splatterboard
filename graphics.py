@@ -1,4 +1,4 @@
-import math, sys, selections
+import math, sys
 import pyglet.graphics, pyglet.image, pyglet.gl
 from settings import *
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import pyglet
-import resources, gui, random, time, resources, graphics, selections
+import resources, gui, random, time, resources, graphics
 import sys, os, time
 from pyglet.window import key
 from settings import settings, save_settings
@@ -37,6 +37,7 @@ class Splatboard(pyglet.window.Window):
 		pyglet.gl.glEnable(pyglet.gl.GL_BLEND)
 		pyglet.gl.glBlendFunc(pyglet.gl.GL_SRC_ALPHA, pyglet.gl.GL_ONE_MINUS_SRC_ALPHA)
 		pyglet.gl.glEnable(pyglet.gl.GL_LINE_SMOOTH)
+		pyglet.gl.glEnable(pyglet.gl.GL_POINT_SMOOTH)
 		pyglet.gl.glHint(pyglet.gl.GL_LINE_SMOOTH_HINT,pyglet.gl.GL_NICEST)
 		
 		self.init_cursors()

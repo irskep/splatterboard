@@ -1,4 +1,4 @@
-import SplatboardTool, selections, resources, graphics
+import SplatboardTool, resources, graphics
 
 class Pencil(SplatboardTool.Tool):
 	"""Simple pencil tool"""

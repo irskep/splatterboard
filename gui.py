@@ -10,7 +10,7 @@ pressed. Header_Button is an image button that acts like a radio button
 when used the way GameWindow uses it.
 """
 
-import pyglet, resources, graphics, selections
+import pyglet, resources, graphics
 from settings import settings
 from dialogs import *
 

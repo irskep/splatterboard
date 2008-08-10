@@ -1,4 +1,4 @@
-import random, SplatboardTool, selections, resources, graphics, pyglet
+import random, SplatboardTool, resources, graphics, pyglet
 
 class Rectangle(SplatboardTool.Tool):
 	"""Simple rect tool"""

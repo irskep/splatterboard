@@ -1,4 +1,4 @@
-import random, SplatboardTool, selections, resources, graphics
+import random, SplatboardTool, resources, graphics
 
 class Ellipse(SplatboardTool.Tool):
 	"""Simple rect tool"""

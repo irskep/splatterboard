@@ -1,4 +1,4 @@
-import SplatboardTool, selections, resources, graphics
+import SplatboardTool, resources, graphics
 
 class Line(SplatboardTool.Tool):
 	"""Simple line tool"""
