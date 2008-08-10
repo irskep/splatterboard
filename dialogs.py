@@ -20,11 +20,12 @@ class WxDialogs(object):
 
 class ZenityDialogs(object):
 	def __init__(self):
-		# make sure zenity exists
+		import subprocess
 		test = subprocess.Popen(["zenity"], stderr=subprocess.PIPE)
 		test.wait()
 
 	def open_file(self, type_list=[]):
+		import subprocess
 		cmd = ["zenity", "--file-selection"]
 		p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
 		if p.wait():
@@ -33,6 +34,7 @@ class ZenityDialogs(object):
 			return p.stdout.next().strip()
 
 	def save_file(self, default_name=""):
+		import subprocess
 		cmd = ["zenity", "--file-selection", "--save"]
 		if default_name: cmd.append("--filename=" + default_name)
 		p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
