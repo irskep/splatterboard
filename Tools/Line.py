@@ -9,7 +9,7 @@ class Line(SplatboardTool.Tool):
 	def select(self):
 		self.canvas_pre = graphics.get_snapshot()
 		
-	def start_drawing(self, x, y):	
+	def start_drawing(self, x, y):
 		self.x1, self.y1 = x, y
 	
 	def keep_drawing(self, x, y, dx, dy):
@@ -28,6 +28,6 @@ class Line(SplatboardTool.Tool):
 
 default = Line()
 priority = 80
-group = 'Primitives'
+group = 'Shapes'
 image = resources.Line
 cursor = graphics.cursor['CURSOR_CROSSHAIR']

@@ -4,10 +4,10 @@ class Pencil(SplatboardTool.Tool):
 	"""Simple pencil tool"""
 	x, y = 0, 0
 	
-	def start_drawing(self, x, y):	
+	def start_drawing(self, x, y):
 		self.x, self.y = x, y
 	
-	def keep_drawing(self, x, y, dx, dy):	
+	def keep_drawing(self, x, y, dx, dy):
 		graphics.set_color(color=graphics.line_color)
 		graphics.draw_line(self.x, self.y, x, y)
 		self.x, self.y = x, y
