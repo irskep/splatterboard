@@ -115,8 +115,7 @@ def draw_ellipse(x1, y1, x2, y2):
 @doublecall_wrapper
 def draw_ellipse_outline(x1, y1, x2, y2):
 	points = list(concat(iter_ellipse(x1, y1, x2, y2)))
-	points.extend(points[:2])
-	pyglet.graphics.draw(len(points)/2, pyglet.gl.GL_LINE_STRIP, ('v2f', points))
+	pyglet.graphics.draw(len(points)/2, pyglet.gl.GL_LINE_LOOP, ('v2f', points))
 
 @doublecall_wrapper
 def draw_quad(*args):
