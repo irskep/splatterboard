@@ -8,7 +8,6 @@ from settings import settings, save_settings
 from collections import defaultdict
 
 class Splatboard(pyglet.window.Window):
-	
 	def __init__(self):
 		
 		#Init window. Fullscreen disabled due to buggyness.
