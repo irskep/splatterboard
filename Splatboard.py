@@ -10,7 +10,7 @@ from collections import defaultdict
 class Splatboard(pyglet.window.Window):
 	def __init__(self):
 		
-		#Init window. Fullscreen disabled due to buggyness.
+		#Init window
 		screen = pyglet.window.get_platform().get_default_display().get_default_screen()
 		
 		if screen.width <= settings['window_width'] or screen.height <= settings['window_height']:

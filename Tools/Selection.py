@@ -4,6 +4,7 @@ class Selection(SplatboardTool.Tool):
 	"""Simple rect tool"""
 	
 	canvas_pre = None
+	canvas_pre_2 = None
 	selection = None
 	x1, y1, x2, y2 = 0.0, 0.0, 0.0, 0.0
 	img_x, img_y = 0.0, 0.0
@@ -21,10 +22,14 @@ class Selection(SplatboardTool.Tool):
 			self.mouse_offset_y = y - self.y1
 			self.update_image_position()
 			if self.selected_new:
+				if self.canvas_pre_2 != None: self.canvas_pre = self.canvas_pre_2
 				self.selection = self.canvas_pre.get_region(self.img_x, self.img_y, abs(self.w), abs(self.h))
+				graphics.set_color(1,1,1,1)
+				graphics.draw_rect(self.img_x, self.img_y, self.w, self.h)
 			self.dragging = True
 			self.selected_new = False
 		else:
+			self.canvas_pre_2 = None
 			if self.selection != None:
 				graphics.set_color(1,1,1,1)
 				graphics.draw_image(self.selection, self.img_x, self.img_y)
@@ -43,27 +48,32 @@ class Selection(SplatboardTool.Tool):
 			self.update_image_position()
 			graphics.set_color(1,1,1,1)
 			graphics.draw_image(self.selection, self.img_x, self.img_y)
-		else:	
+		else:
 			self.x2, self.y2 = x, y
 			self.w = self.x2 - self.x1
 			self.h = self.y2 - self.y1
-			graphics.enable_line_stipple()
-			graphics.set_line_width(1.0)
-			graphics.set_color(color=graphics.line_color)
-			graphics.draw_rect_outline(self.x1, self.y1, self.x2, self.y2)
-			graphics.disable_line_stipple()
+			self.draw_selection()
+	
+	def draw_selection(self):
+		graphics.enable_line_stipple()
+		graphics.set_line_width(1.0)
+		graphics.set_color(color=graphics.line_color)
+		graphics.draw_rect_outline(self.x1, self.y1, self.x2, self.y2)
+		graphics.disable_line_stipple()
 	
 	def stop_drawing(self, x, y):
-		#self.keep_drawing(x, y, 0, 0)
-		graphics.set_color(1,1,1,1)
 		try:
+			graphics.set_color(1,1,1,1)
 			graphics.draw_image(self.selection, self.img_x, self.img_y)
+			if self.dragging:
+				self.draw_selection()
 		except:
 			pass
 	
 	def clean_up(self):
-		if self.dragging: self.canvas_pre = graphics.get_snapshot()
-		self.dragging = False
+		if self.dragging:
+			self.canvas_pre_2 = graphics.get_snapshot()
+			self.dragging = False
 	
 	def update_image_position(self):	
 		self.img_x, self.img_y = self.x1, self.y1
