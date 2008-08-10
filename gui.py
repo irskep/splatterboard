@@ -12,61 +12,7 @@ when used the way GameWindow uses it.
 
 import pyglet, resources, graphics, selections
 from settings import settings
-import wx
-
-app = wx.App(False)
-
-def open_file(type_list=[]):
-	wildcard = '|'.join(z for y in ((x,x) for x in type_list) for z in y)
-	dlg = wx.FileDialog(None,style=wx.FD_OPEN,wildcard=wildcard)
-	dlg.ShowModal()
-	return dlg.GetPath() if dlg.GetFilename() else None
-
-def save_file(default_name=""):
-	dlg = wx.FileDialog(None,style=wx.FD_SAVE)
-	dlg.ShowModal()
-	return dlg.GetPath() if dlg.GetFilename() else None
-"""
-try:	#Mac
-	import EasyDialogs
-	def save_file(default_name=""):
-		return EasyDialogs.AskFileForSave(savedFileName = default_name)
-	def open_file(type_list = []):
-		return EasyDialogs.AskFileForOpen()
-except:
-	try:	#GTK
-		import subprocess
-
-		test = subprocess.Popen(["zenity"], stderr=subprocess.PIPE)
-		test.wait()
-
-		def save_file(default_name=""):
-			cmd = ["zenity", "--file-selection", "--save"]
-			if default_name: cmd.append("--filename=" + default_name)
-			p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-			if p.wait():
-				return None
-			else:
-				return p.stdout.next().strip()
-		def open_file(type_list = []):
-			cmd = ["zenity", "--file-selection"]
-			p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-			if p.wait():
-				return None
-			else:
-				return p.stdout.next().strip()
-	except:
-		try:	#Windows
-			def save_file(default_name = ""):
-				return "My Picture.png"
-			def open_file(type_list = []):
-				return "My Picture.png"
-		except:	#Sad, sad default
-			def save_file(default_name = ""):
-				return "My Picture.png"
-			def open_file(type_list = []):
-				return "My Picture.png"
-"""
+from dialogs import *
 
 class PaletteButton():
 	def __init__(self, image, x, y, action):
