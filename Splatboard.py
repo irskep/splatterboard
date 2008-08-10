@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 import pyglet
-import resources, gui, random, time, loader, resources, graphics, selections
-import sys, time
+import resources, gui, random, time, resources, graphics, selections
+import sys, os, time
 from pyglet.window import key
 from settings import settings, save_settings
 from collections import defaultdict
@@ -157,7 +157,7 @@ class Splatboard(pyglet.window.Window):
 		pyglet.app.exit()
 	
 	#------------TOOL THINGS------------#
-	def import_libs(dir):
+	def import_libs(self, dir):
 		""" Imports the libs, returns a dictionary of the libraries."""
 		library_dict = {}
 		sys.path.append(dir)
@@ -172,7 +172,7 @@ class Splatboard(pyglet.window.Window):
 	
 	def load_tools(self):
 		#Import everything in the Tools directory, shove them in a dictionary
-		self.tools = loader.import_libs('Tools')
+		self.tools = self.import_libs('Tools')
 		#Sort them by their priority property
 		self.sorted_tools = sorted(self.tools.values(), key=lambda tool:tool.priority)
 		
