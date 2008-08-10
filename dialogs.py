@@ -80,12 +80,10 @@ things_to_try = [WxDialogs,ZenityDialogs,EasyDialogsDialogs,TkDialogs,LackOfDial
 for thing in things_to_try:
 	try:
 		handler = thing()
+		open_file = handler.open_file
+		save_file = handler.save_file
+		break
 	except:
 		continue
-	else:
-		break
 else:
 	raise ImportError, "Nothing worked!"
-
-open_file = handler.open_file
-save_file = handler.save_file
