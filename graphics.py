@@ -91,7 +91,7 @@ def draw_rect_outline(x1, y1, x2, y2):
 		('v2f', (x1, y1, x1, y2, x2, y2, x2, y1)))
 
 def concat(it):
-	return (y for x in it for y in x)
+	return list(y for x in it for y in x)
 
 def iter_ellipse(x1, y1, x2, y2):
 	xrad = abs((x2-x1) / 2.0)
@@ -116,12 +116,12 @@ def iter_ellipse(x1, y1, x2, y2):
 
 @doublecall_wrapper
 def draw_ellipse(x1, y1, x2, y2):
-	points = list(concat(iter_ellipse(x1, y1, x2, y2)))
+	points = concat(iter_ellipse(x1, y1, x2, y2))
 	pyglet.graphics.draw(len(points)/2, pyglet.gl.GL_TRIANGLE_FAN, ('v2f', points))
 
 @doublecall_wrapper
 def draw_ellipse_outline(x1, y1, x2, y2):
-	points = list(concat(iter_ellipse(x1, y1, x2, y2)))
+	points = concat(iter_ellipse(x1, y1, x2, y2))
 	pyglet.graphics.draw(len(points)/2, pyglet.gl.GL_LINE_LOOP, ('v2f', points))
 
 @doublecall_wrapper
