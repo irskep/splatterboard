@@ -21,11 +21,11 @@ class Tool:
 	def keep_drawing(self, x, y, dx, dy):
 		pass
 	
-	#mouse released, selections.drawing still True
+	#mouse released, graphics.drawing still True
 	def stop_drawing(self, x, y):
 		pass
 	
-	#selections.drawing just set to False
+	#graphics.drawing just set to False
 	def clean_up(self):
 		pass
 

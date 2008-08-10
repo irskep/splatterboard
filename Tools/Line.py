@@ -16,8 +16,8 @@ class Line(SplatboardTool.Tool):
 		self.x2, self.y2 = x, y
 		graphics.set_color(1,1,1,1)
 		graphics.draw_image(self.canvas_pre,0,0)
-		graphics.set_line_width(selections.line_size)
-		graphics.set_color(color=selections.line_color)
+		graphics.set_line_width(graphics.line_size)
+		graphics.set_color(color=graphics.line_color)
 		graphics.draw_line(self.x1, self.y1, self.x2, self.y2)
 	
 	def stop_drawing(self, x, y):

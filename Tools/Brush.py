@@ -4,15 +4,15 @@ class Brush(SplatboardTool.Tool):
 	"""Simple brush tool"""
 	x, y = 0, 0
 	brush_image = None
-	color = selections.line_color
+	color = graphics.line_color
 	def start_drawing(self, x, y):
-		self.color = selections.line_color
+		self.color = graphics.line_color
 		self.lastx, self.lasty = x, y
 		self.brush_image = resources.Hard_Brush_30
 		graphics.set_color(color=self.color)
 		graphics.draw_image(self.brush_image,x-self.brush_image.width/2, y-self.brush_image.height/2)
 		
-	def keep_drawing(self, x, y, dx, dy):
+	def keep_drawing(self, x, y, dx, dy):	
 		graphics.set_color(color=self.color)
 		graphics.draw_image(self.brush_image,x-self.brush_image.width/2, y-self.brush_image.height/2)
 		angle = math.atan2(dy,dx)
@@ -27,7 +27,7 @@ class Brush(SplatboardTool.Tool):
 		graphics.draw_line(x2, y2, x4, y4)
 		self.lastx, self.lasty = x, y
 	
-	def stop_drawing(self, x, y):
+	def stop_drawing(self, x, y):	
 		graphics.set_color(color=self.color)
 		graphics.draw_image(self.brush_image,x-self.brush_image.width/2, y-self.brush_image.height/2)
 

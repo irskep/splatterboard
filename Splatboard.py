@@ -89,7 +89,7 @@ class Splatboard(pyglet.window.Window):
 			graphics.draw_all_again()
 			self.frame_countdown -= 1
 		i = 0
-		if not selections.drawing:
+		if not graphics.drawing:
 			#toolbar background
 			graphics.set_color(0.8, 0.8, 0.8, 1)
 			graphics.draw_rect(0,self.canvas_y,self.canvas_x,self.height)
@@ -123,7 +123,7 @@ class Splatboard(pyglet.window.Window):
 	def on_mouse_press(self, x, y, button, modifiers):
 		graphics.draw_all_again()
 		if x > self.canvas_x and y > self.canvas_y:
-			selections.drawing = True
+			graphics.drawing = True
 			self.enter_canvas_mode()
 			self.undo_stack.append(graphics.get_snapshot())
 			self.current_tool.start_drawing(x-self.canvas_x,y-self.canvas_y)
@@ -138,18 +138,18 @@ class Splatboard(pyglet.window.Window):
 					button.action()
 			#pick a color if click was in color picker
 			if self.colorpicker.coords_inside(x,y):
-				selections.set_color(self.colorpicker.get_color(x,y))
+				graphics.set_selected_color(self.colorpicker.get_color(x,y))
 	
 	def on_mouse_drag(self, x, y, dx, dy, button, modifiers):
 		graphics.draw_all_again()
 		self.on_mouse_motion(x,y,dx,dy)
-		if selections.drawing: self.current_tool.keep_drawing(x-self.canvas_x,y-self.canvas_y,dx,dy)
+		if graphics.drawing: self.current_tool.keep_drawing(x-self.canvas_x,y-self.canvas_y,dx,dy)
 	
 	def on_mouse_release(self, x, y, button, modifiers):
-		if selections.drawing:
+		if graphics.drawing:
 			self.current_tool.stop_drawing(x-self.canvas_x,y-self.canvas_y)
 			self.exit_canvas_mode()
-			selections.drawing = False
+			graphics.drawing = False
 			self.current_tool.clean_up()
 	
 	def on_close(self):
@@ -260,7 +260,7 @@ class Splatboard(pyglet.window.Window):
 			self.current_tool.select()		#go back into tool
 	
 	def swap_colors(self):
-		selections.fill_color, selections.line_color = selections.line_color, selections.fill_color
+		graphics.fill_color, graphics.line_color = graphics.line_color, graphics.fill_color
 	
 
 if __name__ == '__main__':

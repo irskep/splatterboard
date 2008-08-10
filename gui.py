@@ -163,26 +163,26 @@ class ColorDisplay():
 		self.height = height
 	
 	def draw(self):
-		graphics.set_color(color=selections.line_color)
+		graphics.set_color(color=graphics.line_color)
 		graphics.draw_rect(self.x,self.y+self.height,self.x+self.width,self.y+self.height/2+2)
-		graphics.set_color(color=selections.fill_color)
+		graphics.set_color(color=graphics.fill_color)
 		graphics.draw_rect(self.x,self.y,self.x+self.width,self.y+self.height/2-2)
-		if selections.selected_color == 0: pyglet.gl.glLineWidth(3.0)
+		if graphics.selected_color == 0: pyglet.gl.glLineWidth(3.0)
 		else: pyglet.gl.glLineWidth(1.0)
-		graphics.set_color(color=selections.fill_color)
+		graphics.set_color(color=graphics.fill_color)
 		graphics.draw_rect_outline(self.x,self.y+self.height,self.x+self.width,self.y+self.height/2+2)
-		if selections.selected_color == 1: pyglet.gl.glLineWidth(3.0)
+		if graphics.selected_color == 1: pyglet.gl.glLineWidth(3.0)
 		else: pyglet.gl.glLineWidth(1.0)
-		graphics.set_color(color=selections.line_color)
+		graphics.set_color(color=graphics.line_color)
 		graphics.draw_rect_outline(self.x,self.y,self.x+self.width,self.y+self.height/2-2)
 		pyglet.gl.glLineWidth(1.0)
 	
 	def on_mouse_press(self, x, y, button, modifiers):
 		if self.coords_inside(x,y):
 			if y < self.y + self.height/2:
-				selections.selected_color = 1
+				graphics.selected_color = 1
 			else:
-				selections.selected_color = 0
+				graphics.selected_color = 0
 	
 	def coords_inside(self, x, y):
 		return x >= self.x and y >= self.y and x <= self.x + self.width and y <= self.y + self.height

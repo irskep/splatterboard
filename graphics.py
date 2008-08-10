@@ -7,6 +7,13 @@ cursor = {}	#set by Splatboard.py - pyglet stores cursors in an instance of Wind
 function_stack = []	#[(function, args, kwargs)]
 function_stack_2 = []
 
+line_color = (0.0, 0.0, 0.0, 1.0)
+fill_color = (1.0, 1.0, 1.0, 1.0)
+selected_color = 1 #0 for line_color, 1 for fill_color
+brush_size = 1.0
+line_size = 10.0
+drawing = False
+
 def draw_all_again():
 	if settings['fullscreen'] == True or settings['disable_buffer_fix_in_windowed'] == False:
 		global function_stack, function_stack_2
@@ -32,9 +39,18 @@ def call_twice(func, *args, **kwargs):
 	func(*args,**kwargs)
 	function_stack.append((func,args,kwargs))
 
+def set_selected_color(new_color):
+	global line_color
+	global fill_color
+	if selected_color == 0:
+		line_color = new_color
+	else:
+		fill_color = new_color
+
+
 def get_snapshot():
 	img = pyglet.image.get_buffer_manager().get_color_buffer().get_image_data()
-	if selections.drawing == True:
+	if drawing == True:
 		return img
 	else:
 		x, y = settings['toolbar_width'], settings['buttonbar_height']
@@ -128,7 +144,7 @@ def draw_ellipse(x1, y1, x2, y2):
 
 @doublecall_wrapper
 def draw_ellipse_outline(x1, y1, x2, y2):
-	w2 = selections.line_size / 2.0
+	w2 = line_size / 2.0
 	x_dir = 1 if x2 > x1 else -1
 	y_dir = 1 if y2 > y1 else -1
 
