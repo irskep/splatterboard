@@ -150,7 +150,8 @@ class Splatboard(pyglet.window.Window):
 		if selections.drawing:
 			self.current_tool.stop_drawing(x-self.canvas_x,y-self.canvas_y)
 			self.exit_canvas_mode()
-		selections.drawing = False
+			selections.drawing = False
+			self.current_tool.clean_up()
 	
 	def on_close(self):
 		save_settings()

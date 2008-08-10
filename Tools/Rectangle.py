@@ -23,6 +23,8 @@ class Rectangle(SplatboardTool.Tool):
 	
 	def stop_drawing(self, x, y):
 		self.keep_drawing(x, y, 0, 0)
+	
+	def clean_up(self):
 		self.canvas_pre = graphics.get_snapshot()
 
 default = Rectangle()
