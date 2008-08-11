@@ -17,7 +17,7 @@ class Text(tool.Tool):
 		self.label = pyglet.text.Label(color=(0,0,0,255), x=x, y=y)
 		self.writing = True
 	
-	def post_draw(self, x, y):	
+	def post_draw(self):	
 		self.canvas_pre = graphics.get_snapshot()
 
 	def text(self, text):
