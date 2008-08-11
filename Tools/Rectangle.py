@@ -25,7 +25,7 @@ class Rectangle(tool.Tool):
 	def stop_drawing(self, x, y):
 		self.keep_drawing(x, y, 0, 0)
 	
-	def post_draw(self):
+	def post_draw(self, x, y):
 		self.canvas_pre = graphics.get_snapshot()
 
 default = Rectangle()

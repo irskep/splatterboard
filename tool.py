@@ -1,21 +1,22 @@
 import pyglet
 
+def not_implemented(*args, **kwargs):
+	pass
+
 class Tool:
 	"""Simple line tool"""
-	def __init__(self):
-		self.canvas_pre = None
 	
-	#tool is selected
-	def select(self):
-		pass
+	select = not_implemented	#tool is selected
+	unselect = not_implemented	#	and unselected
 	
-	#different tool is selected
-	def unselect(self):
-		pass
-	
-	#mouse pressed, canvas mode not entered yet
-	def pre_draw(self, x, y):
-		pass
+	pre_draw = not_implemented		#mouse pressed, canvas mode not entered yet (x, y)
+	start_drawing = not_implemented	#canvas mode just entered					(x, y)
+	keep_drawing = not_implemented	#mouse dragging								(x, y, dx, dy)
+	stop_drawing = not_implemented	#mouse released, still in canvas mode		(x, y)
+	post_draw = not_implemented		#just exited canvas mode					(x, y)
+	text = not_implemented			#unicode text entered						(text)
+	key_press = not_implemented		#key pressed - for keyboard commands		(symbol, modifiers)
+	key_release = not_implemented	#see key_pressed
 	
 	#return True if canvas should be grabbed and stored on undo stack.
 	#will almost always be True except for things that draw temporary
@@ -28,34 +29,6 @@ class Tool:
 	#to just moving a tool's selection area)
 	def undo(self):
 		return True
-	
-	#now in canvas mode
-	def start_drawing(self, x, y):
-		pass
-	
-	#mouse dragging
-	def keep_drawing(self, x, y, dx, dy):
-		pass
-	
-	#mouse released, graphics.drawing still True
-	def stop_drawing(self, x, y):
-		pass
-
-	#graphics.drawing just set to False
-	def post_draw(self):
-		pass
-
-	#text entered
-	def text(self, text):
-		pass
-
-	#key pressed
-	def key_press(self, symbol, modifiers):
-		pass
-	
-	#key released
-	def key_release(self, symbol, modifiers):
-		pass
 	
 default = Tool()	#Instance of your class
 priority = 1000		#Position in toolbar

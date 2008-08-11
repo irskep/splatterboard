@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import pyglet
-import resources, gui, random, time, resources, graphics
+import resources, gui, random, time, resources, graphics, tool
 import sys, os, time
 from pyglet.window import key
 from settings import settings, save_settings
@@ -109,17 +109,20 @@ class Splatboard(pyglet.window.Window):
 	
 	def on_key_press(self, symbol, modifiers):
 		graphics.draw_all_again()
-		self.current_tool.key_press(symbol, modifiers)
+		if not graphics.drawing and self.current_tool.key_press != tool.not_implemented:
+			self.enter_canvas_mode()
+			self.current_tool.key_press(symbol, modifiers)
+			self.exit_canvas_mode()
 		if symbol == key.ESCAPE: return True	#stop Pyglet from quitting
 
 	def on_key_release(self, symbol, modifiers):
-		if not graphics.drawing:
+		if not graphics.drawing and self.current_tool.key_release != tool.not_implemented:
 			self.enter_canvas_mode()
 			self.current_tool.key_release(symbol, modifiers)
 			self.exit_canvas_mode()
 
 	def on_text(self, text):
-		if not graphics.drawing:
+		if not graphics.drawing and self.current_tool.text != tool.not_implemented:
 			self.enter_canvas_mode()
 			self.current_tool.text(text)
 			self.exit_canvas_mode()
@@ -166,7 +169,7 @@ class Splatboard(pyglet.window.Window):
 			self.current_tool.stop_drawing(x-self.canvas_x,y-self.canvas_y)
 			self.exit_canvas_mode()
 			graphics.drawing = False
-			self.current_tool.post_draw()
+			self.current_tool.post_draw(x, y)
 	
 	def on_close(self):
 		save_settings()
