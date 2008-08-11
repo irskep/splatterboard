@@ -24,11 +24,23 @@ class Tool:
 	#mouse released, graphics.drawing still True
 	def stop_drawing(self, x, y):
 		pass
-	
+
 	#graphics.drawing just set to False
 	def clean_up(self):
 		pass
 
+	#text entered
+	def text(self, text):
+		pass
+
+	#key pressed
+	def key_press(self, symbol, modifiers):
+		pass
+	
+	#key released
+	def key_release(self, symbol, modifiers):
+		pass
+	
 default = Tool()	#Instance of your class
 priority = 1000		#Position in toolbar
 group = 'Example'	#Toolbar grouping - Drawing, Shapes, etc

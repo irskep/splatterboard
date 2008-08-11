@@ -109,7 +109,14 @@ class Splatboard(pyglet.window.Window):
 	
 	def on_key_press(self, symbol, modifiers):
 		graphics.draw_all_again()
+		self.current_tool.key_press(symbol, modifiers)
 		if symbol == key.ESCAPE: return True	#stop Pyglet from quitting
+
+	def on_key_release(self, symbol, modifiers):
+		self.current_tool.key_release(symbol, modifiers)
+
+	def on_text(self, text):
+		self.current_tool.text(text)
 	
 	def on_mouse_motion(self, x, y, dx, dy):
 		graphics.draw_all_again()
