@@ -48,9 +48,11 @@ class EasyDialogsDialogs(object):
 		import EasyDialogs
 
 	def open_file(type_list=[]):
+		import EasyDialogs
 		return EasyDialogs.AskFileForOpen()
 
 	def save_file(default_name=""):
+		import EasyDialogs
 		return EasyDialogs.AskFileForSave(savedFileName = default_name)
 
 class TkDialogs(object):
