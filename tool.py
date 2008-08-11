@@ -23,9 +23,11 @@ class Tool:
 	def ask_undo(self):
 		return True
 	
-	
+	#Ask the tool to undo its state. Return True if 'normal' undo behavior
+	#should occur (i.e. image is popped off the main undo stack, as opposed
+	#to just moving a tool's selection area)
 	def undo(self):
-		pass
+		return True
 	
 	#now in canvas mode
 	def start_drawing(self, x, y):

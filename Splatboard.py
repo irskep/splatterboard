@@ -259,7 +259,7 @@ class Splatboard(pyglet.window.Window):
 			self.set_fullscreen(settings['fullscreen'])
 	
 	def undo(self):
-		if len(self.undo_stack) > 0:
+		if len(self.undo_stack) > 0 and self.current_tool.undo():
 			self.current_tool.unselect()	#exit current tool, just in case
 			graphics.set_color(1,1,1,1)
 			img = self.undo_stack.pop()
