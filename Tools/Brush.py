@@ -10,14 +10,18 @@ class Brush(SplatboardTool.Tool):
 		self.lastx, self.lasty = x, y
 		self.brush_image = resources.Hard_Brush_30
 		graphics.set_color(color=self.color)
-		graphics.draw_image(self.brush_image,x-self.brush_image.width/2, y-self.brush_image.height/2)
+		#graphics.draw_image(self.brush_image,x-self.brush_image.width/2, y-self.brush_image.height/2)
+		graphics.draw_ellipse(x-graphics.brush_size/2, y-graphics.brush_size/2,
+								x+graphics.brush_size/2, y+graphics.brush_size/2)
 		
 	def keep_drawing(self, x, y, dx, dy):
 		graphics.set_color(color=self.color)
-		graphics.draw_image(self.brush_image,x-self.brush_image.width/2, y-self.brush_image.height/2)
+		#graphics.draw_image(self.brush_image,x-self.brush_image.width/2, y-self.brush_image.height/2)
+		graphics.draw_ellipse(x-graphics.brush_size/2, y-graphics.brush_size/2,
+								x+graphics.brush_size/2, y+graphics.brush_size/2)
 		angle = math.atan2(dy,dx)
 		dist = math.sqrt(math.pow(x-self.lastx,2)+math.pow(y-self.lasty,2))
-		brush_size = self.brush_image.width*0.5*0.95
+		brush_size = graphics.brush_size/2 #self.brush_image.width*0.5*0.95
 		x1, y1 = x+brush_size*math.cos(angle+math.pi/2), y+brush_size*math.sin(angle+math.pi/2)
 		x2, y2 = x+brush_size*math.cos(angle-math.pi/2), y+brush_size*math.sin(angle-math.pi/2)
 		x3, y3 = self.lastx+brush_size*math.cos(angle+math.pi/2), self.lasty+brush_size*math.sin(angle+math.pi/2)
@@ -29,7 +33,9 @@ class Brush(SplatboardTool.Tool):
 	
 	def stop_drawing(self, x, y):
 		graphics.set_color(color=self.color)
-		graphics.draw_image(self.brush_image,x-self.brush_image.width/2, y-self.brush_image.height/2)
+		graphics.draw_ellipse(x-graphics.brush_size/2, y-graphics.brush_size/2,
+								x+graphics.brush_size/2, y+graphics.brush_size/2)
+		#graphics.draw_image(self.brush_image,x-self.brush_image.width/2, y-self.brush_image.height/2)
 
 default = Brush()
 priority = 61

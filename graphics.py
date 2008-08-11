@@ -11,7 +11,7 @@ canvas_x, canvas_y = settings['toolbar_width'], settings['buttonbar_height']
 line_color = (0.0, 0.0, 0.0, 1.0)
 fill_color = (1.0, 1.0, 1.0, 1.0)
 selected_color = 1 #0 for line_color, 1 for fill_color
-brush_size = 1.0
+brush_size = 10.0
 line_size = 10.0
 drawing = False
 
