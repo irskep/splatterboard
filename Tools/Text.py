@@ -1,7 +1,7 @@
-import SplatboardTool, graphics, resources, pyglet
+import tool, graphics, resources, pyglet
 from pyglet.window import key
 
-class Text(SplatboardTool.Tool):
+class Text(tool.Tool):
 	"""Simple text tool"""
 
 	canvas_pre = None

@@ -1,6 +1,6 @@
-import SplatboardTool, resources, graphics
+import tool, resources, graphics
 
-class Pencil(SplatboardTool.Tool):
+class Pencil(tool.Tool):
 	"""Simple pencil tool"""
 	x, y = 0, 0
 	

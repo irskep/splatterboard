@@ -1,7 +1,7 @@
-import random, SplatboardTool, resources, graphics
+import random, tool, resources, graphics
 from settings import *
 
-class Selection(SplatboardTool.Tool):
+class Selection(tool.Tool):
 	"""Simple rect tool"""
 	
 	canvas_pre = None
@@ -16,6 +16,12 @@ class Selection(SplatboardTool.Tool):
 	def select(self):
 		self.canvas_pre = graphics.get_snapshot()
 	
+	def ask_undo(self):
+		if self.w == 0.0 and self.h == 0.0:
+			return True
+		else:
+			return False
+	
 	def pre_draw(self, x, y):
 		if not self.coords_in_selection(x,y):
 			if self.selection != None:
@@ -25,6 +31,7 @@ class Selection(SplatboardTool.Tool):
 				self.canvas_pre = graphics.get_snapshot()
 			self.selection = None
 			self.x1, self.y1 = x, y
+			self.w, self.h = 0.0, 0.0
 			self.dragging = False
 	
 	def start_drawing(self, x, y):

@@ -1,6 +1,6 @@
-import SplatboardTool, resources, graphics
+import tool, resources, graphics
 
-class Line(SplatboardTool.Tool):
+class Line(tool.Tool):
 	"""Simple line tool"""
 	
 	canvas_pre = None

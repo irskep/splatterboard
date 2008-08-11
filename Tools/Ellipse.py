@@ -1,6 +1,6 @@
-import random, SplatboardTool, resources, graphics
+import random, tool, resources, graphics
 
-class Ellipse(SplatboardTool.Tool):
+class Ellipse(tool.Tool):
 	"""Simple rect tool"""
 	
 	canvas_pre = None
