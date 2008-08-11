@@ -245,18 +245,14 @@ class Splatboard(pyglet.window.Window):
 		path = gui.open_file(type_list = resources.supported_image_formats)
 		self.set_fullscreen(settings['fullscreen'])
 		if path != None:
-			self.enter_canvas_mode()
 			graphics.set_color(1,1,1,1)
-			graphics.draw_rect(0,0,settings['window_width']-self.canvas_x,settings['window_height']-self.canvas_y)
-			graphics.draw_image(pyglet.image.load(path),0,0)
-			self.exit_canvas_mode()
+			graphics.draw_rect(self.canvas_x,self.canvas_y,settings['window_width'],settings['window_height'])
+			graphics.draw_image(pyglet.image.load(path),self.canvas_x,self.canvas_y)
 	
 	def save(self):
 		path = gui.save_file(default_name="My Picture.png")
 		if path != None:
-			self.enter_canvas_mode()
 			img = graphics.get_snapshot()
-			self.exit_canvas_mode()
 			self.set_fullscreen(fullscreen=False)
 			img.save(path)
 			self.set_fullscreen(settings['fullscreen'])
