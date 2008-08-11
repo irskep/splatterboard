@@ -13,14 +13,18 @@ class Tool:
 	def unselect(self):
 		pass
 	
+	#mouse pressed, canvas mode not entered yet
+	def pre_draw(self, x, y):
+		pass
+	
 	#return True if canvas should be grabbed and stored on undo stack.
 	#will almost always be True except for things that draw temporary
-	#borders, etc
+	#borders, etc. Called immediately after pre_draw().
 	def ask_undo(self):
 		return True
 	
-	#mouse pressed, canvas mode not entered yet
-	def pre_draw(self, x, y):
+	
+	def undo(self):
 		pass
 	
 	#now in canvas mode

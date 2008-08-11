@@ -47,11 +47,11 @@ class EasyDialogsDialogs(object):
 	def __init__(self):
 		import EasyDialogs
 
-	def open_file(type_list=[]):
+	def open_file(self, type_list=[]):
 		import EasyDialogs
 		return EasyDialogs.AskFileForOpen()
 
-	def save_file(default_name=""):
+	def save_file(self, default_name=""):
 		import EasyDialogs
 		return EasyDialogs.AskFileForSave(savedFileName = default_name)
 
@@ -77,7 +77,7 @@ class LackOfDialogs(object):
 	def save_file(self, default_name=""):
 		return default_name or "My Picture.png"
 
-things_to_try = [WxDialogs,ZenityDialogs,EasyDialogsDialogs,TkDialogs,LackOfDialogs]
+things_to_try = [EasyDialogsDialogs,WxDialogs,ZenityDialogs,TkDialogs,LackOfDialogs]
 
 for thing in things_to_try:
 	try:

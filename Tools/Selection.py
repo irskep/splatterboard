@@ -12,27 +12,29 @@ class Selection(tool.Tool):
 	original_x, original_y = 0.0, 0.0
 	mouse_offset_x, mouse_offset_y = 0.0, 0.0
 	dragging = False
+	allow_undo = True
 	
 	def select(self):
 		self.canvas_pre = graphics.get_snapshot()
 	
-	def ask_undo(self):
-		if self.w == 0.0 and self.h == 0.0:
-			return True
-		else:
-			return False
-	
 	def pre_draw(self, x, y):
+		self.allow_undo = True
 		if not self.coords_in_selection(x,y):
 			if self.selection != None:
 				self.update_image_position()
 				graphics.set_color(1,1,1,1)
 				graphics.draw_image(self.selection, self.img_x+graphics.canvas_x, self.img_y+graphics.canvas_y)
 				self.canvas_pre = graphics.get_snapshot()
+				self.allow_undo = False
 			self.selection = None
 			self.x1, self.y1 = x, y
 			self.w, self.h = 0.0, 0.0
 			self.dragging = False
+		else:
+			self.allow_undo = False
+
+	def ask_undo(self):
+		return self.allow_undo
 	
 	def start_drawing(self, x, y):
 		if self.coords_in_selection(x,y):
@@ -82,6 +84,9 @@ class Selection(tool.Tool):
 					self.draw_selection()
 			except:
 				pass
+	
+	def unselect(self):
+		self.pre_draw(-1,-1)
 	
 	def update_image_position(self):
 		self.img_x, self.img_y = self.x1, self.y1
