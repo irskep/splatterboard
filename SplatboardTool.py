@@ -14,7 +14,7 @@ class Tool:
 		pass
 	
 	#mouse pressed, canvas mode not entered yet
-	def pre_draw(self):
+	def pre_draw(self, x, y):
 		pass
 	
 	#now in canvas mode

@@ -19,8 +19,12 @@ class Selection(SplatboardTool.Tool):
 		self.canvas_pre = graphics.get_snapshot()
 		pass
 	
-	def pre_draw(self):	
-		if self.selected_new: self.canvas_pre = graphics.get_snapshot()
+	def pre_draw(self, x, y):
+		if not self.coords_in_selection(x,y) and self.selection != None:
+			self.update_image_position()
+			graphics.set_color(1,1,1,1)
+			graphics.draw_image(self.selection, self.img_x+graphics.canvas_x, self.img_y+graphics.canvas_y)
+			self.canvas_pre = graphics.get_snapshot()
 		self.dragging = False
 	
 	def start_drawing(self, x, y):
@@ -37,7 +41,7 @@ class Selection(SplatboardTool.Tool):
 		else:
 			self.canvas_pre_2 = None
 			self.selected_new = True
-			#self.selection = None
+			self.selection = None
 			self.x1, self.y1 = x, y
 			self.dragging = False
 	
