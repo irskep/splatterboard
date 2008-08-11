@@ -9,13 +9,16 @@ class Text(tool.Tool):
 
 	def select(self):
 		self.writing = False
+		self.canvas_pre = graphics.get_snapshot()
 
 	def start_drawing(self, x, y):
 		# FIXME wrong coordinates
 		# FIXME wrong time to grab the canvas
-		self.canvas_pre = graphics.get_snapshot()
 		self.label = pyglet.text.Label(color=(0,0,0,255), x=x, y=y)
 		self.writing = True
+	
+	def stop_drawing(self, x, y):	
+		self.canvas_pre = graphics.get_snapshot()
 
 	def text(self, text):
 		if not self.writing:
