@@ -1,0 +1,7 @@
+Steve:
+-Fill tool
+-GUI sliders
+-Abstract ghetto shit out of Selection.py
+
+Josh:
+-Whatever Josh is doing

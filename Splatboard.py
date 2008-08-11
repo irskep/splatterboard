@@ -138,7 +138,6 @@ class Splatboard(pyglet.window.Window):
 			self.current_tool.pre_draw(x-self.canvas_x,y-self.canvas_y)
 			if self.current_tool.ask_undo():
 				self.undo_stack.append(graphics.get_snapshot())
-				print 'stacked'
 			graphics.drawing = True
 			self.enter_canvas_mode()
 			self.current_tool.start_drawing(x-self.canvas_x,y-self.canvas_y)
