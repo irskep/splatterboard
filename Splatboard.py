@@ -131,10 +131,10 @@ class Splatboard(pyglet.window.Window):
 	def on_mouse_press(self, x, y, button, modifiers):
 		graphics.draw_all_again()
 		if x > self.canvas_x and y > self.canvas_y:
+			self.undo_stack.append(graphics.get_snapshot())
 			self.current_tool.pre_draw(x-self.canvas_x,y-self.canvas_y)
 			graphics.drawing = True
 			self.enter_canvas_mode()
-			self.undo_stack.append(graphics.get_snapshot())
 			self.current_tool.start_drawing(x-self.canvas_x,y-self.canvas_y)
 		else:
 			for button in self.toolbar:
