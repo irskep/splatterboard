@@ -5,7 +5,6 @@ class Selection(SplatboardTool.Tool):
 	"""Simple rect tool"""
 	
 	canvas_pre = None
-	canvas_pre_2 = None
 	selection = None
 	x1, y1, x2, y2 = 0.0, 0.0, 0.0, 0.0
 	img_x, img_y = 0.0, 0.0
@@ -13,37 +12,30 @@ class Selection(SplatboardTool.Tool):
 	original_x, original_y = 0.0, 0.0
 	mouse_offset_x, mouse_offset_y = 0.0, 0.0
 	dragging = False
-	selected_new = True
 	
 	def select(self):
 		self.canvas_pre = graphics.get_snapshot()
-		pass
 	
 	def pre_draw(self, x, y):
-		if not self.coords_in_selection(x,y) and self.selection != None:
-			self.update_image_position()
-			graphics.set_color(1,1,1,1)
-			graphics.draw_image(self.selection, self.img_x+graphics.canvas_x, self.img_y+graphics.canvas_y)
-			self.canvas_pre = graphics.get_snapshot()
-		self.dragging = False
+		if not self.coords_in_selection(x,y):
+			if self.selection != None:
+				self.update_image_position()
+				graphics.set_color(1,1,1,1)
+				graphics.draw_image(self.selection, self.img_x+graphics.canvas_x, self.img_y+graphics.canvas_y)
+				self.canvas_pre = graphics.get_snapshot()
+			self.selection = None
+			self.x1, self.y1 = x, y
+			self.dragging = False
 	
 	def start_drawing(self, x, y):
 		if self.coords_in_selection(x,y):
 			self.mouse_offset_x = x - self.x1
 			self.mouse_offset_y = y - self.y1
 			self.update_image_position()
-			if self.selected_new:
-				if self.canvas_pre_2 != None: self.canvas_pre = self.canvas_pre_2
+			if not self.dragging:
 				self.selection = self.canvas_pre.get_region(self.img_x, self.img_y, abs(self.w), abs(self.h))
 				self.original_x, self.original_y = self.img_x, self.img_y
 			self.dragging = True
-			self.selected_new = False
-		else:
-			self.canvas_pre_2 = None
-			self.selected_new = True
-			self.selection = None
-			self.x1, self.y1 = x, y
-			self.dragging = False
 	
 	def keep_drawing(self, x, y, dx, dy):
 		if x > settings['window_width'] - settings['toolbar_width']:

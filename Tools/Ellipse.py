@@ -9,7 +9,7 @@ class Ellipse(SplatboardTool.Tool):
 	def select(self):
 		self.canvas_pre = graphics.get_snapshot()
 	
-	def start_drawing(self, x, y):
+	def start_drawing(self, x, y):	
 		self.x1, self.y1 = x, y
 	
 	def keep_drawing(self, x, y, dx, dy):
@@ -25,7 +25,7 @@ class Ellipse(SplatboardTool.Tool):
 	def stop_drawing(self, x, y):
 		self.keep_drawing(x, y, 0, 0)
 	
-	def clean_up(self):
+	def post_draw(self):
 		self.canvas_pre = graphics.get_snapshot()
 
 default = Ellipse()

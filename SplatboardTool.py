@@ -30,7 +30,7 @@ class Tool:
 		pass
 
 	#graphics.drawing just set to False
-	def clean_up(self):
+	def post_draw(self):
 		pass
 
 	#text entered
