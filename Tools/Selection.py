@@ -38,10 +38,10 @@ class Selection(SplatboardTool.Tool):
 			self.dragging = True
 	
 	def keep_drawing(self, x, y, dx, dy):
-		if x > settings['window_width'] - settings['toolbar_width']:
-			x = settings['window_width'] - settings['toolbar_width']
-		if y > settings['window_height'] - settings['buttonbar_height']:
-			x = settings['window_height'] - settings['buttonbar_height']
+		x = min(x, settings['window_width'] - settings['toolbar_width'])
+		x = max(x, 0)
+		y = min(y, settings['window_height'] - settings['buttonbar_height'])
+		y = max(y, 0)
 		graphics.set_color(1,1,1,1)
 		graphics.draw_image(self.canvas_pre,0,0)
 		if self.dragging:
