@@ -6,6 +6,7 @@ _canvas_pre = None
 cursor = {}	#set by Splatboard.py - pyglet stores cursors in an instance of Window.
 function_stack = []	#[(function, args, kwargs)]
 function_stack_2 = []
+canvas_x, canvas_y = settings['toolbar_width'], settings['buttonbar_height']
 
 line_color = (0.0, 0.0, 0.0, 1.0)
 fill_color = (1.0, 1.0, 1.0, 1.0)
@@ -47,15 +48,12 @@ def set_selected_color(new_color):
 	else:
 		fill_color = new_color
 
-
 def get_snapshot():
 	img = pyglet.image.get_buffer_manager().get_color_buffer().get_image_data()
 	if drawing == True:
 		return img
 	else:
-		x, y = settings['toolbar_width'], settings['buttonbar_height']
-		w, h = settings['window_width']-x, settings['window_height']-y
-		return img.get_region(x, y, w, h)
+		return img.get_region(canvas_x, canvas_y, settings['window_width']-canvas_x, settings['window_height']-canvas_y)
 
 def get_pixel_from_image(image, x, y):
 	data = image.get_region(x,y,1,1).get_image_data()

@@ -13,7 +13,11 @@ class Tool:
 	def unselect(self):
 		pass
 	
-	#mouse pressed
+	#mouse pressed, canvas mode not entered yet
+	def pre_draw(self):
+		pass
+	
+	#now in canvas mode
 	def start_drawing(self, x, y):
 		pass
 	

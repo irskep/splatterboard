@@ -17,6 +17,11 @@ class Selection(SplatboardTool.Tool):
 	
 	def select(self):
 		self.canvas_pre = graphics.get_snapshot()
+		pass
+	
+	def pre_draw(self):	
+		if self.selected_new: self.canvas_pre = graphics.get_snapshot()
+		self.dragging = False
 	
 	def start_drawing(self, x, y):
 		if self.coords_in_selection(x,y):
@@ -66,18 +71,14 @@ class Selection(SplatboardTool.Tool):
 		graphics.disable_line_stipple()
 	
 	def stop_drawing(self, x, y):
-		try:
-			graphics.set_color(1,1,1,1)
-			graphics.draw_image(self.selection, self.img_x, self.img_y)
-			if self.dragging:
-				self.draw_selection()
-		except:
-			pass
-	
-	def clean_up(self):
 		if self.dragging:
-			self.canvas_pre_2 = graphics.get_snapshot()
-			self.dragging = False
+			try:
+				graphics.set_color(1,1,1,1)
+				graphics.draw_image(self.selection, self.img_x, self.img_y)
+				if self.dragging:
+					self.draw_selection()
+			except:
+				pass
 	
 	def update_image_position(self):
 		self.img_x, self.img_y = self.x1, self.y1
