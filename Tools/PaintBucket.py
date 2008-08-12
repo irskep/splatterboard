@@ -10,8 +10,7 @@ class PaintBucket(tool.Tool):
 	def init(self):
 		graphics.set_cursor(graphics.cursor['CURSOR_WAIT'])
 		self.canvas_pre = graphics.get_snapshot()
-		image_data = self.canvas_pre.get_image_data()
-		data = image_data.get_data('RGBA',self.canvas_pre.width*4)
+		data = self.canvas_pre.get_data('RGBA',self.canvas_pre.width*4)
 		self.pixel_data = map(ord, list(data))
 		graphics.set_cursor(graphics.cursor['CURSOR_DEFAULT'])
 	

@@ -57,7 +57,7 @@ def get_snapshot():
 
 def get_pixel_from_image(image, x, y):
 	data = image.get_region(x,y,1,1).get_image_data()
-	data = data.get_data('RGB',3)	#3 is len('RGB')
+	data = data.get_data('RGBA',4)	#3 is len('RGB')
 	data = map(ord, list(data))
 	r = data[0]
 	g = data[1]
