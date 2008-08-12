@@ -64,6 +64,10 @@ def get_pixel_from_image(image, x, y):
 	b = data[2]
 	return (float(r)/255.0,float(g)/255.0,float(b)/255.0,1.0)
 
+def set_cursor(cursor):
+	for window in pyglet.app.windows:
+		window.set_mouse_cursor(cursor)
+
 @doublecall_wrapper
 def set_line_width(width):
 	pyglet.gl.glPointSize(width)

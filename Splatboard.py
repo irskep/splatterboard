@@ -83,6 +83,7 @@ class Splatboard(pyglet.window.Window):
 		graphics.cursor['CURSOR_HAND'] = self.get_system_mouse_cursor(self.CURSOR_HAND)
 		graphics.cursor['CURSOR_TEXT'] = self.get_system_mouse_cursor(self.CURSOR_TEXT)
 		graphics.cursor['CURSOR_WAIT'] = self.get_system_mouse_cursor(self.CURSOR_WAIT)
+		graphics.cursor['CURSOR_DEFAULT'] = self.get_system_mouse_cursor(self.CURSOR_DEFAULT)
 	
 	#------------EVENT HANDLING------------#
 	def on_draw(self, dt=0):

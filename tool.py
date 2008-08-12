@@ -6,8 +6,8 @@ def not_implemented(*args, **kwargs):
 class Tool:
 	"""Simple line tool"""
 	
-	select = not_implemented	#tool is selected
-	unselect = not_implemented	#	and unselected
+	select = not_implemented		#tool is selected
+	unselect = not_implemented		#	and unselected
 	
 	pre_draw = not_implemented		#mouse pressed, canvas mode not entered yet (x, y)
 	start_drawing = not_implemented	#canvas mode just entered					(x, y)
