@@ -4,7 +4,7 @@ from settings import *
 class PaintBucket(tool.Tool):
 	"""Simple paint bucket tool"""
 	original_color = (1.0, 1.0, 1.0, 1.0)
-	threshold = 0.3
+	threshold = 1.0
 	canvas_pre = None
 	pixels = []
 	pixel_data = None
@@ -35,6 +35,7 @@ class PaintBucket(tool.Tool):
 		graphics.set_cursor(graphics.cursor['CURSOR_WAIT'])
 		self.original_color = self.get_pixel(x,y)
 		self.pixels = []
+		self.pixel_colors = []
 		to_check = [(x, y, x, y)]
 		new_pixels = []
 		checked_pixels = [[0 for col in range(self.canvas_pre.height)] for row in range(self.canvas_pre.width)]
@@ -48,6 +49,9 @@ class PaintBucket(tool.Tool):
 						difference = sum(abs(c1-c2) for (c1,c2) in zip(color, self.original_color))
 						if difference < self.threshold:
 							self.pixels.extend((x,y))
+							alpha = 1.0 - difference / self.threshold
+							self.pixel_colors.extend(graphics.fill_color[0:3])
+							self.pixel_colors.append(alpha)
 							if x-1 != ox: new_pixels.append((x-1,y,x,y))
 							if x+1 != ox: new_pixels.append((x+1,y,x,y))
 							if y-1 != oy: new_pixels.append((x,y-1,x,y))
@@ -57,9 +61,9 @@ class PaintBucket(tool.Tool):
 	
 	def stop_drawing(self, x, y):
 		graphics.set_line_width(1.0)
-		graphics.set_color(color=graphics.fill_color)
+		#graphics.set_color(color=graphics.fill_color)
 		graphics.call_twice(pyglet.gl.glDisable, pyglet.gl.GL_POINT_SMOOTH)
-		graphics.draw_points(self.pixels)
+		graphics.draw_points(self.pixels, self.pixel_colors)
 		graphics.call_twice(pyglet.gl.glEnable, pyglet.gl.GL_POINT_SMOOTH)
 
 default = PaintBucket()
