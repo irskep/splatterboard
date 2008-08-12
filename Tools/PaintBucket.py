@@ -54,7 +54,9 @@ class PaintBucket(tool.Tool):
 	def stop_drawing(self, x, y):	
 		graphics.set_line_width(1.0)
 		graphics.set_color(color=graphics.fill_color)
+		graphics.call_twice(pyglet.gl.glDisable, pyglet.gl.GL_POINT_SMOOTH)
 		graphics.draw_points(self.pixels)
+		graphics.call_twice(pyglet.gl.glEnable, pyglet.gl.GL_POINT_SMOOTH)
 
 default = PaintBucket()
 priority = 69

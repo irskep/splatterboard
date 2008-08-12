@@ -24,7 +24,7 @@ class Spray(tool.Tool):
 
 	def doodle(self, dt=0):
 		graphics.set_color(color=self.color)
-		graphics.set_line_width(graphics.brush_size)
+		graphics.set_line_width(graphics.brush_size/2)
 		graphics.draw_points(graphics.concat(self.make_point() for i in range(10)))
 
 	def make_point(self):
