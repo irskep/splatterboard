@@ -56,10 +56,15 @@ def get_snapshot():
 		return img.get_region(canvas_x, canvas_y, settings['window_width']-canvas_x, settings['window_height']-canvas_y)
 
 def get_pixel_from_image(image, x, y):
-	#grab 1x1-pixel image
+	#Grab 1x1-pixel image. Converting entire image to ImageData takes much longer than just
+	#grabbing the single pixel with get_region() and converting just that.
 	image_data = image.get_region(x,y,1,1).get_image_data()
-	data = image_data.get_data('RGBA',4)	#4 is len('RGBA')
-	components = map(ord, list(data))		#convert unicode to int
+	#Get (very small) image as a string. The magic number '4' is just len('RGBA').
+	data = image_data.get_data('RGBA',4)
+	#Convert Unicode strings to integers. Provided by Alex Holkner on the mailing list.
+	components = map(ord, list(data))
+	#components only contains one pixel. I want to return a color that I can pass to
+	#pyglet.gl.glColor4f(), so I need to put it in the 0.0-1.0 range.
 	return [float(c) / 255.0 for c in components]	
 
 def set_cursor(cursor):

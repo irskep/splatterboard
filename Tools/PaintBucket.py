@@ -4,14 +4,18 @@ from settings import *
 class PaintBucket(tool.Tool):
 	"""Simple paint bucket tool"""
 	original_color = (1.0, 1.0, 1.0, 1.0)
+	threshold = 0.3
 	canvas_pre = None
 	pixels = []
 	pixel_data = None
 	
 	def init(self):
 		graphics.set_cursor(graphics.cursor['CURSOR_WAIT'])
+		#Get canvas as image. Essentially an alias for image.get_buffer_manager().get_color_buffer().get_image_data().
 		self.canvas_pre = graphics.get_snapshot()
+		#Convert to array
 		data = self.canvas_pre.get_data('RGBA',self.canvas_pre.width*4)
+		#Convert Unicode to integer
 		self.pixel_data = map(ord, list(data))
 		graphics.set_cursor(graphics.cursor['CURSOR_DEFAULT'])
 	
@@ -22,11 +26,10 @@ class PaintBucket(tool.Tool):
 		self.init()
 	
 	def get_pixel(self, x, y):
+		#Image data array is one-dimensional, so we need to find pixel's position in it
 		pos = y * self.canvas_pre.width * 4 + x * 4
-		r = self.pixel_data[pos]
-		g = self.pixel_data[pos + 1]
-		b = self.pixel_data[pos + 2]
-		return (float(r)/255.0,float(g)/255.0,float(b)/255.0,1.0)
+		#Get pixel as an array slice and convert it to a float in the proper range
+		return [float(c)/255.0 for c in self.pixel_data[pos:pos+4]]
 	
 	def pre_draw(self, x, y):
 		graphics.set_cursor(graphics.cursor['CURSOR_WAIT'])
@@ -42,7 +45,8 @@ class PaintBucket(tool.Tool):
 					if checked_pixels[x][y] == 0:
 						color = self.get_pixel(x,y)
 						checked_pixels[x][y] = 1
-						if color == self.original_color:
+						difference = sum(abs(c1-c2) for (c1,c2) in zip(color, self.original_color))
+						if difference < self.threshold:
 							self.pixels.extend((x,y))
 							if x-1 != ox: new_pixels.append((x-1,y,x,y))
 							if x+1 != ox: new_pixels.append((x+1,y,x,y))
