@@ -119,8 +119,10 @@ def draw_rect_outline(x1, y1, x2, y2):
 
 @doublecall_wrapper
 def draw_points(points):
+	pyglet.gl.glDisable(pyglet.gl.GL_POINT_SMOOTH)
 	pyglet.graphics.draw(len(points)/2, pyglet.gl.GL_POINTS,
 		('v2f', points))
+	pyglet.gl.glEnable(pyglet.gl.GL_POINT_SMOOTH)
 
 def concat(it):
 	return list(y for x in it for y in x)
