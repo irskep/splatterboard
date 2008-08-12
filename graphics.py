@@ -56,13 +56,11 @@ def get_snapshot():
 		return img.get_region(canvas_x, canvas_y, settings['window_width']-canvas_x, settings['window_height']-canvas_y)
 
 def get_pixel_from_image(image, x, y):
-	data = image.get_region(x,y,1,1).get_image_data()
-	data = data.get_data('RGBA',4)	#3 is len('RGB')
-	data = map(ord, list(data))
-	r = data[0]
-	g = data[1]
-	b = data[2]
-	return (float(r)/255.0,float(g)/255.0,float(b)/255.0,1.0)
+	#grab 1x1-pixel image
+	image_data = image.get_region(x,y,1,1).get_image_data()
+	data = image_data.get_data('RGBA',4)	#4 is len('RGBA')
+	components = map(ord, list(data))		#convert unicode to int
+	return [float(c) / 255.0 for c in components]	
 
 def set_cursor(cursor):
 	for window in pyglet.app.windows:
