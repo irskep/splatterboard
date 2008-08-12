@@ -1,7 +1,7 @@
 import random, tool, resources, graphics
 
 class Ellipse(tool.Tool):
-	"""Simple rect tool"""
+	"""Simple ellipse tool"""
 	
 	canvas_pre = None
 	x1, y1, x2, y2 = 0.0, 0.0, 0.0, 0.0
@@ -9,7 +9,7 @@ class Ellipse(tool.Tool):
 	def select(self):
 		self.canvas_pre = graphics.get_snapshot()
 	
-	def start_drawing(self, x, y):	
+	def start_drawing(self, x, y):
 		self.x1, self.y1 = x, y
 	
 	def keep_drawing(self, x, y, dx, dy):

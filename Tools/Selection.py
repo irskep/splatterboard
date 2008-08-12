@@ -2,7 +2,7 @@ import random, tool, resources, graphics
 from settings import *
 
 class Selection(tool.Tool):
-	"""Simple rect tool"""
+	"""Simple selection tool"""
 	
 	canvas_pre = None
 	selection = None

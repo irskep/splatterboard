@@ -12,12 +12,10 @@ class Text(tool.Tool):
 		self.canvas_pre = graphics.get_snapshot()
 
 	def start_drawing(self, x, y):
-		# FIXME wrong coordinates
-		# FIXME wrong time to grab the canvas
 		self.label = pyglet.text.Label(color=(0,0,0,255), x=x, y=y)
 		self.writing = True
 	
-	def post_draw(self, x, y):	
+	def post_draw(self, x, y):
 		self.canvas_pre = graphics.get_snapshot()
 
 	def text(self, text):
@@ -38,7 +36,7 @@ class Text(tool.Tool):
 			self.draw()
 
 	def draw(self):
-		# TODO show a cursor, maybe use a real TextLayout
+		# TODO show a caret, maybe use a real TextLayout
 		graphics.set_color(1,1,1,1)
 		graphics.draw_image(self.canvas_pre,0,0)
 		graphics.draw_label(self.label)

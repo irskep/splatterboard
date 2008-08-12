@@ -2,6 +2,7 @@ import tool, resources, graphics
 from settings import *
 
 class PaintBucket(tool.Tool):
+	"""Simple paint bucket tool"""
 	original_color = (1.0, 1.0, 1.0, 1.0)
 	canvas_pre = None
 	pixels = []
@@ -50,7 +51,7 @@ class PaintBucket(tool.Tool):
 			to_check = new_pixels
 			new_pixels = []
 	
-	def stop_drawing(self, x, y):	
+	def stop_drawing(self, x, y):
 		graphics.set_line_width(1.0)
 		graphics.set_color(color=graphics.fill_color)
 		graphics.call_twice(pyglet.gl.glDisable, pyglet.gl.GL_POINT_SMOOTH)

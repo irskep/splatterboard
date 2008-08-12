@@ -4,7 +4,7 @@ def not_implemented(*args, **kwargs):
 	pass
 
 class Tool:
-	"""Simple line tool"""
+	"""Abstract base tool"""
 	
 	select = not_implemented		#tool is selected
 	unselect = not_implemented		#	and unselected

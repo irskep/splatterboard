@@ -1,7 +1,7 @@
 import tool, resources, graphics, math
 
 class Eraser(tool.Tool):
-	"""Simple brush tool"""
+	"""Simple eraser tool"""
 	x, y = 0, 0
 	color = (1,1,1,1)
 	
