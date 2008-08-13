@@ -263,6 +263,7 @@ class Splatboard(pyglet.window.Window):
 		path = gui.save_file(default_name="My Picture.png")
 		if path != None:
 			img = graphics.get_snapshot()
+			img = img.get_region(1,1,img.width-1,img.height-1)
 			self.set_fullscreen(fullscreen=False)
 			img.save(path)
 			self.set_fullscreen(settings['fullscreen'])
