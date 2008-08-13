@@ -31,7 +31,7 @@ class Splatboard(pyglet.window.Window):
 			settings['window_height'] = self.height
 		
 		
-		self.set_caption('Splatboard')
+		self.set_caption('Splatterboard')
 		
 		#enable alpha blending, line smoothing
 		pyglet.gl.glEnable(pyglet.gl.GL_BLEND)
