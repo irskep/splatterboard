@@ -16,24 +16,22 @@ supported_image_formats = [	'bmp','dds','exif','gif','jpg','jpeg','jp2','jpx',
 pyglet.resource.path=['Tools','Resources']
 pyglet.resource.reindex()
 
-#Notice that streaming=True for TheBrave.ogg, but all other sounds should
-#have streaming=False because they need to be played more than once at
-#the same time.
-#One way to avoid using these special cases is to save music in one format
-#and sound in another, and pass different parameters for each.
 exclude = []
 
 function_pairs = {
 	#'ext':(func, {args})
 	#I only implemented the most common formats. Copy/paste to do more.
-	'bmp':(pyglet.resource.image,{}),
-	'gif':(pyglet.resource.image,{}),
-	'png':(pyglet.resource.image,{}),
 	'mp3':(pyglet.resource.media,{'streaming':False}),
 	'ogg':(pyglet.resource.media,{'streaming':False}),
 	'wav':(pyglet.resource.media,{'streaming':False})
 }
 
+#Make default function for images be pyglet.resource.image().
+for ext in supported_image_formats:
+    if not ext in function_pairs.keys():
+        function_pairs[ext] = (pyglet.resource.image,{})
+
+#Then a miracle occurs!
 for path in pyglet.resource.path:
 	for file_name in os.listdir(path):
 		name, ext = os.path.splitext(file_name)

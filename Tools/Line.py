@@ -8,6 +8,8 @@ class Line(tool.Tool):
 	
 	def select(self):
 		self.canvas_pre = graphics.get_snapshot()
+		tool.controlspace.add_text_button("1",self.button_1,5,5)
+		tool.controlspace.add_text_button("2",self.button_2,130,5)
 		
 	def start_drawing(self, x, y):
 		self.x1, self.y1 = x, y
@@ -25,6 +27,12 @@ class Line(tool.Tool):
 	
 	def post_draw(self, x, y):
 		self.canvas_pre = graphics.get_snapshot()
+	
+	def button_1(self):
+	    graphics.line_size = 1
+	
+	def button_2(self):
+	    graphics.line_size = 10
 
 default = Line()
 priority = 80
