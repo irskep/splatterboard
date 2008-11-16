@@ -12,8 +12,6 @@ from collections import defaultdict
 
 class Splatboard(pyglet.window.Window):
     def __init__(self):
-        self.set_caption('Splatterboard')
-        
         #Init window
         screen = pyglet.window.get_platform().get_default_display().get_default_screen()
         
@@ -41,6 +39,7 @@ class Splatboard(pyglet.window.Window):
         pyglet.gl.glEnable(pyglet.gl.GL_POINT_SMOOTH)
         pyglet.gl.glHint(pyglet.gl.GL_LINE_SMOOTH_HINT,pyglet.gl.GL_NICEST)
         
+        self.set_caption('Splatterboard')
         self.init_cursors()
         
         #set up undo stack
