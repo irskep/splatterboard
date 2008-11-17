@@ -27,16 +27,17 @@ class PaletteButton():
         return x >= self.x and y >= self.y and x <= self.x + self.image.width and y <= self.y + self.image.height
 
 class Button():
-    def __init__(self, text, action, x, y):
+    def __init__(self, text, image, action, x, y, more_draw = None):
         self.action = action
         self.x, self.y = x, y
         self.selected = False
-        self.image = resources.Button
+        self.image = image
         self.label = pyglet.text.Label(text, font_size=20, color=(0,0,0,255),
                                         x=self.x+self.image.width/2, y=self.y+self.image.height/2,
                                         anchor_x='center', anchor_y='center')
         self.width = self.image.width
         self.height = self.image.height
+        self.more_draw = more_draw
 
     def draw(self):
         color = (1,1,1,1)
@@ -45,6 +46,7 @@ class Button():
         graphics.draw_image(self.image,self.x,self.y)
         graphics.set_color(1,1,1,1)
         graphics.draw_label(self.label)
+        if self.more_draw != None: self.more_draw()
     
     def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
         self.on_mouse_press(x,y,None,None)

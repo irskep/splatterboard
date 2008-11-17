@@ -54,8 +54,8 @@ class Splatboard(pyglet.window.Window):
         graphics.clear(1,1,1,1);
         
         #load buttons
-        self.save_button = gui.Button('Save', self.save, self.width-resources.Button.width-3, 3)
-        self.open_button = gui.Button('Open', self.open, self.save_button.x, resources.Button.height+8)
+        self.save_button = gui.Button('Save', resources.Button, self.save, self.width-resources.Button.width-3, 3)
+        self.open_button = gui.Button('Open', resources.Button, self.open, self.save_button.x, resources.Button.height+8)
         self.swap_button = gui.ImageButton(resources.ColorSwitch, self.swap_colors,
                                             self.width-440, 50-resources.ColorSwitch.height/2)
         self.undo_button = gui.ImageButton(resources.Rewind, self.undo, 5, self.canvas_y+5)
@@ -111,6 +111,7 @@ class Splatboard(pyglet.window.Window):
             tool.controlspace.draw()
             #divider lines
             graphics.set_color(0,0,0,1)
+            graphics.set_line_width(1.0)
             graphics.draw_line(0, self.canvas_y, self.width, self.canvas_y)
             graphics.draw_line(self.canvas_x, self.canvas_y, self.canvas_x, self.height)
     
