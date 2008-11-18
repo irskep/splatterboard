@@ -38,7 +38,7 @@ class Text(tool.Tool):
 	def draw(self):
 		# TODO show a caret, maybe use a real TextLayout
 		graphics.set_color(1,1,1,1)
-		graphics.draw_image(self.canvas_pre,0,0)
+		graphics.draw_image(self.canvas_pre,graphics.canvas_x,graphics.canvas_y)
 		graphics.draw_label(self.label)
 
 

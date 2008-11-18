@@ -68,7 +68,7 @@ def set_selected_color(new_color):
 
 def get_snapshot():
     img = pyglet.image.get_buffer_manager().get_color_buffer().get_image_data()
-    if drawing == True:
+    if drawing:
         return img
     else:
         return img.get_region(canvas_x, canvas_y, settings['window_width']-canvas_x, settings['window_height']-canvas_y)
@@ -97,16 +97,18 @@ def change_canvas_area(x,y,w,h):
     pyglet.gl.glMatrixMode(pyglet.gl.GL_PROJECTION)
 
 def enter_canvas_mode():
-    global _in_canvas_mode
-    if not _in_canvas_mode:
-        change_canvas_area(canvas_x,canvas_y,width-canvas_x,height-canvas_y)
-        _in_canvas_mode = True
+    pyglet.gl.glEnable(pyglet.gl.GL_SCISSOR_TEST)
+    # global _in_canvas_mode
+    # if not _in_canvas_mode:
+    #     change_canvas_area(canvas_x,canvas_y,width-canvas_x,height-canvas_y)
+    #     _in_canvas_mode = True
 
 def exit_canvas_mode():
-    global _in_canvas_mode
-    if _in_canvas_mode:
-        change_canvas_area(0,0,width,height)
-        _in_canvas_mode = False
+    pyglet.gl.glDisable(pyglet.gl.GL_SCISSOR_TEST)
+    # global _in_canvas_mode
+    # if _in_canvas_mode:
+    #     change_canvas_area(0,0,width,height)
+    #     _in_canvas_mode = False
 
 @command_wrapper
 def set_line_width(width):

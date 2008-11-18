@@ -54,7 +54,7 @@ class Selection(tool.Tool):
 		x = max(min(x, settings['window_width'] - settings['toolbar_width']), 0)
 		y = max(min(y, settings['window_height'] - settings['buttonbar_height']), 0)
 		graphics.set_color(1,1,1,1)
-		graphics.draw_image(self.canvas_pre,0,0)
+		graphics.draw_image(self.canvas_pre,graphics.canvas_x,graphics.canvas_y)
 		if self.dragging:
 			self.x1 = x - self.mouse_offset_x
 			self.y1 = y - self.mouse_offset_y

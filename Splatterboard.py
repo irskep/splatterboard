@@ -44,13 +44,6 @@ class Splatboard(pyglet.window.Window):
         graphics.width = self.width
         graphics.height = self.height
         
-        #enable alpha blending, line smoothing
-        pyglet.gl.glEnable(pyglet.gl.GL_BLEND)
-        pyglet.gl.glBlendFunc(pyglet.gl.GL_SRC_ALPHA, pyglet.gl.GL_ONE_MINUS_SRC_ALPHA)
-        pyglet.gl.glEnable(pyglet.gl.GL_LINE_SMOOTH)
-        pyglet.gl.glEnable(pyglet.gl.GL_POINT_SMOOTH)
-        pyglet.gl.glHint(pyglet.gl.GL_LINE_SMOOTH_HINT,pyglet.gl.GL_NICEST)
-        
         self.set_caption('Splatterboard')
         self.init_cursors()
         
@@ -61,6 +54,14 @@ class Splatboard(pyglet.window.Window):
         #shortcuts
         self.canvas_x = settings['toolbar_width']
         self.canvas_y = settings['buttonbar_height']
+        
+        #enable alpha blending, line smoothing, init glScissor
+        pyglet.gl.glEnable(pyglet.gl.GL_BLEND)
+        pyglet.gl.glBlendFunc(pyglet.gl.GL_SRC_ALPHA, pyglet.gl.GL_ONE_MINUS_SRC_ALPHA)
+        pyglet.gl.glEnable(pyglet.gl.GL_LINE_SMOOTH)
+        pyglet.gl.glEnable(pyglet.gl.GL_POINT_SMOOTH)
+        pyglet.gl.glHint(pyglet.gl.GL_LINE_SMOOTH_HINT,pyglet.gl.GL_NICEST)
+        pyglet.gl.glScissor(self.canvas_x,self.canvas_y,self.width-self.canvas_x,self.height-self.canvas_y)
         
         #load buttons
         self.save_button = gui.Button('Save', resources.Button, self.save, self.width-resources.Button.width-3, 3)
@@ -176,12 +177,13 @@ class Splatboard(pyglet.window.Window):
     def on_mouse_press(self, x, y, button, modifiers):
         self.try_redraw()
         if x > self.canvas_x and y > self.canvas_y:
-            self.current_tool.pre_draw(x-self.canvas_x,y-self.canvas_y)
+            self.current_tool.pre_draw(x,y)
             if self.current_tool.ask_undo():
                 self.undo_queue.append(graphics.get_snapshot())
             graphics.drawing = True
             self.enter_canvas_mode()
-            self.current_tool.start_drawing(x-self.canvas_x,y-self.canvas_y)
+            #self.current_tool.start_drawing(x-self.canvas_x,y-self.canvas_y)
+            self.current_tool.start_drawing(x,y)
         else:
             for button in self.toolbar:
                 #clear selection
@@ -197,13 +199,15 @@ class Splatboard(pyglet.window.Window):
     
     def on_mouse_drag(self, x, y, dx, dy, button, modifiers):
         self.on_mouse_motion(x,y,dx,dy)
-        if graphics.drawing: self.current_tool.keep_drawing(x-self.canvas_x,y-self.canvas_y,dx,dy)
+        #if graphics.drawing: self.current_tool.keep_drawing(x-self.canvas_x,y-self.canvas_y,dx,dy)
+        if graphics.drawing: self.current_tool.keep_drawing(x,y,dx,dy)
     
     def on_mouse_release(self, x, y, button, modifiers):
         #self.notify("mouserelease")
         self.try_redraw()
         if graphics.drawing:
-            self.current_tool.stop_drawing(x-self.canvas_x,y-self.canvas_y)
+            #self.current_tool.stop_drawing(x-self.canvas_x,y-self.canvas_y)
+            self.current_tool.stop_drawing(x,y)
             graphics.drawing = False
             self.exit_canvas_mode()
             self.current_tool.post_draw(x, y)
