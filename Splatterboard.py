@@ -11,6 +11,15 @@ from settings import settings, save_settings
 from collections import defaultdict
 
 class Splatboard(pyglet.window.Window):
+    
+    last_event = ""
+    drawn_this_frame = False
+    
+    def notify(self, event, checkdup=False):
+        if checkdup == False or event != self.last_event:
+            print event
+        self.last_event = event
+    
     def __init__(self):
         #Init window
         screen = pyglet.window.get_platform().get_default_display().get_default_screen()
@@ -93,11 +102,13 @@ class Splatboard(pyglet.window.Window):
     
     #------------EVENT HANDLING------------#
     def on_draw(self, dt=0):
+        #self.notify("draw")
         #Need to draw initial stuff multiple times due to double buffering
         if self.frame_countdown > 0:
-            graphics.draw_all_again()
+            self.try_redraw()
             self.frame_countdown -= 1
         
+        self.try_redraw()
         if not graphics.drawing:
             #toolbar background
             graphics.set_color(0.8, 0.8, 0.8, 1)
@@ -116,8 +127,11 @@ class Splatboard(pyglet.window.Window):
             graphics.set_line_width(1.0)
             graphics.draw_line(0, self.canvas_y, self.width, self.canvas_y)
             graphics.draw_line(self.canvas_x, self.canvas_y, self.canvas_x, self.height)
+        self.drawn_this_frame = False
     
     def on_key_press(self, symbol, modifiers):
+        #self.notify("keypress")
+        self.try_redraw()
         if not graphics.drawing and self.current_tool.key_press != tool.not_implemented:
             #graphics.draw_all_again()
             self.enter_canvas_mode()
@@ -128,6 +142,8 @@ class Splatboard(pyglet.window.Window):
         if symbol == key.ESCAPE: return True    #stop Pyglet from quitting
 
     def on_key_release(self, symbol, modifiers):
+        #self.notify("keyrelease")
+        self.try_redraw()
         if not graphics.drawing and self.current_tool.key_release != tool.not_implemented:
             self.enter_canvas_mode()
             graphics.drawing = True
@@ -136,6 +152,8 @@ class Splatboard(pyglet.window.Window):
             self.exit_canvas_mode()
 
     def on_text(self, text):
+        #self.notify("text")
+        self.try_redraw()
         if not graphics.drawing and self.current_tool.text != tool.not_implemented:
             self.enter_canvas_mode()
             graphics.drawing = True
@@ -144,7 +162,9 @@ class Splatboard(pyglet.window.Window):
             self.exit_canvas_mode()
     
     def on_mouse_motion(self, x, y, dx, dy):
-        graphics.draw_all_again()
+        #self.notify("motion",True)
+        self.try_redraw()
+        #graphics.draw_all_again()
         lastx, lasty = x-dx, y-dy
         if x > self.canvas_x and y > self.canvas_y:
             if not (lastx > self.canvas_x and lasty > self.canvas_y) and self.current_tool.cursor != None:
@@ -154,7 +174,7 @@ class Splatboard(pyglet.window.Window):
                 self.set_mouse_cursor(graphics.cursor['CURSOR_DEFAULT'])
     
     def on_mouse_press(self, x, y, button, modifiers):
-        graphics.draw_all_again()
+        self.try_redraw()
         if x > self.canvas_x and y > self.canvas_y:
             self.current_tool.pre_draw(x-self.canvas_x,y-self.canvas_y)
             if self.current_tool.ask_undo():
@@ -180,7 +200,8 @@ class Splatboard(pyglet.window.Window):
         if graphics.drawing: self.current_tool.keep_drawing(x-self.canvas_x,y-self.canvas_y,dx,dy)
     
     def on_mouse_release(self, x, y, button, modifiers):
-        graphics.draw_all_again()
+        #self.notify("mouserelease")
+        self.try_redraw()
         if graphics.drawing:
             self.current_tool.stop_drawing(x-self.canvas_x,y-self.canvas_y)
             graphics.drawing = False
@@ -247,6 +268,11 @@ class Splatboard(pyglet.window.Window):
             tool.controlspace.clear()
             self.current_tool.select()
         return action
+    
+    def try_redraw(self):
+        if not self.drawn_this_frame:
+            graphics.draw_all_again()
+            self.drawn_this_frame = True
     
     def enter_canvas_mode(self):
         graphics.enter_canvas_mode()
