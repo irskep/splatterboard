@@ -290,6 +290,7 @@ class Splatboard(pyglet.window.Window):
         
     def open_2(self, dt=0):    
         path = gui.open_file(type_list = resources.supported_image_formats)
+        if path == None: return
         if not settings['fullscreen']:
             self.open_3(0,path)
             return
@@ -300,17 +301,32 @@ class Splatboard(pyglet.window.Window):
         if path != None:
             graphics.clear(1,1,1,1)
             graphics.set_color_extra(1,1,1,1)
-            #graphics.draw_rect(self.canvas_x,self.canvas_y,settings['window_width'],settings['window_height'])
             graphics.draw_image_extra(pyglet.image.load(path),self.canvas_x,self.canvas_y)
     
     def save(self):
+        img = graphics.get_snapshot()
+        img = img.get_region(1,1,img.width-1,img.height-1)
+        if not settings['fullscreen']:
+            self.save_2(0,img)
+            return
+        self.set_fullscreen(False)
+        pyglet.clock.schedule_once(self.save_2,0.5,img)
+    
+    def save_2(self, dt=0, img=None):
         path = gui.save_file(default_name="My Picture.png")
-        if path != None:
-            img = graphics.get_snapshot()
-            img = img.get_region(1,1,img.width-1,img.height-1)
-            self.set_fullscreen(fullscreen=False)
-            img.save(path)
-            self.set_fullscreen(settings['fullscreen'])
+        if path == None: return
+        img.save(path)
+        if not settings['fullscreen']:
+            self.save_3(0,img,path)
+            return
+        self.set_fullscreen(settings['fullscreen'])
+        pyglet.clock.schedule_once(self.save_3, 0.5, img, path)
+    
+    def save_3(self, dt=0, img = None, path = None):
+        if img != None:
+            graphics.clear(1,1,1,1)
+            graphics.set_color_extra(1,1,1,1)
+            graphics.draw_image_extra(img,self.canvas_x,self.canvas_y)
     
     def undo(self):
         if len(self.undo_queue) > 0 and self.current_tool.undo():
