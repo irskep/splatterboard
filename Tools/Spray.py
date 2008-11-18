@@ -6,6 +6,7 @@ class Spray(tool.Tool):
     """Simple spray paint tool"""
     color = graphics.line_color
     x,y = 0,0
+    last_x, last_y = 0,0
     radius = 3 # in units of brush_size
     
     def select(self):
@@ -14,22 +15,25 @@ class Spray(tool.Tool):
 
     def start_drawing(self, x, y):
         self.color = graphics.line_color
-        self.x = x
-        self.y = y
-        clock.schedule(self.doodle)
+        self.x, self.y = x, y
+        self.last_x, self.last_y = self.x, self.y
+        #clock.schedule(self.doodle)
 
     def keep_drawing(self, x, y, dx, dy):
         # FIXME connect point A to point B
-        self.x = x
-        self.y = y
+        
+        self.x, self.y = x, y
+        self.last_x, self.last_y = self.x, self.y
+        self.doodle()
 
     def stop_drawing(self, x, y):
-        clock.unschedule(self.doodle)
+        pass
+        #clock.unschedule(self.doodle)
 
     def doodle(self, dt=0):
         graphics.set_color(color=self.color)
         graphics.set_line_width(graphics.brush_size/2)
-        graphics.draw_points(graphics.concat(self.make_point() for i in range(10)))
+        graphics.draw_points(graphics.concat(self.make_point() for i in xrange(10)))
 
     def make_point(self):
         # Pick somewhere random to draw
