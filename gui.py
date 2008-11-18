@@ -1,9 +1,3 @@
-"""
-Button is just a text button that calls the action function when it is
-pressed. Header_Button is an image button that acts like a radio button
-when used the way GameWindow uses it.
-"""
-
 import pyglet, resources, graphics
 from settings import settings
 from dialogs import *
@@ -93,17 +87,17 @@ class ColorDisplay():
         graphics.draw_rect(self.x,self.y+self.height,self.x+self.width,self.y+self.height/2+2)
         graphics.set_color(color=graphics.fill_color)
         graphics.draw_rect(self.x,self.y,self.x+self.width,self.y+self.height/2-2)
-        if graphics.selected_color == 0: pyglet.gl.glLineWidth(3.0)
-        else: pyglet.gl.glLineWidth(1.0)
+        if graphics.selected_color == 0: graphics.set_line_width(3.0)
+        else: graphics.set_line_width(1.0)
         #graphics.set_color(color=graphics.fill_color)
         graphics.set_color(color=(0,0,0,1))
         graphics.draw_rect_outline(self.x,self.y+self.height,self.x+self.width,self.y+self.height/2+2)
-        if graphics.selected_color == 1: pyglet.gl.glLineWidth(3.0)
-        else: pyglet.gl.glLineWidth(1.0)
+        if graphics.selected_color == 1: graphics.set_line_width(3.0)
+        else: graphics.set_line_width(1.0)
         #graphics.set_color(color=graphics.line_color)
         graphics.set_color(color=(0,0,0,1))
         graphics.draw_rect_outline(self.x,self.y,self.x+self.width,self.y+self.height/2-2)
-        pyglet.gl.glLineWidth(1.0)
+        graphics.set_line_width(1.0)
     
     def on_mouse_press(self, x, y, button, modifiers):
         if self.coords_inside(x,y):

@@ -128,6 +128,11 @@ def set_color(r=0.0, g=0.0, b=0.0, a=1.0, color=None):
     else: pyglet.gl.glColor4f(r,g,b,a)
 
 @triplecall_wrapper
+def set_color_extra(r=0.0, g=0.0, b=0.0, a=1.0, color=None):
+    if color is not None: pyglet.gl.glColor4f(*color)
+    else: pyglet.gl.glColor4f(r,g,b,a)
+
+@triplecall_wrapper
 def clear(r=0.0, g=0.0, b=0.0, a=1.0, color=None):
     if color is not None: pyglet.gl.glClearColor(*color)
     else: pyglet.gl.glClearColor(1,1,1,1);
@@ -137,6 +142,11 @@ def clear(r=0.0, g=0.0, b=0.0, a=1.0, color=None):
 @command_wrapper
 def draw_image(img, x, y):
     img.blit(x,y)
+
+@triplecall_wrapper
+def draw_image_extra(img, x, y):
+    img.blit(x,y)
+
 
 @command_wrapper
 def draw_label(label):
