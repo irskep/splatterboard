@@ -32,6 +32,9 @@ class Splatboard(pyglet.window.Window):
             settings['window_width'] = self.width
             settings['window_height'] = self.height
         
+        graphics.width = self.width
+        graphics.height = self.height
+        
         #enable alpha blending, line smoothing
         pyglet.gl.glEnable(pyglet.gl.GL_BLEND)
         pyglet.gl.glBlendFunc(pyglet.gl.GL_SRC_ALPHA, pyglet.gl.GL_ONE_MINUS_SRC_ALPHA)
@@ -43,15 +46,12 @@ class Splatboard(pyglet.window.Window):
         self.init_cursors()
         
         #set up undo stack
-        self.undo_stack = []
+        self.undo_queue = []
         self.max_undo = 5   #arbitrary
         
         #shortcuts
         self.canvas_x = settings['toolbar_width']
         self.canvas_y = settings['buttonbar_height']
-        
-        #white background
-        graphics.clear(1,1,1,1);
         
         #load buttons
         self.save_button = gui.Button('Save', resources.Button, self.save, self.width-resources.Button.width-3, 3)
@@ -79,6 +79,9 @@ class Splatboard(pyglet.window.Window):
         self.colordisplay = gui.ColorDisplay(self.width-410, 6, 25, 90)
         self.push_handlers(self.colorpicker, self.colordisplay)
         
+        #white background
+        graphics.clear(1,1,1,1);
+        
         self.frame_countdown = 2
     
     def init_cursors(self):
@@ -94,7 +97,6 @@ class Splatboard(pyglet.window.Window):
         if self.frame_countdown > 0:
             graphics.draw_all_again()
             self.frame_countdown -= 1
-        i = 0
         
         if not graphics.drawing:
             #toolbar background
@@ -116,23 +118,29 @@ class Splatboard(pyglet.window.Window):
             graphics.draw_line(self.canvas_x, self.canvas_y, self.canvas_x, self.height)
     
     def on_key_press(self, symbol, modifiers):
-        graphics.draw_all_again()
         if not graphics.drawing and self.current_tool.key_press != tool.not_implemented:
+            #graphics.draw_all_again()
             self.enter_canvas_mode()
+            graphics.drawing = True
             self.current_tool.key_press(symbol, modifiers)
+            graphics.drawing = False
             self.exit_canvas_mode()
         if symbol == key.ESCAPE: return True    #stop Pyglet from quitting
 
     def on_key_release(self, symbol, modifiers):
         if not graphics.drawing and self.current_tool.key_release != tool.not_implemented:
             self.enter_canvas_mode()
+            graphics.drawing = True
             self.current_tool.key_release(symbol, modifiers)
+            graphics.drawing = False
             self.exit_canvas_mode()
 
     def on_text(self, text):
         if not graphics.drawing and self.current_tool.text != tool.not_implemented:
             self.enter_canvas_mode()
+            graphics.drawing = True
             self.current_tool.text(text)
+            graphics.drawing = False
             self.exit_canvas_mode()
     
     def on_mouse_motion(self, x, y, dx, dy):
@@ -150,7 +158,7 @@ class Splatboard(pyglet.window.Window):
         if x > self.canvas_x and y > self.canvas_y:
             self.current_tool.pre_draw(x-self.canvas_x,y-self.canvas_y)
             if self.current_tool.ask_undo():
-                self.undo_stack.append(graphics.get_snapshot())
+                self.undo_queue.append(graphics.get_snapshot())
             graphics.drawing = True
             self.enter_canvas_mode()
             self.current_tool.start_drawing(x-self.canvas_x,y-self.canvas_y)
@@ -172,10 +180,11 @@ class Splatboard(pyglet.window.Window):
         if graphics.drawing: self.current_tool.keep_drawing(x-self.canvas_x,y-self.canvas_y,dx,dy)
     
     def on_mouse_release(self, x, y, button, modifiers):
+        graphics.draw_all_again()
         if graphics.drawing:
             self.current_tool.stop_drawing(x-self.canvas_x,y-self.canvas_y)
-            self.exit_canvas_mode()
             graphics.drawing = False
+            self.exit_canvas_mode()
             self.current_tool.post_draw(x, y)
     
     def on_close(self):
@@ -227,7 +236,7 @@ class Splatboard(pyglet.window.Window):
                     y -= self.toolsize
                 new_button = gui.SquareButton(tool.image, x, y, self.get_toolbar_button_action(tool.default))
                 self.toolbar.append(new_button)
-        #select pencil
+        
         self.current_tool = sorted_tools[0].default
         self.toolbar[0].selected = True
     
@@ -240,23 +249,10 @@ class Splatboard(pyglet.window.Window):
         return action
     
     def enter_canvas_mode(self):
-        graphics.draw_all_again()
-        pyglet.gl.glViewport(self.canvas_x,self.canvas_y,
-            settings['window_width']-self.canvas_x,settings['window_height']-self.canvas_y)
-        pyglet.gl.glMatrixMode(pyglet.gl.GL_PROJECTION)
-        pyglet.gl.glLoadIdentity()
-        pyglet.gl.glOrtho(0, settings['window_width']-self.canvas_x, 0, settings['window_height']-self.canvas_y, -1, 1)
-        #pyglet.gl.glMatrixMode(pyglet.gl.GL_MODELVIEW)
-        pyglet.gl.glMatrixMode(pyglet.gl.GL_PROJECTION)
+        graphics.enter_canvas_mode()
     
     def exit_canvas_mode(self):
-        graphics.draw_all_again()
-        pyglet.gl.glViewport(0,0,self.width,self.height)
-        pyglet.gl.glMatrixMode(pyglet.gl.GL_PROJECTION)
-        pyglet.gl.glLoadIdentity()
-        pyglet.gl.glOrtho(0, self.width, 0, self.height, -1, 1)
-        #pyglet.gl.glMatrixMode(pyglet.gl.GL_MODELVIEW)
-        pyglet.gl.glMatrixMode(pyglet.gl.GL_PROJECTION)
+        graphics.exit_canvas_mode()
     
     #------------BUTTON THINGS------------#
     def open(self):
@@ -278,10 +274,10 @@ class Splatboard(pyglet.window.Window):
             self.set_fullscreen(settings['fullscreen'])
     
     def undo(self):
-        if len(self.undo_stack) > 0 and self.current_tool.undo():
+        if len(self.undo_queue) > 0 and self.current_tool.undo():
             self.current_tool.unselect()    #exit current tool, just in case
             graphics.set_color(1,1,1,1)
-            img = self.undo_stack.pop()
+            img = self.undo_queue.pop()
             graphics.draw_image(img,self.canvas_x,self.canvas_y)
             self.current_tool.select()      #go back into tool
     
