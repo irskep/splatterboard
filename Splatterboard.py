@@ -305,6 +305,8 @@ class Splatboard(pyglet.window.Window):
             graphics.set_color(1,1,1,1)
             img = self.undo_queue.pop()
             graphics.draw_image(img,self.canvas_x,self.canvas_y)
+            graphics.canvas_queue_2.append((graphics.set_color, (1,1,1,1),{},False))
+            graphics.canvas_queue_2.append((graphics.draw_image, (img,self.canvas_x,self.canvas_y), {}, False))
             self.current_tool.select()      #go back into tool
     
     def swap_colors(self):

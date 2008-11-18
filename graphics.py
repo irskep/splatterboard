@@ -54,8 +54,9 @@ def draw_all_again():
             exit_canvas_mode()
 
 def call_twice(func, *args, **kwargs):
+    global drawing
     func(*args,**kwargs)
-    normal_queue.append((func,args,kwargs))
+    canvas_queue.append((func,args,kwargs,drawing))
 
 def set_selected_color(new_color):
     global line_color
