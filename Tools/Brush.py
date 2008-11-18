@@ -14,19 +14,19 @@ class Brush(tool.Tool):
         self.lastx, self.lasty = x, y
         graphics.set_color(color=self.color)
         graphics.set_line_width(graphics.brush_size)
-        graphics.draw_points((x,y))
+        if graphics.brush_size > 1: graphics.draw_points((x,y))
         
     def keep_drawing(self, x, y, dx, dy):
         graphics.set_color(color=self.color)
         graphics.set_line_width(graphics.brush_size)
-        graphics.draw_points((x,y))
+        if graphics.brush_size > 1: graphics.draw_points((x,y))
         graphics.draw_line(x, y, self.lastx, self.lasty)
         self.lastx, self.lasty = x, y
     
     def stop_drawing(self, x, y):
         graphics.set_color(color=self.color)
         graphics.set_line_width(graphics.brush_size)
-        graphics.draw_points((x,y))
+        if graphics.brush_size > 1: graphics.draw_points((x,y))
 
 default = Brush()
 priority = 61

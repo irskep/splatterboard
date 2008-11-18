@@ -86,9 +86,11 @@ controlspace = ControlSpace(0,0)
 
 def generate_brush_selector():
     def get_brush_drawer(x,y,w,h,size):
+        if size < 1.5: size = 1.5
         def draw_brush():
             graphics.set_color(0,0,0,1)
-            graphics.draw_ellipse(x+w/2-size/2,y+h/2-size/2,x+w/2+size/2,y+h/2+size/2)
+            graphics.set_line_width(size)
+            graphics.draw_points((x+w/2,y+h/2))
         return draw_brush
     
     def get_brush_setter(size):
