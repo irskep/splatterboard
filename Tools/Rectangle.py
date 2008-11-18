@@ -8,6 +8,7 @@ class Rectangle(tool.Tool):
 	
 	def select(self):
 		self.canvas_pre = graphics.get_snapshot()
+		tool.generate_line_selector()
 	
 	def start_drawing(self, x, y):
 		self.x1, self.y1 = x, y

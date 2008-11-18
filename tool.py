@@ -1,5 +1,5 @@
 import pyglet
-import gui, resources
+import gui, resources, graphics
 
 def not_implemented(*args, **kwargs):
     pass
@@ -83,3 +83,50 @@ class ControlSpace:
         for control in self.controls: control.on_mouse_release(x,y,button,modifiers)
 
 controlspace = ControlSpace(0,0)
+
+def generate_brush_selector():
+    def get_brush_drawer(x,y,w,h,size):
+        def draw_brush():
+            graphics.set_color(0,0,0,1)
+            graphics.draw_ellipse(x+w/2-size/2,y+h/2-size/2,x+w/2+size/2,y+h/2+size/2)
+        return draw_brush
+    
+    def get_brush_setter(size):
+        def set_brush_size():
+            graphics.brush_size = size
+        return set_brush_size
+    
+    w, h = resources.SquareButton.width, resources.SquareButton.height
+    steps = int(controlspace.max_x/(w+5))
+    current_width = 1.0
+    max_width = 40.0
+    width_inc = (max_width-current_width)/float(steps)
+    for x in xrange(5, controlspace.max_x-(w), w):
+        controlspace.add_button(text="", image=resources.SquareButton,
+                                        action=get_brush_setter(current_width), x=x, y=5, 
+                                        more_draw=get_brush_drawer(x, 5, w, h, current_width))
+        current_width += width_inc
+
+def generate_line_selector():
+    def get_line_drawer(x,y,w,h,size):
+        def draw_line():
+            graphics.set_line_width(size)
+            graphics.set_color(0,0,0,1)
+            graphics.draw_line(x+15,y+10, x+w-15, y+h-10)
+        return draw_line
+    
+    def get_line_setter(size):
+        def set_line_size():
+            graphics.line_size = size
+        return set_line_size
+    
+    w, h = resources.SquareButton.width, resources.SquareButton.height
+    steps = int(controlspace.max_x/(w+5))
+    current_width = 1.0
+    max_width = 15.0
+    width_inc = (max_width-current_width)/float(steps)
+    for x in xrange(5, controlspace.max_x-(w), w):
+        controlspace.add_button(text="", image=resources.SquareButton,
+                                        action=get_line_setter(current_width), x=x, y=5, 
+                                        more_draw=get_line_drawer(x, 5, w, h, current_width))
+        current_width += width_inc

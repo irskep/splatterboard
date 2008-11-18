@@ -190,7 +190,7 @@ class Splatboard(pyglet.window.Window):
         for f in os.listdir(os.path.abspath(dir)):
             module_name, ext = os.path.splitext(f)
             if ext == '.py' and module_name != '__init__':
-                print 'imported module: %s' % (module_name)
+                print 'importing module: %s' % (module_name)
                 module = __import__(module_name)
                 library_dict[module_name] = module
         
