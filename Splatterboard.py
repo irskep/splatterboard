@@ -71,7 +71,7 @@ class Splatboard(pyglet.window.Window):
         self.toolbar = []
         self.labels = []
         self.current_tool = None
-        self.toolsize = resources.PaletteButton.width
+        self.toolsize = resources.SquareButton.width
         self.load_tools()
         
         #color picker stuff
@@ -193,7 +193,7 @@ class Splatboard(pyglet.window.Window):
                 print 'imported module: %s' % (module_name)
                 module = __import__(module_name)
                 library_dict[module_name] = module
-
+        
         return library_dict
     
     def load_tools(self):
@@ -225,7 +225,7 @@ class Splatboard(pyglet.window.Window):
                 if i % 2 != 0:
                     x = 0
                     y -= self.toolsize
-                new_button = gui.PaletteButton(tool.image, x, y, self.get_toolbar_button_action(tool.default))
+                new_button = gui.SquareButton(tool.image, x, y, self.get_toolbar_button_action(tool.default))
                 self.toolbar.append(new_button)
         #select pencil
         self.current_tool = sorted_tools[0].default

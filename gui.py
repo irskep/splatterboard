@@ -8,7 +8,7 @@ import pyglet, resources, graphics
 from settings import settings
 from dialogs import *
 
-class PaletteButton():
+class SquareButton():
     def __init__(self, image, x, y, action):
         self.image = image
         self.action = action
@@ -19,7 +19,7 @@ class PaletteButton():
         color = (1,1,1,1)
         if self.selected: color = (0.8, 0.8, 0.8, 1)
         graphics.set_color(color=color)
-        graphics.draw_image(resources.PaletteButton,self.x,self.y)
+        graphics.draw_image(resources.SquareButton,self.x,self.y)
         graphics.set_color(1,1,1,1)
         graphics.draw_image(self.image,self.x,self.y)
     

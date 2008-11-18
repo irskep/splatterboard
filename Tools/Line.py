@@ -5,6 +5,7 @@ class Line(tool.Tool):
     
     canvas_pre = None
     x1, y1, x2, y2 = 0.0, 0.0, 0.0, 0.0
+    last_line_size = 1.0
     
     def get_line_drawer(self,x,y,w,h,size):
         def draw_line():
@@ -15,25 +16,23 @@ class Line(tool.Tool):
     
     def get_line_setter(self,size):
         def set_line_size():
-            print "size set to",size
             graphics.line_size = size
+            self.last_line_size = size
         return set_line_size
     
     def select(self):
+        graphics.line_size = self.last_line_size
         self.canvas_pre = graphics.get_snapshot()
-        w, h = resources.PaletteButton.width, resources.PaletteButton.height
+        w, h = resources.SquareButton.width, resources.SquareButton.height
         steps = int(tool.controlspace.max_x/(w+5))
         current_width = 1.0
         max_width = 15.0
         width_inc = (max_width-current_width)/float(steps)
-        for x in xrange(5, tool.controlspace.max_x-(w+5), w+5):
-            tool.controlspace.add_button(text="", image=resources.PaletteButton,
+        for x in xrange(5, tool.controlspace.max_x-(w), w):
+            tool.controlspace.add_button(text="", image=resources.SquareButton,
                                             action=self.get_line_setter(current_width), x=x, y=5, 
                                             more_draw=self.get_line_drawer(x, 5, w, h, current_width))
             current_width += width_inc
-        #tool.controlspace.add_button(text="", image=resources.PaletteButton, 
-        #                                action=self.get_line_setter(10), x=130, y=5,
-        #                                more_draw=self.get_line_drawer(130, 5, w, h, 10))
         
     def start_drawing(self, x, y):
         self.x1, self.y1 = x, y
