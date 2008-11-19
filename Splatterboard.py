@@ -12,13 +12,7 @@ from collections import defaultdict
 
 class Splatboard(pyglet.window.Window):
     
-    last_event = ""
     drawn_this_frame = False
-    
-    def notify(self, event, checkdup=False):
-        if checkdup == False or event != self.last_event:
-            print event
-        self.last_event = event
     
     def __init__(self):
         #Init window
@@ -47,13 +41,9 @@ class Splatboard(pyglet.window.Window):
         self.set_caption('Splatterboard')
         self.init_cursors()
         
-        #set up undo stack
-        self.undo_queue = []
-        self.max_undo = 5   #arbitrary
-        
         #shortcuts
-        self.canvas_x = settings['toolbar_width']
-        self.canvas_y = settings['buttonbar_height']
+        graphics.canvas_x = settings['toolbar_width']
+        graphics.canvas_y = settings['buttonbar_height']
         
         #enable alpha blending, line smoothing, init glScissor
         pyglet.gl.glEnable(pyglet.gl.GL_BLEND)
@@ -61,20 +51,24 @@ class Splatboard(pyglet.window.Window):
         pyglet.gl.glEnable(pyglet.gl.GL_LINE_SMOOTH)
         pyglet.gl.glEnable(pyglet.gl.GL_POINT_SMOOTH)
         pyglet.gl.glHint(pyglet.gl.GL_LINE_SMOOTH_HINT,pyglet.gl.GL_NICEST)
-        pyglet.gl.glScissor(self.canvas_x,self.canvas_y,self.width-self.canvas_x,self.height-self.canvas_y)
+        pyglet.gl.glScissor(graphics.canvas_x,graphics.canvas_y,self.width-graphics.canvas_x,self.height-graphics.canvas_y)
+        
+        #set up undo stack
+        self.undo_queue = []
+        self.max_undo = 5   #arbitrary
         
         #load buttons
         self.save_button = gui.Button('Save', resources.Button, self.save, self.width-resources.Button.width-3, 3)
         self.open_button = gui.Button('Open', resources.Button, self.open, self.save_button.x, resources.Button.height+8)
         self.swap_button = gui.ImageButton(resources.ColorSwitch, self.swap_colors,
                                             self.width-440, 50-resources.ColorSwitch.height/2)
-        self.undo_button = gui.ImageButton(resources.Rewind, self.undo, 5, self.canvas_y+5)
+        self.undo_button = gui.ImageButton(resources.Rewind, self.undo, 5, graphics.canvas_y+5)
         self.buttons = [self.save_button, self.open_button, self.swap_button, self.undo_button]
         
         for button in self.buttons: self.push_handlers(button)
         
         tool.controlspace.max_x = self.swap_button.x-5
-        tool.controlspace.max_y = self.canvas_y
+        tool.controlspace.max_y = graphics.canvas_y
         self.push_handlers(tool.controlspace)
         
         #load tools, make toolbar
@@ -91,8 +85,6 @@ class Splatboard(pyglet.window.Window):
         
         #white background
         graphics.clear(1,1,1,1);
-        
-        self.frame_countdown = 2
     
     def init_cursors(self):
         graphics.cursor['CURSOR_CROSSHAIR'] = self.get_system_mouse_cursor(self.CURSOR_CROSSHAIR)
@@ -103,18 +95,12 @@ class Splatboard(pyglet.window.Window):
     
     #------------EVENT HANDLING------------#
     def on_draw(self, dt=0):
-        #self.notify("draw")
-        #Need to draw initial stuff multiple times due to double buffering
-        if self.frame_countdown > 0:
-            self.try_redraw()
-            self.frame_countdown -= 1
-        
         self.try_redraw()
         if not graphics.drawing:
             #toolbar background
             graphics.set_color(0.8, 0.8, 0.8, 1)
-            graphics.draw_rect(0,self.canvas_y,self.canvas_x,self.height)
-            graphics.draw_rect(0,0,self.width,self.canvas_y)
+            graphics.draw_rect(0,graphics.canvas_y,graphics.canvas_x,self.height)
+            graphics.draw_rect(0,0,self.width,graphics.canvas_y)
             #buttons
             graphics.set_color(1,1,1,1)
             for button in self.toolbar: button.draw()   #toolbar buttons
@@ -126,63 +112,56 @@ class Splatboard(pyglet.window.Window):
             #divider lines
             graphics.set_color(0,0,0,1)
             graphics.set_line_width(1.0)
-            graphics.draw_line(0, self.canvas_y, self.width, self.canvas_y)
-            graphics.draw_line(self.canvas_x, self.canvas_y, self.canvas_x, self.height)
+            graphics.draw_line(0, graphics.canvas_y, self.width, graphics.canvas_y)
+            graphics.draw_line(graphics.canvas_x, graphics.canvas_y, graphics.canvas_x, self.height)
         self.drawn_this_frame = False
     
     def on_key_press(self, symbol, modifiers):
-        #self.notify("keypress")
         self.try_redraw()
         if not graphics.drawing and self.current_tool.key_press != tool.not_implemented:
-            #graphics.draw_all_again()
-            self.enter_canvas_mode()
+            graphics.enter_canvas_mode()
             graphics.drawing = True
             self.current_tool.key_press(symbol, modifiers)
             graphics.drawing = False
-            self.exit_canvas_mode()
+            graphics.exit_canvas_mode()
         if symbol == key.ESCAPE: return True    #stop Pyglet from quitting
 
     def on_key_release(self, symbol, modifiers):
-        #self.notify("keyrelease")
         self.try_redraw()
         if not graphics.drawing and self.current_tool.key_release != tool.not_implemented:
-            self.enter_canvas_mode()
+            graphics.enter_canvas_mode()
             graphics.drawing = True
             self.current_tool.key_release(symbol, modifiers)
             graphics.drawing = False
-            self.exit_canvas_mode()
+            graphics.exit_canvas_mode()
 
     def on_text(self, text):
-        #self.notify("text")
         self.try_redraw()
         if not graphics.drawing and self.current_tool.text != tool.not_implemented:
-            self.enter_canvas_mode()
+            graphics.enter_canvas_mode()
             graphics.drawing = True
             self.current_tool.text(text)
             graphics.drawing = False
-            self.exit_canvas_mode()
+            graphics.exit_canvas_mode()
     
     def on_mouse_motion(self, x, y, dx, dy):
-        #self.notify("motion",True)
         self.try_redraw()
-        #graphics.draw_all_again()
         lastx, lasty = x-dx, y-dy
-        if x > self.canvas_x and y > self.canvas_y:
-            if not (lastx > self.canvas_x and lasty > self.canvas_y) and self.current_tool.cursor != None:
+        if x > graphics.canvas_x and y > graphics.canvas_y:
+            if not (lastx > graphics.canvas_x and lasty > graphics.canvas_y) and self.current_tool.cursor != None:
                 self.set_mouse_cursor(self.current_tool.cursor)
         else:
-            if lastx > self.canvas_x and lasty > self.canvas_y:
+            if lastx > graphics.canvas_x and lasty > graphics.canvas_y:
                 self.set_mouse_cursor(graphics.cursor['CURSOR_DEFAULT'])
     
     def on_mouse_press(self, x, y, button, modifiers):
         self.try_redraw()
-        if x > self.canvas_x and y > self.canvas_y:
+        if x > graphics.canvas_x and y > graphics.canvas_y:
             self.current_tool.pre_draw(x,y)
             if self.current_tool.ask_undo():
                 self.undo_queue.append(graphics.get_snapshot())
             graphics.drawing = True
-            self.enter_canvas_mode()
-            #self.current_tool.start_drawing(x-self.canvas_x,y-self.canvas_y)
+            graphics.enter_canvas_mode()
             self.current_tool.start_drawing(x,y)
         else:
             for button in self.toolbar:
@@ -199,17 +178,14 @@ class Splatboard(pyglet.window.Window):
     
     def on_mouse_drag(self, x, y, dx, dy, button, modifiers):
         self.on_mouse_motion(x,y,dx,dy)
-        #if graphics.drawing: self.current_tool.keep_drawing(x-self.canvas_x,y-self.canvas_y,dx,dy)
         if graphics.drawing: self.current_tool.keep_drawing(x,y,dx,dy)
     
     def on_mouse_release(self, x, y, button, modifiers):
-        #self.notify("mouserelease")
         self.try_redraw()
         if graphics.drawing:
-            #self.current_tool.stop_drawing(x-self.canvas_x,y-self.canvas_y)
             self.current_tool.stop_drawing(x,y)
             graphics.drawing = False
-            self.exit_canvas_mode()
+            graphics.exit_canvas_mode()
             self.current_tool.post_draw(x, y)
     
     def on_close(self):
@@ -278,13 +254,20 @@ class Splatboard(pyglet.window.Window):
             graphics.draw_all_again()
             self.drawn_this_frame = True
     
-    def enter_canvas_mode(self):
-        graphics.enter_canvas_mode()
+    #------------BUTTON THINGS------------#        
+    def undo(self):
+        if len(self.undo_queue) > 0 and self.current_tool.undo():
+            self.current_tool.unselect()    #exit current tool, just in case
+            graphics.set_color(1,1,1,1)
+            img = self.undo_queue.pop()
+            graphics.draw_image(img,graphics.canvas_x,graphics.canvas_y)
+            graphics.canvas_queue_2.append((graphics.set_color, (1,1,1,1),{},False))
+            graphics.canvas_queue_2.append((graphics.draw_image, (img,graphics.canvas_x,graphics.canvas_y), {}, False))
+            self.current_tool.select()      #go back into tool
     
-    def exit_canvas_mode(self):
-        graphics.exit_canvas_mode()
+    def swap_colors(self):
+        graphics.fill_color, graphics.line_color = graphics.line_color, graphics.fill_color
     
-    #------------BUTTON THINGS------------#
     def open(self):
         if not settings['fullscreen']:
             self.open_2()
@@ -305,7 +288,7 @@ class Splatboard(pyglet.window.Window):
         if path != None:
             graphics.clear(1,1,1,1)
             graphics.set_color_extra(1,1,1,1)
-            graphics.draw_image_extra(pyglet.image.load(path),self.canvas_x,self.canvas_y)
+            graphics.draw_image_extra(pyglet.image.load(path),graphics.canvas_x,graphics.canvas_y)
     
     def save(self):
         img = graphics.get_snapshot()
@@ -330,22 +313,9 @@ class Splatboard(pyglet.window.Window):
         if img != None:
             graphics.clear(1,1,1,1)
             graphics.set_color_extra(1,1,1,1)
-            graphics.draw_image_extra(img,self.canvas_x,self.canvas_y)
-    
-    def undo(self):
-        if len(self.undo_queue) > 0 and self.current_tool.undo():
-            self.current_tool.unselect()    #exit current tool, just in case
-            graphics.set_color(1,1,1,1)
-            img = self.undo_queue.pop()
-            graphics.draw_image(img,self.canvas_x,self.canvas_y)
-            graphics.canvas_queue_2.append((graphics.set_color, (1,1,1,1),{},False))
-            graphics.canvas_queue_2.append((graphics.draw_image, (img,self.canvas_x,self.canvas_y), {}, False))
-            self.current_tool.select()      #go back into tool
-    
-    def swap_colors(self):
-        graphics.fill_color, graphics.line_color = graphics.line_color, graphics.fill_color
+            graphics.draw_image_extra(img,graphics.canvas_x,graphics.canvas_y)
     
 
 if __name__ == '__main__':
-    window = Splatboard()
+    graphics.window = Splatboard()
     pyglet.app.run()
