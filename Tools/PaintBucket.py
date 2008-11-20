@@ -18,8 +18,8 @@ class NormalPainter:
     
     def init(self):
         if not self.should_init: return
-        self.should_init = True
-        graphics.set_cursor(graphics.cursor['CURSOR_WAIT'])
+        self.should_init = False
+        graphics.set_cursor('CURSOR_WAIT')
         #Get canvas as image. Essentially an alias for image.get_buffer_manager().get_color_buffer().get_image_data().
         self.canvas_pre = graphics.get_canvas()
         #Convert to array
@@ -27,7 +27,7 @@ class NormalPainter:
         data = self.canvas_pre.get_data('RGBA',self.canvas_pre.width*4)
         #Convert to integer
         self.pixel_data = map(ord, list(data))
-        graphics.set_cursor(graphics.cursor['CURSOR_DEFAULT'])
+        graphics.set_cursor('CURSOR_DEFAULT')
     
     def get_pixel(self, x, y):
         #Image data array is one-dimensional, so we need to find pixel's position in it
@@ -115,6 +115,7 @@ class NormalPainter:
             self.drawing = False
             pyglet.clock.unschedule(self.paint)
             self.should_init = True
+            graphics.call_much_later(self.testfunc)
             graphics.call_thrice(self.draw_fill)
             graphics.call_much_later(self.init)
             self.pixels, self.pixel_colors = self.pixels_old, self.pixel_colors_old
@@ -130,8 +131,7 @@ class StipplePainter(NormalPainter):
         return False
     
     def color_function(self, x, y):
-        #darkness = random.random()*(0.5+0.25*math.sin(0.3*x+y)+0.25*math.sin(0.3*y))
-        lightness = random.random()*0.6-0.3
+        lightness = random.random()*0.4-0.2
         return [
             graphics.fill_color[0]+lightness,
             graphics.fill_color[1]+lightness,

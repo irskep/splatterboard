@@ -39,6 +39,7 @@ default = Tool()    #Instance of your class
 priority = 1000     #Position in toolbar
 group = 'Example'   #Toolbar grouping - Drawing, Shapes, etc
 image = None        #Toolbar icon
+cursor = None
 
 # =====================
 # = END TOOL TEMPLATE =

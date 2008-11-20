@@ -64,10 +64,16 @@ def call_thrice(func, *args, **kwargs):
     canvas_queue_2.append((func,args,kwargs,drawing))
 
 def call_later(func, *args, **kwargs):
-    canvas_queue.append((func,args,kwargs,drawing))
+    if settings['fullscreen'] == True or settings['disable_buffer_fix_in_windowed'] == False:
+        canvas_queue.append((func,args,kwargs,drawing))
+    else:
+        func(*args, **kwargs)
 
 def call_much_later(func, *args, **kwargs):
-    canvas_queue_2.append((func,args,kwargs,drawing))
+    if settings['fullscreen'] == True or settings['disable_buffer_fix_in_windowed'] == False:
+        canvas_queue_2.append((func,args,kwargs,drawing))
+    else:
+        func(*args, **kwargs)
 
 def set_selected_color(new_color):
     global line_color
@@ -103,9 +109,8 @@ def get_pixel_from_image(image, x, y):
     #pyglet.gl.glColor4f(), so I need to put it in the 0.0-1.0 range.
     return [float(c) / 255.0 for c in components]   
 
-def set_cursor(cursor):
-    for window in pyglet.app.windows:
-        window.set_mouse_cursor(cursor)
+def set_cursor(new_cursor):
+    main_window.set_mouse_cursor(cursor[new_cursor])
 
 def change_canvas_area(x,y,w,h):
     pyglet.gl.glViewport(x,y,w,h)
@@ -158,8 +163,9 @@ def set_color_extra(r=0.0, g=0.0, b=0.0, a=1.0, color=None):
 def clear(r=0.0, g=0.0, b=0.0, a=1.0, color=None):
     if color is not None: pyglet.gl.glClearColor(*color)
     else: pyglet.gl.glClearColor(1,1,1,1);
-    for window in pyglet.app.windows.__iter__():
-        window.clear()
+    #for window in pyglet.app.windows.__iter__():
+    #    window.clear()
+    main_window.clear()
 
 @command_wrapper
 def draw_image(img, x, y):
