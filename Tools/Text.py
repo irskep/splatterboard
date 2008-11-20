@@ -9,14 +9,14 @@ class Text(tool.Tool):
 
 	def select(self):
 		self.writing = False
-		self.canvas_pre = graphics.get_snapshot()
+		self.canvas_pre = graphics.get_canvas()
 
 	def start_drawing(self, x, y):
 		self.label = pyglet.text.Label(color=(0,0,0,255), x=x, y=y)
 		self.writing = True
 	
 	def post_draw(self, x, y):
-		self.canvas_pre = graphics.get_snapshot()
+		self.canvas_pre = graphics.get_canvas()
 
 	def text(self, text):
 		if not self.writing:

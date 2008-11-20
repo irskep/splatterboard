@@ -18,6 +18,7 @@ class PaintingEnvironment:
     drawn_this_frame = False
     
     def __init__(self):
+        tool.painting_env = self
         
         #set up undo stack
         self.undo_queue = []
@@ -56,7 +57,12 @@ class PaintingEnvironment:
         #white background
         graphics.clear(1,1,1,1);
     
-    #------------EVENT HANDLING------------#
+    #------------EVENT HANDLING------------#    
+    def try_redraw(self):
+        if not self.drawn_this_frame:
+            graphics.draw_all_again()
+            self.drawn_this_frame = True
+    
     def on_draw(self, dt=0):
         self.try_redraw()
         if not graphics.drawing:
@@ -88,6 +94,8 @@ class PaintingEnvironment:
             graphics.drawing = False
             graphics.exit_canvas_mode()
         if symbol == key.ESCAPE: return True    #stop Pyglet from quitting
+        if symbol == key.F and modifiers & key.MOD_COMMAND or modifiers & key.MOD_ALT:
+            graphics.toggle_fullscreen()
 
     def on_key_release(self, symbol, modifiers):
         self.try_redraw()
@@ -122,7 +130,7 @@ class PaintingEnvironment:
         if x > graphics.canvas_x and y > graphics.canvas_y:
             self.current_tool.pre_draw(x,y)
             if self.current_tool.ask_undo():
-                self.undo_queue.append(graphics.get_snapshot())
+                self.undo_queue.append(graphics.get_canvas())
             graphics.drawing = True
             graphics.enter_canvas_mode()
             self.current_tool.start_drawing(x,y)
@@ -156,6 +164,10 @@ class PaintingEnvironment:
     def on_close(self):
         save_settings()
         pyglet.app.exit()
+    
+    def push_undo(self, snap):
+        self.undo_queue.append(snap)
+        print "Image added to undo stack"
     
     #------------TOOL THINGS------------#
     def import_libs(self, dir):
@@ -218,11 +230,6 @@ class PaintingEnvironment:
             self.current_tool.select()
         return action
     
-    def try_redraw(self):
-        if not self.drawn_this_frame:
-            graphics.draw_all_again()
-            self.drawn_this_frame = True
-    
     #------------BUTTON THINGS------------#        
     def undo(self):
         if len(self.undo_queue) > 0 and self.current_tool.undo():
@@ -241,7 +248,7 @@ class PaintingEnvironment:
         if not settings['fullscreen']:
             self.open_2()
             return
-        self.set_fullscreen(False)
+        graphics.main_window.set_fullscreen(False)
         pyglet.clock.schedule_once(self.open_2,0.5)
         
     def open_2(self, dt=0):    
@@ -250,7 +257,7 @@ class PaintingEnvironment:
         if not settings['fullscreen']:
             self.open_3(0,path)
             return
-        self.set_fullscreen(settings['fullscreen'])
+        graphics.main_window.set_fullscreen(settings['fullscreen'])
         pyglet.clock.schedule_once(self.open_3, 0.5, path)
         
     def open_3(self, dt=0, path=None):
@@ -259,17 +266,17 @@ class PaintingEnvironment:
             graphics.clear(1,1,1,1)
             graphics.set_color_extra(1,1,1,1)
             graphics.call_thrice(graphics.enter_canvas_mode)
-            graphics.draw_image_extra(pyglet.image.load(path),graphics.canvas_x,graphics.canvas_y)
+            graphics.draw_image_extra(pyglet.image.load(path),graphics.canvas_x+1,graphics.canvas_y+1)
             graphics.call_thrice(graphics.exit_canvas_mode)
             graphics.call_much_later(self.current_tool.select())
     
     def save(self):
-        img = graphics.get_snapshot()
+        img = graphics.get_canvas()
         img = img.get_region(1,1,img.width-1,img.height-1)
         if not settings['fullscreen']:
             self.save_2(0,img)
             return
-        self.set_fullscreen(False)
+        graphics.main_window.set_fullscreen(False)
         pyglet.clock.schedule_once(self.save_2,0.5,img)
     
     def save_2(self, dt=0, img=None):
@@ -279,7 +286,7 @@ class PaintingEnvironment:
         if not settings['fullscreen']:
             self.save_3(0,img,path)
             return
-        self.set_fullscreen(settings['fullscreen'])
+        graphics.main_window.set_fullscreen(settings['fullscreen'])
         pyglet.clock.schedule_once(self.save_3, 0.5, img, path)
     
     def save_3(self, dt=0, img = None, path = None):

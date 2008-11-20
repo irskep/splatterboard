@@ -6,7 +6,7 @@ class Eraser(tool.Tool):
     color = (1,1,1,1)
     
     def select(self):
-        self.canvas_pre = graphics.get_snapshot()
+        self.canvas_pre = graphics.get_canvas()
         tool.generate_brush_selector()
     
     def start_drawing(self, x, y):

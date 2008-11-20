@@ -45,6 +45,14 @@ cursor = None
 # = END TOOL TEMPLATE =
 # =====================
 
+painting_env = None
+
+def push_undo(snap=None):
+    if snap == None: snap = graphics.get_canvas()
+    graphics.enter_canvas_mode()
+    painting_env.push_undo(snap)
+    if not graphics.drawing: graphics.exit_canvas_mode()
+
 class ControlSpace:
     controls = []
     max_x = 0

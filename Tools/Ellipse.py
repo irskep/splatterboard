@@ -7,7 +7,7 @@ class Ellipse(tool.Tool):
     x1, y1, x2, y2 = 0.0, 0.0, 0.0, 0.0
     
     def select(self):
-        self.canvas_pre = graphics.get_snapshot()
+        self.canvas_pre = graphics.get_canvas()
         tool.generate_line_selector()
     
     def start_drawing(self, x, y):
@@ -27,7 +27,7 @@ class Ellipse(tool.Tool):
         self.keep_drawing(x, y, 0, 0)
     
     def post_draw(self, x, y):
-        self.canvas_pre = graphics.get_snapshot()
+        self.canvas_pre = graphics.get_canvas()
 
 default = Ellipse()
 priority = 82

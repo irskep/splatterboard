@@ -10,7 +10,7 @@ class Spray(tool.Tool):
     radius = 3 # in units of brush_size
     
     def select(self):
-        self.canvas_pre = graphics.get_snapshot()
+        self.canvas_pre = graphics.get_canvas()
         tool.generate_brush_selector()
 
     def start_drawing(self, x, y):

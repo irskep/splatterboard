@@ -22,15 +22,15 @@ def doublecall_wrapper(func):
     def new_func(*args, **kwargs):
         global drawing
         func(*args, **kwargs)
-        canvas_queue.append((func, args, kwargs, drawing))
+        canvas_queue.append((func, args, kwargs, _in_canvas_mode))
     return new_func
     
 def triplecall_wrapper(func):
     def new_func(*args, **kwargs):
         global drawing
         func(*args, **kwargs)
-        canvas_queue.append((func, args, kwargs, drawing))
-        canvas_queue_2.append((func, args, kwargs, drawing))
+        canvas_queue.append((func, args, kwargs, _in_canvas_mode))
+        canvas_queue_2.append((func, args, kwargs, _in_canvas_mode))
     return new_func
 
 if settings['fullscreen']:
@@ -84,15 +84,10 @@ def set_selected_color(new_color):
         fill_color = new_color
 
 def get_snapshot():
-    img = pyglet.image.get_buffer_manager().get_color_buffer().get_image_data()
-    if drawing:
-        return img
-    else:
-        return img.get_region(canvas_x, canvas_y, width-canvas_x, height-canvas_y)
+    return pyglet.image.get_buffer_manager().get_color_buffer().get_image_data()
 
 def get_canvas():
-    img = pyglet.image.get_buffer_manager().get_color_buffer().get_image_data()
-    return img.get_region(canvas_x, canvas_y, width-canvas_x, height-canvas_y)
+    return get_snapshot().get_region(canvas_x, canvas_y, width-canvas_x, height-canvas_y)
         
 def get_color_buffer():
     return pyglet.image.get_buffer_manager().get_color_buffer()

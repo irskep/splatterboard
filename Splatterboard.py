@@ -27,19 +27,12 @@ class SplatterboardWindow(pyglet.window.Window):
                                             )
         else:
             super(SplatterboardWindow, self).__init__( fullscreen=True, resizable=False, vsync=True)
-            settings['window_width'] = self.width
-            settings['window_height'] = self.height
         
-        graphics.width = self.width
-        graphics.height = self.height
+        self.update_size_constants()
         graphics.main_window = self
         
         self.set_caption('Splatterboard')
         self.init_cursors()
-        
-        #shortcuts
-        graphics.canvas_x = settings['toolbar_width']
-        graphics.canvas_y = settings['buttonbar_height']
         
         #enable alpha blending, line smoothing, init glScissor
         pyglet.gl.glEnable(pyglet.gl.GL_BLEND)
@@ -52,6 +45,12 @@ class SplatterboardWindow(pyglet.window.Window):
         
         self.painting_environment = PaintingEnvironment.PaintingEnvironment()
         self.push_handlers(self.painting_environment)
+    
+    def update_size_constants(self):
+        graphics.width = self.width
+        graphics.height = self.height
+        graphics.canvas_x = settings['toolbar_width']
+        graphics.canvas_y = settings['buttonbar_height']
     
     def init_cursors(self):
         graphics.cursor['CURSOR_CROSSHAIR'] = self.get_system_mouse_cursor(self.CURSOR_CROSSHAIR)
