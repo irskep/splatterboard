@@ -115,7 +115,6 @@ class NormalPainter:
             self.drawing = False
             pyglet.clock.unschedule(self.paint)
             self.should_init = True
-            graphics.call_much_later(self.testfunc)
             graphics.call_thrice(self.draw_fill)
             graphics.call_much_later(self.init)
             self.pixels, self.pixel_colors = self.pixels_old, self.pixel_colors_old
