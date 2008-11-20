@@ -67,6 +67,7 @@ class Splatboard(pyglet.window.Window):
         
         for button in self.buttons: self.push_handlers(button)
         
+        self.toolbar_group = gui.ButtonGroup()
         tool.controlspace.max_x = self.swap_button.x-5
         tool.controlspace.max_y = graphics.canvas_y
         self.push_handlers(tool.controlspace)
@@ -164,6 +165,7 @@ class Splatboard(pyglet.window.Window):
             graphics.enter_canvas_mode()
             self.current_tool.start_drawing(x,y)
         else:
+            """
             for button in self.toolbar:
                 #clear selection
                 if button.coords_inside(x,y):
@@ -172,6 +174,7 @@ class Splatboard(pyglet.window.Window):
                     #select proper button
                     button.selected = True
                     button.action()
+            """
             #pick a color if click was in color picker
             if self.colorpicker.coords_inside(x,y):
                 graphics.set_selected_color(self.colorpicker.get_color(x,y))
@@ -235,11 +238,15 @@ class Splatboard(pyglet.window.Window):
                 if i % 2 != 0:
                     x = 0
                     y -= self.toolsize
-                new_button = gui.SquareButton(tool.image, x, y, self.get_toolbar_button_action(tool.default))
+                new_button = gui.ImageButton(resources.SquareButton, 
+                                        self.get_toolbar_button_action(tool.default), x,y, 
+                                        parent_group = self.toolbar_group,image_2=tool.image)
                 self.toolbar.append(new_button)
         
         self.current_tool = sorted_tools[0].default
         self.toolbar[0].selected = True
+        self.toolbar_group.buttons = self.toolbar
+        for tool in self.toolbar: self.push_handlers(tool)
     
     def get_toolbar_button_action(self, specific_tool):  #decorator for toolbar buttons
         def action():

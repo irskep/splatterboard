@@ -20,7 +20,6 @@ class PaintBucket(tool.Tool):
     def init(self):
         if not self.should_init: return
         self.should_init = True
-        print "init"
         graphics.set_cursor(graphics.cursor['CURSOR_WAIT'])
         #Get canvas as image. Essentially an alias for image.get_buffer_manager().get_color_buffer().get_image_data().
         self.canvas_pre = graphics.get_canvas()
@@ -28,7 +27,6 @@ class PaintBucket(tool.Tool):
         data = ""
         data = self.canvas_pre.get_data('RGBA',self.canvas_pre.width*4)
         #Convert to integer
-        print self.canvas_pre.width,len(data)
         self.pixel_data = map(ord, list(data))
         graphics.set_cursor(graphics.cursor['CURSOR_DEFAULT'])
     
@@ -54,10 +52,8 @@ class PaintBucket(tool.Tool):
             difference =  abs(graphics.fill_color[0]-self.original_color[0])
             difference += abs(graphics.fill_color[1]-self.original_color[1])
             difference += abs(graphics.fill_color[2]-self.original_color[2])
-            print graphics.fill_color, self.original_color
             if difference < self.threshold:
                 self.drawing = False
-                print "abort! abort!"
                 self.init()
                 return
             self.pixels = []
