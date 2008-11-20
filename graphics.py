@@ -55,14 +55,18 @@ def draw_all_again():
             exit_canvas_mode()
 
 def call_twice(func, *args, **kwargs):
-    global drawing
     func(*args,**kwargs)
     canvas_queue.append((func,args,kwargs,drawing))
 
 def call_thrice(func, *args, **kwargs):
-    global drawing
     func(*args,**kwargs)
     canvas_queue.append((func,args,kwargs,drawing))
+    canvas_queue_2.append((func,args,kwargs,drawing))
+
+def call_later(func, *args, **kwargs):
+    canvas_queue.append((func,args,kwargs,drawing))
+
+def call_much_later(func, *args, **kwargs):
     canvas_queue_2.append((func,args,kwargs,drawing))
 
 def set_selected_color(new_color):
@@ -112,17 +116,19 @@ def change_canvas_area(x,y,w,h):
 
 def enter_canvas_mode():
     pyglet.gl.glEnable(pyglet.gl.GL_SCISSOR_TEST)
-    # global _in_canvas_mode
-    # if not _in_canvas_mode:
-    #     change_canvas_area(canvas_x,canvas_y,width-canvas_x,height-canvas_y)
-    #     _in_canvas_mode = True
+    pyglet.gl.glDisable(pyglet.gl.GL_BLEND)
+    #pyglet.gl.glDisable(pyglet.gl.GL_LINE_SMOOTH)
+    #pyglet.gl.glDisable(pyglet.gl.GL_POINT_SMOOTH)
+    global _in_canvas_mode
+    if not _in_canvas_mode: _in_canvas_mode = True
 
 def exit_canvas_mode():
     pyglet.gl.glDisable(pyglet.gl.GL_SCISSOR_TEST)
-    # global _in_canvas_mode
-    # if _in_canvas_mode:
-    #     change_canvas_area(0,0,width,height)
-    #     _in_canvas_mode = False
+    pyglet.gl.glEnable(pyglet.gl.GL_BLEND)
+    #pyglet.gl.glEnable(pyglet.gl.GL_LINE_SMOOTH)
+    #pyglet.gl.glEnable(pyglet.gl.GL_POINT_SMOOTH)
+    global _in_canvas_mode
+    if _in_canvas_mode: _in_canvas_mode = False
 
 @command_wrapper
 def set_line_width(width):
@@ -158,11 +164,13 @@ def clear(r=0.0, g=0.0, b=0.0, a=1.0, color=None):
 @command_wrapper
 def draw_image(img, x, y):
     img.blit(x,y)
+    if _in_canvas_mode: pyglet.gl.glDisable(pyglet.gl.GL_BLEND)
+    
 
 @triplecall_wrapper
 def draw_image_extra(img, x, y):
     img.blit(x,y)
-
+    if _in_canvas_mode: pyglet.gl.glDisable(pyglet.gl.GL_BLEND)
 
 @command_wrapper
 def draw_label(label):

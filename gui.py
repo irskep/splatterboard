@@ -3,7 +3,7 @@ from settings import settings
 from dialogs import *
 
 class Button():
-    def __init__(self, text, image, action, x, y, parent_group = None, more_draw = None):
+    def __init__(self, image, action, x, y, text="", parent_group = None, more_draw = None):
         self.action = action
         self.x, self.y = x, y
         self.selected = False
@@ -41,6 +41,9 @@ class Button():
             if self.parent_group != None: self.parent_group.select(self)
             self.action()
         self.pressed = False
+    
+    def select(self):
+        if self.parent_group != None: self.parent_group.select(self)
 
     def coords_inside(self, x, y):
         return x >= self.x and y >= self.y and x <= self.x + self.image.width and y <= self.y + self.image.height
@@ -48,7 +51,7 @@ class Button():
 class ImageButton(Button):
     def __init__(self, image, action, x, y, parent_group = None, image_2=None):
         #For some reason, Python doesn't like me to use super() here.
-        Button.__init__(self,"", image, action, x, y, parent_group)
+        Button.__init__(self, image, action, x, y, "", parent_group)
         self.image_2 = image_2
 
     def draw(self):
@@ -65,7 +68,7 @@ class ButtonGroup:
         if len(buttons) > 0:
             buttons[0].selected = True
     
-    def add_button(self, button):
+    def add(self, button):
         self.buttons.append(button)
     
     def select(self, select_button):

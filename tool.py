@@ -57,8 +57,7 @@ class ControlSpace:
         for control in self.controls:
             control.draw()
     
-    def add_button(self, *args, **kwargs):
-        newbutton = gui.Button(*args, **kwargs)
+    def add(self, newbutton):
         if newbutton.x >= 0 and newbutton.y >= 0 and newbutton.x+newbutton.width <= self.max_x and newbutton.y+newbutton.height <= self.max_y:
             self.controls.append(newbutton)
         else:
@@ -84,7 +83,7 @@ class ControlSpace:
 
 controlspace = ControlSpace(0,0)
 
-def generate_brush_selector():
+def generate_brush_selector(start_x=5,start_y=5,max_x=-1,max_y=-1):
     def get_brush_drawer(x,y,w,h,size):
         if size < 1.5: size = 1.5
         def draw_brush():
@@ -98,18 +97,31 @@ def generate_brush_selector():
             graphics.brush_size = size
         return set_brush_size
     
+    brush_group = gui.ButtonGroup()
     w, h = resources.SquareButton.width, resources.SquareButton.height
-    steps = int(controlspace.max_x/(w+5))
+    if max_x < 0: max_x = min(resources.SquareButton.width*5,controlspace.max_x)
+    if max_y < 0: max_y = min(resources.SquareButton.height,controlspace.max_y)
+    steps = int(max_x/w)
     current_width = 1.0
     max_width = 40.0
-    width_inc = (max_width-current_width)/float(steps)
-    for x in xrange(5, controlspace.max_x-(w), w):
-        controlspace.add_button(text="", image=resources.SquareButton,
-                                        action=get_brush_setter(current_width), x=x, y=5, 
-                                        more_draw=get_brush_drawer(x, 5, w, h, current_width))
+    width_inc = (max_width-current_width)/steps
+    size_set = False
+    newbutton = None
+    for x in xrange(start_x, start_x+max_x, w):
+        newbutton = gui.Button(text="", image=resources.SquareButton,
+                                        action=get_brush_setter(current_width), x=x, y=start_y, 
+                                        more_draw=get_brush_drawer(x, start_y, w, h, current_width),
+                                        parent_group=brush_group)
+        controlspace.add(newbutton)
+        brush_group.add(newbutton)
+        if graphics.brush_size <= current_width and not size_set:
+            newbutton.action()
+            newbutton.select()
+            size_set = True
         current_width += width_inc
+    if not size_set: newbutton.select()
 
-def generate_line_selector():
+def generate_line_selector(start_x=5, start_y=5, max_x=-1, max_y=-1):
     def get_line_drawer(x,y,w,h,size):
         def draw_line():
             graphics.set_line_width(size)
@@ -122,13 +134,26 @@ def generate_line_selector():
             graphics.line_size = size
         return set_line_size
     
+    line_group = gui.ButtonGroup()
     w, h = resources.SquareButton.width, resources.SquareButton.height
-    steps = int(controlspace.max_x/(w+5))
+    if max_x < 0: max_x = min(resources.SquareButton.width*5,controlspace.max_x)
+    if max_y < 0: max_y = min(resources.SquareButton.height,controlspace.max_y)
+    steps = int(max_x/w)
     current_width = 1.0
     max_width = 15.0
     width_inc = (max_width-current_width)/float(steps)
-    for x in xrange(5, controlspace.max_x-(w), w):
-        controlspace.add_button(text="", image=resources.SquareButton,
-                                        action=get_line_setter(current_width), x=x, y=5, 
-                                        more_draw=get_line_drawer(x, 5, w, h, current_width))
+    size_set = False
+    newbutton = None
+    for x in xrange(start_x, start_x+max_x, w):
+        newbutton = gui.Button(text="", image=resources.SquareButton,
+                                        action=get_line_setter(current_width), x=x, y=start_y, 
+                                        more_draw=get_line_drawer(x, start_y, w, h, current_width),
+                                        parent_group=line_group)
+        controlspace.add(newbutton)
+        line_group.add(newbutton)
+        if graphics.line_size <= current_width and not size_set:
+            newbutton.action()
+            newbutton.select()
+            size_set = True
         current_width += width_inc
+    if not size_set: newbutton.select()

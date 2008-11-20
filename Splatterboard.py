@@ -50,16 +50,19 @@ class Splatboard(pyglet.window.Window):
         pyglet.gl.glBlendFunc(pyglet.gl.GL_SRC_ALPHA, pyglet.gl.GL_ONE_MINUS_SRC_ALPHA)
         pyglet.gl.glEnable(pyglet.gl.GL_LINE_SMOOTH)
         pyglet.gl.glEnable(pyglet.gl.GL_POINT_SMOOTH)
-        pyglet.gl.glHint(pyglet.gl.GL_LINE_SMOOTH_HINT,pyglet.gl.GL_NICEST)
-        pyglet.gl.glScissor(graphics.canvas_x,graphics.canvas_y,self.width-graphics.canvas_x,self.height-graphics.canvas_y)
+        #pyglet.gl.glHint(pyglet.gl.GL_LINE_SMOOTH_HINT,pyglet.gl.GL_NICEST)
+        pyglet.gl.glScissor(graphics.canvas_x,graphics.canvas_y,
+                            self.width-graphics.canvas_x,self.height-graphics.canvas_y)
         
         #set up undo stack
         self.undo_queue = []
         self.max_undo = 5   #arbitrary
         
         #load buttons
-        self.save_button = gui.Button('Save', resources.Button, self.save, self.width-resources.Button.width-3, 3)
-        self.open_button = gui.Button('Open', resources.Button, self.open, self.save_button.x, resources.Button.height+8)
+        self.save_button = gui.Button(resources.Button, self.save, 
+                                        self.width-resources.Button.width-3, 3, text='Save')
+        self.open_button = gui.Button(resources.Button, self.open, 
+                                        self.save_button.x, resources.Button.height+8, text='Open')
         self.swap_button = gui.ImageButton(resources.ColorSwitch, self.swap_colors,
                                             self.width-440, 50-resources.ColorSwitch.height/2)
         self.undo_button = gui.ImageButton(resources.Rewind, self.undo, 5, graphics.canvas_y+5)
@@ -265,11 +268,11 @@ class Splatboard(pyglet.window.Window):
     def undo(self):
         if len(self.undo_queue) > 0 and self.current_tool.undo():
             self.current_tool.unselect()    #exit current tool, just in case
-            graphics.set_color(1,1,1,1)
+            graphics.set_color_extra(1,1,1,1)
+            graphics.call_thrice(graphics.enter_canvas_mode)
             img = self.undo_queue.pop()
-            graphics.draw_image(img,graphics.canvas_x,graphics.canvas_y)
-            graphics.canvas_queue_2.append((graphics.set_color, (1,1,1,1),{},False))
-            graphics.canvas_queue_2.append((graphics.draw_image, (img,graphics.canvas_x,graphics.canvas_y), {}, False))
+            graphics.draw_image_extra(img,graphics.canvas_x,graphics.canvas_y)
+            graphics.call_thrice(graphics.exit_canvas_mode)
             self.current_tool.select()      #go back into tool
     
     def swap_colors(self):
@@ -293,9 +296,13 @@ class Splatboard(pyglet.window.Window):
         
     def open_3(self, dt=0, path=None):
         if path != None:
+            self.current_tool.unselect()
             graphics.clear(1,1,1,1)
             graphics.set_color_extra(1,1,1,1)
+            graphics.call_thrice(graphics.enter_canvas_mode)
             graphics.draw_image_extra(pyglet.image.load(path),graphics.canvas_x,graphics.canvas_y)
+            graphics.call_thrice(graphics.exit_canvas_mode)
+            graphics.call_much_later(self.current_tool.select())
     
     def save(self):
         img = graphics.get_snapshot()
@@ -318,9 +325,13 @@ class Splatboard(pyglet.window.Window):
     
     def save_3(self, dt=0, img = None, path = None):
         if img != None:
+            self.current_tool.unselect()
             graphics.clear(1,1,1,1)
             graphics.set_color_extra(1,1,1,1)
+            graphics.call_thrice(graphics.enter_canvas_mode)
             graphics.draw_image_extra(img,graphics.canvas_x,graphics.canvas_y)
+            graphics.call_thrice(graphics.exit_canvas_mode)
+            graphics.call_much_later(self.current_tool.select())
     
 
 if __name__ == '__main__':
