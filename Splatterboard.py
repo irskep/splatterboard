@@ -79,7 +79,7 @@ class Splatboard(pyglet.window.Window):
         self.load_tools()
         
         #color picker stuff
-        self.colorpicker = colorpicker.ColorPicker(self.width-370,6,240,90,step_x=15,step_y=10)
+        self.colorpicker = colorpicker.ColorPicker(self.width-370,6,240,90,step_x=15,step_y=15)
         self.colordisplay = gui.ColorDisplay(self.width-410, 6, 25, 90)
         self.push_handlers(self.colorpicker, self.colordisplay)
         

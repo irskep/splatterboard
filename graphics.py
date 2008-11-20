@@ -6,6 +6,7 @@ cursor = {} #set by Splatboard.py - pyglet stores cursors in an instance of Wind
 canvas_queue = [] #[(function, args, kwargs)]
 canvas_queue_2 = []
 canvas_x, canvas_y = settings['toolbar_width'], settings['buttonbar_height']
+main_window = None
 
 _in_canvas_mode = False
 
@@ -58,6 +59,12 @@ def call_twice(func, *args, **kwargs):
     func(*args,**kwargs)
     canvas_queue.append((func,args,kwargs,drawing))
 
+def call_thrice(func, *args, **kwargs):
+    global drawing
+    func(*args,**kwargs)
+    canvas_queue.append((func,args,kwargs,drawing))
+    canvas_queue_2.append((func,args,kwargs,drawing))
+
 def set_selected_color(new_color):
     global line_color
     global fill_color
@@ -71,7 +78,14 @@ def get_snapshot():
     if drawing:
         return img
     else:
-        return img.get_region(canvas_x, canvas_y, settings['window_width']-canvas_x, settings['window_height']-canvas_y)
+        return img.get_region(canvas_x, canvas_y, width-canvas_x, height-canvas_y)
+
+def get_canvas():
+    img = pyglet.image.get_buffer_manager().get_color_buffer().get_image_data()
+    return img.get_region(canvas_x, canvas_y, width-canvas_x, height-canvas_y)
+        
+def get_color_buffer():
+    return pyglet.image.get_buffer_manager().get_color_buffer()
 
 def get_pixel_from_image(image, x, y):
     #Grab 1x1-pixel image. Converting entire image to ImageData takes much longer than just

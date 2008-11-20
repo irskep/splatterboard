@@ -71,7 +71,8 @@ class ColorPicker():
         graphics.draw_rect_outline(self.x,self.y,self.x+self.width,self.y+self.height)
     
     def get_color(self, x, y):
-        return graphics.get_pixel_from_image(self.image, x-self.x, y-self.y)
+        color = graphics.get_pixel_from_image(self.image, x-self.x, y-self.y)
+        return (color[0],color[1],color[2],1.0)
     
     def coords_inside(self, x, y):
         return x >= self.x and y >= self.y and x <= self.x + self.width and y <= self.y + self.height

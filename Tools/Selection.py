@@ -27,8 +27,8 @@ class Selection(tool.Tool):
 			if self.selection != None:
 				self.img_x, self.img_y = min(self.x1, self.x2), min(self.y1, self.y2)
 				graphics.set_color(1,1,1,1)
-				graphics.draw_image(self.selection, self.img_x+graphics.canvas_x, self.img_y+graphics.canvas_y)
-				self.canvas_pre = graphics.get_snapshot()
+				graphics.draw_image(self.selection, self.img_x, self.img_y)
+				self.canvas_pre = graphics.get_canvas()
 				self.allow_undo = False
 			self.selection = None
 			self.x1, self.y1 = x, y
@@ -46,7 +46,7 @@ class Selection(tool.Tool):
 			self.mouse_offset_y = y - self.y1
 			self.img_x, self.img_y = min(self.x1, self.x2), min(self.y1, self.y2)
 			if not self.dragging:
-				self.selection = self.canvas_pre.get_region(self.img_x, self.img_y, abs(self.w), abs(self.h))
+				self.selection = self.canvas_pre.get_region(self.img_x-graphics.canvas_x, self.img_y-graphics.canvas_y, abs(self.w), abs(self.h))
 				self.original_x, self.original_y = self.img_x, self.img_y
 			self.dragging = True
 	
