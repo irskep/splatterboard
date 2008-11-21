@@ -19,7 +19,7 @@ def default_settings():
 					window_height=768,
 					toolbar_width=110,
 					buttonbar_height=110,
-					fullscreen=False,
+					fullscreen=True,
 					fit_window_to_screen=False,
 					volume=1.0,
 					disable_buffer_fix_in_windowed=False

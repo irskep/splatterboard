@@ -279,3 +279,18 @@ def draw_ellipse_outline(x1, y1, x2, y2, dashed=False):
 @command_wrapper
 def draw_quad(*args):
     pyglet.graphics.draw(4, pyglet.gl.GL_QUADS, ('v2f', args))
+
+@command_wrapper
+def init_stencil_mode():
+    pyglet.gl.glClearStencil(0)
+    pyglet.gl.glEnable(pyglet.gl.GL_STENCIL_TEST)
+    pyglet.gl.glClear(pyglet.gl.GL_STENCIL_BUFFER_BIT)
+    pyglet.gl.glStencilFunc(pyglet.gl.GL_NEVER, 0x0, 0x0)
+    pyglet.gl.glStencilOp(pyglet.gl.GL_INCR, pyglet.gl.GL_INCR, pyglet.gl.GL_INCR)
+
+def stop_drawing_stencil():
+    pyglet.gl.glStencilFunc(pyglet.gl.GL_NOTEQUAL, 0x1, 0x1)
+    pyglet.gl.glStencilOp(pyglet.gl.GL_KEEP, pyglet.gl.GL_KEEP, pyglet.gl.GL_KEEP)
+
+def exit_stencil_mode():    
+    pyglet.gl.glDisable(pyglet.gl.GL_STENCIL_TEST)

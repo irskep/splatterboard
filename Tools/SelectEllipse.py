@@ -1,6 +1,5 @@
 import random, tool, resources, graphics
 from settings import *
-import pyglet
 
 class SelectEllipse(tool.Tool):
     """
@@ -22,10 +21,6 @@ class SelectEllipse(tool.Tool):
     undo_image = None
     
     def select(self):
-        # pyglet.gl.glClearStencil(0)
-        # pyglet.gl.glClear(pyglet.gl.GL_STENCIL_BUFFER_BIT)
-        # pyglet.gl.glEnable(pyglet.gl.GL_STENCIL_TEST)
-        # pyglet.gl.glStencilFunc(pyglet.gl.GL_EQUAL,0x1,0xff)
         self.canvas_pre = graphics.get_snapshot()
         self.undo_image = graphics.get_canvas()
         self.selection = None
@@ -46,7 +41,7 @@ class SelectEllipse(tool.Tool):
                 graphics.set_color(1,1,1,1)
                 graphics.draw_image(self.canvas_pre,0,0)
                 self.draw_selection_mask(self.original_x, self.original_y,
-                                            self.original_x+abs(self.w), self.original_y+abs(self.h))
+                                self.original_x+abs(self.w), self.original_y+abs(self.h))
                 self.draw_selection_image()
                 self.canvas_pre = graphics.get_snapshot()
                 self.undo_image = graphics.get_canvas()
@@ -95,42 +90,43 @@ class SelectEllipse(tool.Tool):
         graphics.set_color(1,1,1,1)
         #graphics.draw_rect(self.x1,self.y1,self.x2,self.y2)
         self.draw_selection_mask(self.x1,self.y1,self.x2,self.y2)
-        pyglet.gl.glClearStencil(0)
-        pyglet.gl.glEnable(pyglet.gl.GL_STENCIL_TEST)
-
-        pyglet.gl.glClear(pyglet.gl.GL_STENCIL_BUFFER_BIT)
-
-        pyglet.gl.glStencilFunc(pyglet.gl.GL_NEVER, 0x0, 0x0)
-        pyglet.gl.glStencilOp(pyglet.gl.GL_INCR, pyglet.gl.GL_INCR, pyglet.gl.GL_INCR)
+        
+        graphics.init_stencil_mode()
 
         graphics.set_color(1,1,1,1)
         graphics.draw_rect(self.x1,self.y1,self.x2,self.y2)
         graphics.set_color(0,0,0,1)
         self.draw_selection_mask(self.x1,self.y1,self.x2,self.y2)
-        pyglet.gl.glStencilFunc(pyglet.gl.GL_NOTEQUAL, 0x1, 0x1)
-        pyglet.gl.glStencilOp(pyglet.gl.GL_KEEP, pyglet.gl.GL_KEEP, pyglet.gl.GL_KEEP)
+        
+        graphics.stop_drawing_stencil()
+        
         graphics.set_color(1,1,1,1)
         #graphics.draw_rect(self.x1,self.y1,self.x2,self.y2)
         graphics.draw_image(self.selection, self.img_x, self.img_y)
-        pyglet.gl.glDisable(pyglet.gl.GL_STENCIL_TEST)
+        
+        graphics.exit_stencil_mode()
     
     def draw_selection_shape(self):
         graphics.enable_line_stipple()
         graphics.set_line_width(1.0)
         graphics.set_color(0,0,0,1)
         old_line_size = graphics.line_size
-        graphics.line_size = 1.0
+        def temp1():
+            graphics.line_size = 1.0
+        def temp2():
+            graphics.line_size = old_line_size
+        graphics.call_twice(temp1)
         #graphics.draw_rect_outline(self.img_x+1, self.img_y+1, self.img_x+abs(self.w)-1, self.img_y+abs(self.h)-1)
         graphics.draw_ellipse_outline(self.img_x+1, self.img_y+1, self.img_x+abs(self.w)-1, self.img_y+abs(self.h)-1)
         graphics.disable_line_stipple()
-        graphics.line_size = old_line_size
+        graphics.call_twice(temp2)
     
     def stop_drawing(self, x, y):
         if self.dragging and self.selection != None:
             graphics.set_color(1,1,1,1)
             #graphics.draw_image(self.selection, self.img_x, self.img_y)
             self.draw_selection_image()
-            if self.dragging: self.draw_selection_shape()
+            self.draw_selection_shape()
         else:
             if x != self.mouse_start_x or y != self.mouse_start_y:
                 tool.push_undo(self.undo_image)  
