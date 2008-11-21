@@ -146,10 +146,10 @@ class PaintBucket(tool.Tool):
         self.painter = self.painter_normal
         self.button_group = gui.ButtonGroup()
         self.button_normal = gui.ImageButton(resources.SquareButton, self.switch_normal, 
-                                            5, 5, image_2 = resources.PaintBucket, 
+                                            5, 60, image_2 = resources.PaintBucket, 
                                             parent_group=self.button_group)
         self.button_noisy = gui.ImageButton(resources.SquareButton, self.switch_noisy, 
-                                            55, 5, image_2 = resources.PaintBucket_noise, 
+                                            55, 60, image_2 = resources.PaintBucket_noise, 
                                             parent_group=self.button_group)
         tool.controlspace.add(self.button_normal)
         tool.controlspace.add(self.button_noisy)

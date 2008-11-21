@@ -26,11 +26,11 @@ class PaintingEnvironment:
         
         #init buttons
         self.save_button = gui.Button(resources.Button, self.save, 
-                                        graphics.width-resources.Button.width-3, 3, text='Save')
+                                        graphics.width-resources.Button.width-3, 5, text='Save')
         self.open_button = gui.Button(resources.Button, self.open, 
-                                        self.save_button.x, resources.Button.height+8, text='Open')
+                                        self.save_button.x, resources.Button.height+10, text='Open')
         self.swap_button = gui.ImageButton(resources.ColorSwitch, self.swap_colors,
-                                            graphics.width-440, 50-resources.ColorSwitch.height/2)
+                    graphics.width-440, settings['buttonbar_height']/2-resources.ColorSwitch.height/2)
         self.undo_button = gui.ImageButton(resources.Rewind, self.undo, 5, graphics.canvas_y+5)
         self.buttons = [self.save_button, self.open_button, self.swap_button, self.undo_button]
         
@@ -50,8 +50,8 @@ class PaintingEnvironment:
         self.load_tools()
         
         #color picker stuff
-        self.colorpicker = colorpicker.ColorPicker(graphics.width-370,6,240,90,step_x=15,step_y=15)
-        self.colordisplay = gui.ColorDisplay(graphics.width-410, 6, 25, 90)
+        self.colorpicker = colorpicker.ColorPicker(graphics.width-370,10,240,90,step_x=15,step_y=15)
+        self.colordisplay = gui.ColorDisplay(graphics.width-410, 10, 25, 90)
         graphics.main_window.push_handlers(self.colorpicker, self.colordisplay)
         
         #white background

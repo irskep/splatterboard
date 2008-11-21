@@ -17,8 +17,8 @@ def default_settings():
 	return dict(
 					window_width=1024,
 					window_height=768,
-					toolbar_width=102,
-					buttonbar_height=102,
+					toolbar_width=110,
+					buttonbar_height=110,
 					fullscreen=False,
 					fit_window_to_screen=False,
 					volume=1.0,
