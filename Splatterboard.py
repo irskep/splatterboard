@@ -13,6 +13,8 @@ class SplatterboardWindow(pyglet.window.Window):
         #Init window
         screen = pyglet.window.get_platform().get_default_display().get_default_screen()
         
+        config = pyglet.gl.Config(double_buffer=True, stencil_size=8)
+        
         if screen.width <= settings['window_width'] or screen.height <= settings['window_height']:
             settings['fullscreen'] = True
             settings['fit_window_to_screen'] = True
@@ -23,10 +25,10 @@ class SplatterboardWindow(pyglet.window.Window):
         if not settings['fullscreen']:
             super(SplatterboardWindow, self).__init__(   width=settings['window_width'],
                                                 height=settings['window_height'],
-                                                resizable=False, vsync=True
+                                                resizable=False, vsync=True, config=config
                                             )
         else:
-            super(SplatterboardWindow, self).__init__( fullscreen=True, resizable=False, vsync=True)
+            super(SplatterboardWindow, self).__init__( fullscreen=True, resizable=False, vsync=True, config=config)
         
         self.update_size_constants()
         graphics.main_window = self

@@ -167,7 +167,6 @@ class PaintingEnvironment:
     
     def push_undo(self, snap):
         self.undo_queue.append(snap)
-        print "Image added to undo stack"
     
     #------------TOOL THINGS------------#
     def import_libs(self, dir):

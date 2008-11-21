@@ -125,7 +125,7 @@ class NormalPainter:
     def color_function(self, x, y):
         return graphics.fill_color[0:3]
 
-class StipplePainter(NormalPainter):
+class NoisyPainter(NormalPainter):
     def test_difference(self, difference):
         return False
     
@@ -142,19 +142,19 @@ class PaintBucket(tool.Tool):
     
     def select(self):
         self.painter_normal = NormalPainter()
-        self.painter_stipple = StipplePainter()
+        self.painter_noisy = NoisyPainter()
         self.painter = self.painter_normal
         self.button_group = gui.ButtonGroup()
         self.button_normal = gui.ImageButton(resources.SquareButton, self.switch_normal, 
                                             5, 5, image_2 = resources.PaintBucket, 
                                             parent_group=self.button_group)
-        self.button_stipple = gui.ImageButton(resources.SquareButton, self.switch_stipple, 
-                                            55, 5, image_2 = resources.PaintBucket, 
+        self.button_noisy = gui.ImageButton(resources.SquareButton, self.switch_noisy, 
+                                            55, 5, image_2 = resources.PaintBucket_noise, 
                                             parent_group=self.button_group)
         tool.controlspace.add(self.button_normal)
-        tool.controlspace.add(self.button_stipple)
+        tool.controlspace.add(self.button_noisy)
         self.button_group.add(self.button_normal)
-        self.button_group.add(self.button_stipple)
+        self.button_group.add(self.button_noisy)
         self.button_normal.select()
         self.painter.init()
     
@@ -169,9 +169,9 @@ class PaintBucket(tool.Tool):
         self.painter = self.painter_normal
         self.painter.init()
     
-    def switch_stipple(self):
+    def switch_noisy(self):
         self.painter.stop()
-        self.painter = self.painter_stipple
+        self.painter = self.painter_noisy
         self.painter.init()
 
 default = PaintBucket()

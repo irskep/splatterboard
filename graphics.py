@@ -202,7 +202,7 @@ def draw_points(points, colors=None):
 def concat(it):
     return list(y for x in it for y in x)
 
-def iter_ellipse(x1, y1, x2, y2, da=None, step=None):
+def iter_ellipse(x1, y1, x2, y2, da=None, step=None, dashed=False):
     xrad = abs((x2-x1) / 2.0)
     yrad = abs((y2-y1) / 2.0)
     x = (x1+x2) / 2.0
@@ -229,14 +229,15 @@ def iter_ellipse(x1, y1, x2, y2, da=None, step=None):
     while a <= math.pi * 2:
         yield (x + math.cos(a) * xrad, y + math.sin(a) * yrad)
         a += da
+        if dashed: a += da
 
 @command_wrapper
-def draw_ellipse(x1, y1, x2, y2):
-    points = concat(iter_ellipse(x1, y1, x2, y2))
+def draw_ellipse(x1, y1, x2, y2, dashed=False):
+    points = concat(iter_ellipse(x1, y1, x2, y2, dashed=dashed))
     pyglet.graphics.draw(len(points)/2, pyglet.gl.GL_TRIANGLE_FAN, ('v2f', points))
 
 @command_wrapper
-def draw_ellipse_outline(x1, y1, x2, y2):
+def draw_ellipse_outline(x1, y1, x2, y2, dashed=False):
     w2 = line_size / 2.0
     x_dir = 1 if x2 > x1 else -1
     y_dir = 1 if y2 > y1 else -1
@@ -251,8 +252,8 @@ def draw_ellipse_outline(x1, y1, x2, y2):
     y2_out = y2 + y_dir * w2
     y2_in = y2 - y_dir * w2
 
-    points_inner = list(iter_ellipse(x1_in, y1_in, x2_in, y2_in, da=0.1))
-    points_outer = list(iter_ellipse(x1_out, y1_out, x2_out, y2_out, da=0.1))
+    points_inner = list(iter_ellipse(x1_in, y1_in, x2_in, y2_in, da=0.1, dashed=dashed))
+    points_outer = list(iter_ellipse(x1_out, y1_out, x2_out, y2_out, da=0.1, dashed=dashed))
 
     points_stroke = concat(concat(zip(points_inner, points_outer)))
     points_stroke.extend(points_stroke[:4]) # draw the first *two* points again
@@ -260,10 +261,11 @@ def draw_ellipse_outline(x1, y1, x2, y2):
     points_outer = concat(points_outer)
 
     pyglet.gl.glLineWidth(1)
-    pyglet.graphics.draw(len(points_stroke)/2,
-            pyglet.gl.GL_TRIANGLE_STRIP, ('v2f', points_stroke))
-    pyglet.graphics.draw(len(points_inner)/2,
-            pyglet.gl.GL_LINE_LOOP, ('v2f', points_inner))
+    if line_size > 1:
+        pyglet.graphics.draw(len(points_stroke)/2,
+                pyglet.gl.GL_TRIANGLE_STRIP, ('v2f', points_stroke))
+        pyglet.graphics.draw(len(points_inner)/2,
+                pyglet.gl.GL_LINE_LOOP, ('v2f', points_inner))
     pyglet.graphics.draw(len(points_outer)/2,
             pyglet.gl.GL_LINE_LOOP, ('v2f', points_outer))
 
