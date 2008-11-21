@@ -161,9 +161,9 @@ def set_color_extra(r=0.0, g=0.0, b=0.0, a=1.0, color=None):
     else: pyglet.gl.glColor4f(r,g,b,a)
 
 @triplecall_wrapper
-def clear(r=0.0, g=0.0, b=0.0, a=1.0, color=None):
+def clear(r=1.0, g=1.0, b=1.0, a=1.0, color=None):
     if color is not None: pyglet.gl.glClearColor(*color)
-    else: pyglet.gl.glClearColor(1,1,1,1);
+    else: pyglet.gl.glClearColor(r,g,b,a);
     #for window in pyglet.app.windows.__iter__():
     #    window.clear()
     main_window.clear()
@@ -282,15 +282,22 @@ def draw_quad(*args):
 
 @command_wrapper
 def init_stencil_mode():
+    #pyglet.gl.glClearColor(0,0,0,1)
     pyglet.gl.glClearStencil(0)
     pyglet.gl.glEnable(pyglet.gl.GL_STENCIL_TEST)
     pyglet.gl.glClear(pyglet.gl.GL_STENCIL_BUFFER_BIT)
     pyglet.gl.glStencilFunc(pyglet.gl.GL_NEVER, 0x0, 0x0)
     pyglet.gl.glStencilOp(pyglet.gl.GL_INCR, pyglet.gl.GL_INCR, pyglet.gl.GL_INCR)
 
+@command_wrapper
 def stop_drawing_stencil():
     pyglet.gl.glStencilFunc(pyglet.gl.GL_NOTEQUAL, 0x1, 0x1)
     pyglet.gl.glStencilOp(pyglet.gl.GL_KEEP, pyglet.gl.GL_KEEP, pyglet.gl.GL_KEEP)
 
-def exit_stencil_mode():    
+@command_wrapper
+def reset_stencil_mode():
+    # init_stencil_mode()
+    # pyglet.gl.glColor3f(1,1,1)
+    # draw_rect(0,0,width,height)
+    # stop_drawing_stencil()
     pyglet.gl.glDisable(pyglet.gl.GL_STENCIL_TEST)

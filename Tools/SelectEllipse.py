@@ -36,6 +36,7 @@ class SelectEllipse(tool.Tool):
         return False
     
     def start_drawing(self, x, y):
+        #print "start"
         if not self.coords_in_selection(x,y):
             if self.selection != None:
                 graphics.set_color(1,1,1,1)
@@ -61,6 +62,7 @@ class SelectEllipse(tool.Tool):
             self.dragging = True
     
     def keep_drawing(self, x, y, dx, dy):
+        #print "go"
         x = min(max(x, graphics.canvas_x), graphics.width)
         y = min(max(y, graphics.canvas_y), graphics.height)
         graphics.set_color(1,1,1,1)
@@ -104,7 +106,7 @@ class SelectEllipse(tool.Tool):
         #graphics.draw_rect(self.x1,self.y1,self.x2,self.y2)
         graphics.draw_image(self.selection, self.img_x, self.img_y)
         
-        graphics.exit_stencil_mode()
+        graphics.reset_stencil_mode()
     
     def draw_selection_shape(self):
         graphics.enable_line_stipple()
@@ -122,6 +124,7 @@ class SelectEllipse(tool.Tool):
         graphics.call_twice(temp2)
     
     def stop_drawing(self, x, y):
+        #print "stop"
         if self.dragging and self.selection != None:
             graphics.set_color(1,1,1,1)
             #graphics.draw_image(self.selection, self.img_x, self.img_y)
@@ -129,7 +132,10 @@ class SelectEllipse(tool.Tool):
             self.draw_selection_shape()
         else:
             if x != self.mouse_start_x or y != self.mouse_start_y:
-                tool.push_undo(self.undo_image)  
+                tool.push_undo(self.undo_image)
+
+    def draw_selection_mask(self, x1, y1, x2, y2):
+        graphics.draw_ellipse(x1,y1,x2,y2)
     
     def unselect(self):
         graphics.enter_canvas_mode()
@@ -140,9 +146,6 @@ class SelectEllipse(tool.Tool):
         x1, x2 = sorted([self.x1, self.x2])
         y1, y2 = sorted([self.y1, self.y2])
         return x > x1 and y > y1 and x < x2 and y < y2
-    
-    def draw_selection_mask(self, x1, y1, x2, y2):
-        graphics.draw_ellipse(x1,y1,x2,y2)
 
 default = SelectEllipse()
 priority = 89
