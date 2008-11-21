@@ -18,6 +18,9 @@ line_size = 10.0
 drawing = False
 width, height = 0, 0    #set by the main window
 
+def empty_wrapper(func):
+    return func
+
 def doublecall_wrapper(func):
     def new_func(*args, **kwargs):
         global drawing
@@ -36,7 +39,10 @@ def triplecall_wrapper(func):
 if settings['fullscreen']:
     command_wrapper = doublecall_wrapper
 else:
-    command_wrapper = doublecall_wrapper
+    if settings['disable_buffer_fix_in_windowed']:
+        command_wrapper = empty_wrapper
+    else:
+        command_wrapper = doublecall_wrapper
 
 def draw_all_again():
     if settings['fullscreen'] == True or settings['disable_buffer_fix_in_windowed'] == False:
@@ -238,6 +244,7 @@ def draw_ellipse(x1, y1, x2, y2, dashed=False):
 
 @command_wrapper
 def draw_ellipse_outline(x1, y1, x2, y2, dashed=False):
+    if abs(x2-x1) < 1.0 or abs(y2-y1) < 1.0: return
     w2 = line_size / 2.0
     x_dir = 1 if x2 > x1 else -1
     y_dir = 1 if y2 > y1 else -1
