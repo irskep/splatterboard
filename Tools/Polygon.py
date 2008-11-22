@@ -20,24 +20,26 @@ class Polygon(tool.Tool):
         graphics.draw_image(self.canvas_pre,graphics.canvas_x,graphics.canvas_y)
         graphics.set_line_width(graphics.line_size)
         graphics.set_color(color=graphics.fill_color)
-        self.draw_polygon(self.x, self.y, self.rx, self.ry);
+        graphics.draw_polygon(self.generate_polygon(self.x,self.y,self.rx,self.ry));
         graphics.set_color(color=graphics.line_color)
-        self.draw_polygon_outline(self.x, self.y, self.rx, self.ry)
+        graphics.draw_polygon_outline(self.generate_polygon(self.x,self.y,self.rx,self.ry));
+        graphics.draw_points(self.generate_polygon(self.x,self.y,self.rx,self.ry));
     
     def stop_drawing(self, x, y):
         self.keep_drawing(x, y, 0, 0)
         self.canvas_pre = graphics.get_canvas()
-	
-    def draw_polygon(self, x, y, rx, ry):
-        radius = math.sqrt(sq(rx - x), sq(ry - y))
-	theta = math.atan2(ry - y, rx - x)
+    
+    def generate_polygon(self, x, y, rx, ry):
+        radius = math.sqrt((rx - x)*(rx - x)+(ry - y)*(ry - y))
+        theta = math.atan2(ry - y, rx - x)
         li = []
-	for i in xrange(theta, theta + 2 * math.pi, 2 * math.pi / sides):
-            li = li.extend([radius * math.cos(i), radius * math.sin(i)])
-        graphics.draw_polygon(li)
+        for i in xrange(3):
+            theta += 2 * math.pi / self.sides
+            li.extend([radius * math.cos(theta) + x, radius * math.sin(theta) + y])
+        return li
 
-default = Rectangle()
-priority = 81
+default = Polygon()
+priority = 90
 group = 'Shapes'
 image = resources.Rectangle
 cursor = graphics.cursor['CURSOR_CROSSHAIR']
