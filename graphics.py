@@ -258,6 +258,10 @@ def draw_rect_outline(x1, y1, x2, y2):
 
 @command_wrapper
 def draw_points(points, colors=None):
+    """
+    @param points: A list formatted like [x1, y1, x2, y2...]
+    @param colors: A list formatted like [r1, g1, b1, a1, r2, g2, b2 a2...]
+    """
     if colors == None:
         pyglet.graphics.draw(len(points)/2, pyglet.gl.GL_POINTS,('v2f', points))
     else:
@@ -265,6 +269,10 @@ def draw_points(points, colors=None):
 
 @command_wrapper
 def draw_polygon(points, colors=None):
+    """
+    @param points: A list formatted like [x1, y1, x2, y2...]
+    @param colors: A list formatted like [r1, g1, b1, a1, r2, g2, b2 a2...]
+    """
     if colors == None:
         pyglet.graphics.draw(len(points)/2, pyglet.gl.GL_POLYGON,('v2f', points))
     else:
@@ -272,6 +280,10 @@ def draw_polygon(points, colors=None):
 
 @command_wrapper
 def draw_polygon_outline(points, colors=None):
+    """
+    @param points: A list formatted like [x1, y1, x2, y2...]
+    @param colors: A list formatted like [r1, g1, b1, a1, r2, g2, b2 a2...]
+    """
     if colors == None:
         pyglet.graphics.draw(len(points)/2, pyglet.gl.GL_LINE_LOOP,('v2f', points))
     else:

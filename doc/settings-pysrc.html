@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>settings</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >Splatterboard Tool API Reference</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        Module&nbsp;settings
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="settings-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="settings-module.html">Module settings</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-docstring">1. Put your game's name as the parameter in the settings_dir line</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-docstring">2. List your game's options and saved state necessities in the settings dict</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-docstring">3. "from settings import *" in other files and refer to settings['screen_width']</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-docstring">   or something.</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-docstring">4. Call save_settings() whenever you update the settings dictionary.</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-docstring">5. There is no step 5, because everything is loaded automatically at startup.</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-docstring">If you add settings that aren't in the save file and would be overwritten by the</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-docstring">loading step, then add the following lines to your game, run it once, and then</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-docstring">remove them:</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-docstring">settings = default_settings()</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-docstring">save_settings()</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"> </tt>
+<a name="default_settings"></a><div id="default_settings-def"><a name="L16"></a><tt class="py-lineno">16</tt> <a class="py-toggle" href="#" id="default_settings-toggle" onclick="return toggle('default_settings');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="settings-module.html#default_settings">default_settings</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="default_settings-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="default_settings-expanded"><a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line">                                        <tt class="py-name">window_width</tt><tt class="py-op">=</tt><tt class="py-number">1024</tt><tt class="py-op">,</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line">                                        <tt class="py-name">window_height</tt><tt class="py-op">=</tt><tt class="py-number">768</tt><tt class="py-op">,</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line">                                        <tt class="py-name">toolbar_width</tt><tt class="py-op">=</tt><tt class="py-number">102</tt><tt class="py-op">,</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line">                                        <tt class="py-name">buttonbar_height</tt><tt class="py-op">=</tt><tt class="py-number">110</tt><tt class="py-op">,</tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">                                        <tt class="py-name">fullscreen</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">                                        <tt class="py-name">fit_window_to_screen</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line">                                        <tt class="py-name">volume</tt><tt class="py-op">=</tt><tt class="py-number">1.0</tt><tt class="py-op">,</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">                                        <tt class="py-name">disable_buffer_fix_in_windowed</tt><tt class="py-op">=</tt><tt class="py-name">False</tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">                                        <tt class="py-op">)</tt> </tt>
+</div><a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line"> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">pyglet</tt><tt class="py-op">.</tt><tt class="py-name">resource</tt><tt class="py-op">,</tt> <tt class="py-name">os</tt><tt class="py-op">,</tt> <tt class="py-name">pickle</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line"><tt id="link-0" class="py-name" targets="Variable gui.settings=gui-module.html#settings,Module settings=settings-module.html,Variable settings.settings=settings-module.html#settings"><a title="gui.settings
+settings
+settings.settings" class="py-name" href="#" onclick="return doclink('link-0', 'settings', 'link-0');">settings</a></tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line"> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line"><tt id="link-1" class="py-name" targets="Variable settings.settings_dir=settings-module.html#settings_dir"><a title="settings.settings_dir" class="py-name" href="#" onclick="return doclink('link-1', 'settings_dir', 'link-1');">settings_dir</a></tt> <tt class="py-op">=</tt> <tt class="py-name">pyglet</tt><tt class="py-op">.</tt><tt class="py-name">resource</tt><tt class="py-op">.</tt><tt class="py-name">get_settings_path</tt><tt class="py-op">(</tt><tt class="py-string">'Splatboard'</tt><tt class="py-op">)</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line"><tt id="link-2" class="py-name" targets="Variable settings.settings_path=settings-module.html#settings_path"><a title="settings.settings_path" class="py-name" href="#" onclick="return doclink('link-2', 'settings_path', 'link-2');">settings_path</a></tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt id="link-3" class="py-name"><a title="settings.settings_dir" class="py-name" href="#" onclick="return doclink('link-3', 'settings_dir', 'link-1');">settings_dir</a></tt><tt class="py-op">,</tt> <tt class="py-string">'Preferences.txt'</tt><tt class="py-op">)</tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line"> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line"><tt id="link-4" class="py-name"><a title="gui.settings
+settings
+settings.settings" class="py-name" href="#" onclick="return doclink('link-4', 'settings', 'link-0');">settings</a></tt> <tt class="py-op">=</tt> <tt id="link-5" class="py-name" targets="Function settings.default_settings()=settings-module.html#default_settings"><a title="settings.default_settings" class="py-name" href="#" onclick="return doclink('link-5', 'default_settings', 'link-5');">default_settings</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line"> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">exists</tt><tt class="py-op">(</tt><tt id="link-6" class="py-name"><a title="settings.settings_path" class="py-name" href="#" onclick="return doclink('link-6', 'settings_path', 'link-2');">settings_path</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> <tt class="py-keyword">pass</tt> <tt class="py-comment">#settings = pickle.load(open(settings_path,'r'))</tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt><tt class="py-op">:</tt> <tt class="py-keyword">print</tt> <tt class="py-string">"Failed to load settings. Reverting to defaults."</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line"> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">sys</tt> <tt class="py-keyword">import</tt> <tt id="link-7" class="py-name" targets="Variable settings.platform=settings-module.html#platform"><a title="settings.platform" class="py-name" href="#" onclick="return doclink('link-7', 'platform', 'link-7');">platform</a></tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt id="link-8" class="py-name"><a title="settings.platform" class="py-name" href="#" onclick="return doclink('link-8', 'platform', 'link-7');">platform</a></tt> <tt class="py-op">==</tt> <tt class="py-string">'darwin'</tt><tt class="py-op">:</tt> <tt id="link-9" class="py-name"><a title="gui.settings
+settings
+settings.settings" class="py-name" href="#" onclick="return doclink('link-9', 'settings', 'link-0');">settings</a></tt><tt class="py-op">[</tt><tt class="py-string">'disable_buffer_fix_in_windowed'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line"> </tt>
+<a name="save_settings"></a><div id="save_settings-def"><a name="L43"></a><tt class="py-lineno">43</tt> <a class="py-toggle" href="#" id="save_settings-toggle" onclick="return toggle('save_settings');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="settings-module.html#save_settings">save_settings</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="save_settings-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="save_settings-expanded"><a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">        <tt class="py-docstring">"""Pickle settings dictionary to the appropriate location"""</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line"> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">exists</tt><tt class="py-op">(</tt><tt id="link-10" class="py-name"><a title="settings.settings_dir" class="py-name" href="#" onclick="return doclink('link-10', 'settings_dir', 'link-1');">settings_dir</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">                <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">makedirs</tt><tt class="py-op">(</tt><tt id="link-11" class="py-name"><a title="settings.settings_dir" class="py-name" href="#" onclick="return doclink('link-11', 'settings_dir', 'link-1');">settings_dir</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line">        <tt class="py-name">settings_file</tt> <tt class="py-op">=</tt> <tt id="link-12" class="py-name" targets="Method PaintingEnvironment.PaintingEnvironment.open()=PaintingEnvironment.PaintingEnvironment-class.html#open"><a title="PaintingEnvironment.PaintingEnvironment.open" class="py-name" href="#" onclick="return doclink('link-12', 'open', 'link-12');">open</a></tt><tt class="py-op">(</tt><tt id="link-13" class="py-name"><a title="settings.settings_path" class="py-name" href="#" onclick="return doclink('link-13', 'settings_path', 'link-2');">settings_path</a></tt><tt class="py-op">,</tt><tt class="py-string">'w'</tt><tt class="py-op">)</tt> </tt>
+<a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">        <tt class="py-name">pickle</tt><tt class="py-op">.</tt><tt class="py-name">dump</tt><tt class="py-op">(</tt><tt id="link-14" class="py-name"><a title="gui.settings
+settings
+settings.settings" class="py-name" href="#" onclick="return doclink('link-14', 'settings', 'link-0');">settings</a></tt><tt class="py-op">,</tt><tt class="py-name">settings_file</tt><tt class="py-op">)</tt> </tt>
+<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line">        <tt class="py-name">settings_file</tt><tt class="py-op">.</tt><tt class="py-name">close</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >Splatterboard Tool API Reference</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Fri Nov 21 23:03:29 2008
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

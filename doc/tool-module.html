@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>tool</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >Splatterboard Tool API Reference</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        Module&nbsp;tool
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="tool-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module tool</h1><p class="nomargin-top"></p>
+<p>Base class and utilities for tools.</p>
+  <h1 class="heading">Writing a Tool</h1>
+    <ol start="1">
+      <li>
+        <b>Subclass <i>Tool</i></b>
+      </li>
+      <li>
+        <b>Override Appropriate Methods</b>
+        <p>Most simple tools will want to at least override start_drawing()
+        and keep_drawing(). More sophisticated tools will need to override 
+        more methods to achieve the desired behavior.</p>
+      </li>
+      <li>
+        <b>Set Module Properties</b> :
+<pre class="literalblock">
+   default = YourClass()   #: Instance of your class
+   priority = 1000         #: Rank
+   group = 'Example'       #: Grouping - Drawing, Shapes, etc
+   image = None            #: Icon
+   cursor = None           #: Default cursor
+</pre>
+      </li>
+    </ol>
+  <h1 class="heading">Adding Buttons</h1>
+    <ol start="1">
+      <li>
+        Make a button. See <a href="gui.Button-class.html" 
+        class="link">Button</a> and <a href="gui.ImageButton-class.html" 
+        class="link">ImageButton</a>.
+      </li>
+      <li>
+        Add it to the control space with <a 
+        href="tool.ControlSpace-class.html#add" 
+        class="link">tool.controlspace.add()</a>.
+      </li>
+      <li>
+        Repeat as necessary.
+      </li>
+      <li>
+        If you want radio button behavior (only one button selected at a 
+        time),
+      </li>
+    </ol>
+
+<!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Classes</span></td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="tool.ControlSpace-class.html" class="summary-name">ControlSpace</a><br />
+      A singleton that allows tools to add GUI elements to the bottom bar
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="tool.Tool-class.html" class="summary-name">Tool</a><br />
+      Abstract base tool
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Functions</span></td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">ButtonGroup</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="tool-module.html#generate_brush_selector" class="summary-sig-name">generate_brush_selector</a>(<span class="summary-sig-arg">start_x</span>=<span class="summary-sig-default">5</span>,
+        <span class="summary-sig-arg">start_y</span>=<span class="summary-sig-default">5</span>,
+        <span class="summary-sig-arg">max_x</span>=<span class="summary-sig-default">-1</span>,
+        <span class="summary-sig-arg">max_y</span>=<span class="summary-sig-default">-1</span>)</span><br />
+      Generate a line of buttons that let the user change the brush size.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">ButtonGroup</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="tool-module.html#generate_line_selector" class="summary-sig-name">generate_line_selector</a>(<span class="summary-sig-arg">start_x</span>=<span class="summary-sig-default">5</span>,
+        <span class="summary-sig-arg">start_y</span>=<span class="summary-sig-default">5</span>,
+        <span class="summary-sig-arg">max_x</span>=<span class="summary-sig-default">-1</span>,
+        <span class="summary-sig-arg">max_y</span>=<span class="summary-sig-default">-1</span>)</span><br />
+      Generate a line of buttons that let the user change the line size.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="tool-module.html#push_undo" class="summary-sig-name">push_undo</a>(<span class="summary-sig-arg">canvas_image_to_push</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Pushes the passed image onto the undo stack.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Variables</span></td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="controlspace"></a><span class="summary-name">controlspace</span> = <code title="&lt;tool.ControlSpace instance at 0x15cd18f0&gt;">&lt;tool.ControlSpace instance at 0x15cd18f0&gt;</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="cursor"></a><span class="summary-name">cursor</span> = <code title="None">None</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="default"></a><span class="summary-name">default</span> = <code title="&lt;tool.Tool instance at 0x15cd18c8&gt;">&lt;tool.Tool instance at 0x15cd18c8&gt;</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="group"></a><span class="summary-name">group</span> = <code title="'Example'"><code class="variable-quote">'</code><code class="variable-string">Example</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="image"></a><span class="summary-name">image</span> = <code title="None">None</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="painting_env"></a><span class="summary-name">painting_env</span> = <code title="None">None</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="priority"></a><span class="summary-name">priority</span> = <code title="1000">1000</code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Function Details</span></td>
+</tr>
+</table>
+<a name="generate_brush_selector"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">generate_brush_selector</span>(<span class="sig-arg">start_x</span>=<span class="sig-default">5</span>,
+        <span class="sig-arg">start_y</span>=<span class="sig-default">5</span>,
+        <span class="sig-arg">max_x</span>=<span class="sig-default">-1</span>,
+        <span class="sig-arg">max_y</span>=<span class="sig-default">-1</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Generate a line of buttons that let the user change the brush size. 
+  See Brush tool for an example.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>start_x</code></strong>, <strong class="pname"><code>start_y</code></strong> - Bottom left corner of the button row</li>
+        <li><strong class="pname"><code>max_x</code></strong>, <strong class="pname"><code>max_y</code></strong> - Maximum values for button positions. Should generally be ignored.</li>
+    </ul></dd>
+    <dt>Returns: ButtonGroup</dt>
+        <dd>The ButtonGroup that owns the generated buttons</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="generate_line_selector"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">generate_line_selector</span>(<span class="sig-arg">start_x</span>=<span class="sig-default">5</span>,
+        <span class="sig-arg">start_y</span>=<span class="sig-default">5</span>,
+        <span class="sig-arg">max_x</span>=<span class="sig-default">-1</span>,
+        <span class="sig-arg">max_y</span>=<span class="sig-default">-1</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Generate a line of buttons that let the user change the line size. See
+  the Line tool for an example.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>start_x</code></strong>, <strong class="pname"><code>start_y</code></strong> - Bottom left corner of the button row</li>
+        <li><strong class="pname"><code>max_x</code></strong>, <strong class="pname"><code>max_y</code></strong> - Maximum values for button positions. Should generally be ignored.</li>
+    </ul></dd>
+    <dt>Returns: ButtonGroup</dt>
+        <dd>The ButtonGroup that owns the generated buttons</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="push_undo"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">push_undo</span>(<span class="sig-arg">canvas_image_to_push</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Pushes the passed image onto the undo stack. See selection tool for an
+  example.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >Splatterboard Tool API Reference</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sat Nov 22 15:49:06 2008
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

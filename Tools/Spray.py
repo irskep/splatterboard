@@ -18,7 +18,7 @@ class Spray(tool.Tool):
                                             5, 55, image_2 = resources.Spray, 
                                             parent_group=self.button_group)
         self.button_double = gui.ImageButton(resources.SquareButton, self.select_double, 
-                                            55, 55, image_2 = resources.Spray, 
+                                            55, 55, image_2 = resources.Spray2, 
                                             parent_group=self.button_group)
         tool.controlspace.add(self.button_single)
         tool.controlspace.add(self.button_double)

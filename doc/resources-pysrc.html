@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>resources</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >Splatterboard Tool API Reference</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        Module&nbsp;resources
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="resources-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="resources-module.html">Module resources</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-docstring">1. Drop this module into your game folder.</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-docstring">2. Tweak pyglet.resource.path[].</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-docstring">3. Insert custom resource loading (streaming sounds, fonts).</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-docstring">4. Import the module.</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-docstring">5. Refer to images and sounds as resources.your_resource. Automatically updates</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-docstring">        when you add new resources to your folder.</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">pyglet</tt><tt class="py-op">,</tt> <tt class="py-name">os</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt id="link-0" class="py-name" targets="Variable resources.supported_image_formats=resources-module.html#supported_image_formats"><a title="resources.supported_image_formats" class="py-name" href="#" onclick="return doclink('link-0', 'supported_image_formats', 'link-0');">supported_image_formats</a></tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt>     <tt class="py-string">'bmp'</tt><tt class="py-op">,</tt><tt class="py-string">'dds'</tt><tt class="py-op">,</tt><tt class="py-string">'exif'</tt><tt class="py-op">,</tt><tt class="py-string">'gif'</tt><tt class="py-op">,</tt><tt class="py-string">'jpg'</tt><tt class="py-op">,</tt><tt class="py-string">'jpeg'</tt><tt class="py-op">,</tt><tt class="py-string">'jp2'</tt><tt class="py-op">,</tt><tt class="py-string">'jpx'</tt><tt class="py-op">,</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line">                                                        <tt class="py-string">'pcx'</tt><tt class="py-op">,</tt><tt class="py-string">'png'</tt><tt class="py-op">,</tt><tt class="py-string">'pnm'</tt><tt class="py-op">,</tt><tt class="py-string">'ras'</tt><tt class="py-op">,</tt><tt class="py-string">'tga'</tt><tt class="py-op">,</tt><tt class="py-string">'tif'</tt><tt class="py-op">,</tt><tt class="py-string">'tiff'</tt><tt class="py-op">,</tt> <tt class="py-string">'xbm'</tt><tt class="py-op">,</tt> <tt class="py-string">'xpm'</tt><tt class="py-op">]</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-comment">#Change this to fit your folder structure</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt id="link-1" class="py-name" targets="Variable resources.resource_path=resources-module.html#resource_path"><a title="resources.resource_path" class="py-name" href="#" onclick="return doclink('link-1', 'resource_path', 'link-1');">resource_path</a></tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-string">'Tools'</tt><tt class="py-op">,</tt><tt class="py-string">'Resources'</tt><tt class="py-op">]</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt id="link-2" class="py-name" targets="Variable resources.exclude=resources-module.html#exclude"><a title="resources.exclude" class="py-name" href="#" onclick="return doclink('link-2', 'exclude', 'link-2');">exclude</a></tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"><tt id="link-3" class="py-name" targets="Variable resources.loaded=resources-module.html#loaded"><a title="resources.loaded" class="py-name" href="#" onclick="return doclink('link-3', 'loaded', 'link-3');">loaded</a></tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line"> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line"><tt id="link-4" class="py-name" targets="Variable resources.function_pairs=resources-module.html#function_pairs"><a title="resources.function_pairs" class="py-name" href="#" onclick="return doclink('link-4', 'function_pairs', 'link-4');">function_pairs</a></tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">        <tt class="py-comment">#'ext':(func, {args})</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line">        <tt class="py-comment">#I only included the most common formats. Copy/paste to do more.</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">        <tt class="py-string">'mp3'</tt><tt class="py-op">:</tt><tt class="py-op">(</tt><tt class="py-name">pyglet</tt><tt class="py-op">.</tt><tt class="py-name">resource</tt><tt class="py-op">.</tt><tt class="py-name">media</tt><tt class="py-op">,</tt><tt class="py-op">{</tt><tt class="py-string">'streaming'</tt><tt class="py-op">:</tt><tt class="py-name">False</tt><tt class="py-op">}</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">        <tt class="py-string">'ogg'</tt><tt class="py-op">:</tt><tt class="py-op">(</tt><tt class="py-name">pyglet</tt><tt class="py-op">.</tt><tt class="py-name">resource</tt><tt class="py-op">.</tt><tt class="py-name">media</tt><tt class="py-op">,</tt><tt class="py-op">{</tt><tt class="py-string">'streaming'</tt><tt class="py-op">:</tt><tt class="py-name">False</tt><tt class="py-op">}</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line">        <tt class="py-string">'wav'</tt><tt class="py-op">:</tt><tt class="py-op">(</tt><tt class="py-name">pyglet</tt><tt class="py-op">.</tt><tt class="py-name">resource</tt><tt class="py-op">.</tt><tt class="py-name">media</tt><tt class="py-op">,</tt><tt class="py-op">{</tt><tt class="py-string">'streaming'</tt><tt class="py-op">:</tt><tt class="py-name">False</tt><tt class="py-op">}</tt><tt class="py-op">)</tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line"><tt class="py-op">}</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line"> </tt>
+<a name="load"></a><div id="load-def"><a name="L30"></a><tt class="py-lineno">30</tt> <a class="py-toggle" href="#" id="load-toggle" onclick="return toggle('load');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="resources-module.html#load">load</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="load-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="load-expanded"><a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line">    <tt class="py-name">pyglet</tt><tt class="py-op">.</tt><tt class="py-name">resource</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">=</tt><tt id="link-5" class="py-name"><a title="resources.resource_path" class="py-name" href="#" onclick="return doclink('link-5', 'resource_path', 'link-1');">resource_path</a></tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">    <tt class="py-name">pyglet</tt><tt class="py-op">.</tt><tt class="py-name">resource</tt><tt class="py-op">.</tt><tt class="py-name">reindex</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line">    <tt class="py-comment">#Make default function for images be pyglet.resource.image().</tt> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line"><tt class="py-comment"></tt>    <tt class="py-keyword">for</tt> <tt class="py-name">ext</tt> <tt class="py-keyword">in</tt> <tt id="link-6" class="py-name"><a title="resources.supported_image_formats" class="py-name" href="#" onclick="return doclink('link-6', 'supported_image_formats', 'link-0');">supported_image_formats</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">ext</tt> <tt class="py-keyword">in</tt> <tt id="link-7" class="py-name"><a title="resources.function_pairs" class="py-name" href="#" onclick="return doclink('link-7', 'function_pairs', 'link-4');">function_pairs</a></tt><tt class="py-op">.</tt><tt class="py-name">keys</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">            <tt id="link-8" class="py-name"><a title="resources.function_pairs" class="py-name" href="#" onclick="return doclink('link-8', 'function_pairs', 'link-4');">function_pairs</a></tt><tt class="py-op">[</tt><tt class="py-name">ext</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">pyglet</tt><tt class="py-op">.</tt><tt class="py-name">resource</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name" targets="Variable tool.image=tool-module.html#image"><a title="tool.image" class="py-name" href="#" onclick="return doclink('link-9', 'image', 'link-9');">image</a></tt><tt class="py-op">,</tt><tt class="py-op">{</tt><tt class="py-op">}</tt><tt class="py-op">)</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line"> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">    <tt class="py-comment">#Then a miracle occurs!</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line"><tt class="py-comment"></tt>    <tt class="py-keyword">for</tt> <tt class="py-name">path</tt> <tt class="py-keyword">in</tt> <tt class="py-name">pyglet</tt><tt class="py-op">.</tt><tt class="py-name">resource</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">:</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">file_name</tt> <tt class="py-keyword">in</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">listdir</tt><tt class="py-op">(</tt><tt class="py-name">path</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">                <tt class="py-name">name</tt><tt class="py-op">,</tt> <tt class="py-name">ext</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">splitext</tt><tt class="py-op">(</tt><tt class="py-name">file_name</tt><tt class="py-op">)</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">name</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt id="link-10" class="py-name"><a title="resources.exclude" class="py-name" href="#" onclick="return doclink('link-10', 'exclude', 'link-2');">exclude</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">                        <tt class="py-keyword">for</tt> <tt class="py-name">key</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">func</tt><tt class="py-op">,</tt> <tt class="py-name">kwargs</tt><tt class="py-op">)</tt> <tt class="py-keyword">in</tt> <tt id="link-11" class="py-name"><a title="resources.function_pairs" class="py-name" href="#" onclick="return doclink('link-11', 'function_pairs', 'link-4');">function_pairs</a></tt><tt class="py-op">.</tt><tt class="py-name">iteritems</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">                                <tt class="py-keyword">if</tt> <tt class="py-name">ext</tt> <tt class="py-op">==</tt> <tt class="py-string">'.'</tt><tt class="py-op">+</tt><tt class="py-name">key</tt> <tt class="py-keyword">and</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">exists</tt><tt class="py-op">(</tt><tt class="py-name">path</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">                                        <tt class="py-name">globals</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-name">name</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">func</tt><tt class="py-op">(</tt><tt class="py-name">file_name</tt><tt class="py-op">,</tt><tt class="py-op">**</tt><tt class="py-name">kwargs</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >Splatterboard Tool API Reference</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Fri Nov 21 23:03:29 2008
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

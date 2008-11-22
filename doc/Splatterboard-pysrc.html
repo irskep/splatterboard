@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Splatterboard</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >Splatterboard Tool API Reference</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        Module&nbsp;Splatterboard
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Splatterboard-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Splatterboard-module.html">Module Splatterboard</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment">#!/usr/bin/env python</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-comment"></tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">pyglet</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Module graphics=graphics-module.html"><a title="graphics" class="py-name" href="#" onclick="return doclink('link-0', 'graphics', 'link-0');">graphics</a></tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt id="link-1" class="py-name" targets="Module PaintingEnvironment=PaintingEnvironment-module.html,Class PaintingEnvironment.PaintingEnvironment=PaintingEnvironment.PaintingEnvironment-class.html"><a title="PaintingEnvironment
+PaintingEnvironment.PaintingEnvironment" class="py-name" href="#" onclick="return doclink('link-1', 'PaintingEnvironment', 'link-1');">PaintingEnvironment</a></tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt id="link-2" class="py-name" targets="Variable gui.settings=gui-module.html#settings,Module settings=settings-module.html,Variable settings.settings=settings-module.html#settings"><a title="gui.settings
+settings
+settings.settings" class="py-name" href="#" onclick="return doclink('link-2', 'settings', 'link-2');">settings</a></tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt id="link-3" class="py-name" targets="Module resources=resources-module.html"><a title="resources" class="py-name" href="#" onclick="return doclink('link-3', 'resources', 'link-3');">resources</a></tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"> </tt>
+<a name="SplatterboardWindow"></a><div id="SplatterboardWindow-def"><a name="L9"></a><tt class="py-lineno"> 9</tt> <a class="py-toggle" href="#" id="SplatterboardWindow-toggle" onclick="return toggle('SplatterboardWindow');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Splatterboard.SplatterboardWindow-class.html">SplatterboardWindow</a><tt class="py-op">(</tt><tt class="py-base-class">pyglet</tt><tt class="py-op">.</tt><tt class="py-base-class">window</tt><tt class="py-op">.</tt><tt class="py-base-class">Window</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="SplatterboardWindow-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="SplatterboardWindow-expanded"><a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line">     </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line">    <tt id="link-4" class="py-name" targets="Variable PaintingEnvironment.PaintingEnvironment.drawn_this_frame=PaintingEnvironment.PaintingEnvironment-class.html#drawn_this_frame,Variable Splatterboard.SplatterboardWindow.drawn_this_frame=Splatterboard.SplatterboardWindow-class.html#drawn_this_frame"><a title="PaintingEnvironment.PaintingEnvironment.drawn_this_frame
+Splatterboard.SplatterboardWindow.drawn_this_frame" class="py-name" href="#" onclick="return doclink('link-4', 'drawn_this_frame', 'link-4');">drawn_this_frame</a></tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line">     </tt>
+<a name="SplatterboardWindow.__init__"></a><div id="SplatterboardWindow.__init__-def"><a name="L13"></a><tt class="py-lineno">13</tt> <a class="py-toggle" href="#" id="SplatterboardWindow.__init__-toggle" onclick="return toggle('SplatterboardWindow.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Splatterboard.SplatterboardWindow-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="SplatterboardWindow.__init__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="SplatterboardWindow.__init__-expanded"><a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line">         </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line">        <tt class="py-name">opt</tt> <tt class="py-op">=</tt> <tt id="link-5" class="py-name"><a title="gui.settings
+settings
+settings.settings" class="py-name" href="#" onclick="return doclink('link-5', 'settings', 'link-2');">settings</a></tt><tt class="py-op">.</tt><tt id="link-6" class="py-name"><a title="gui.settings
+settings
+settings.settings" class="py-name" href="#" onclick="return doclink('link-6', 'settings', 'link-2');">settings</a></tt> <tt class="py-comment">#ugly shortcut</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line">        <tt id="link-7" class="py-name"><a title="resources" class="py-name" href="#" onclick="return doclink('link-7', 'resources', 'link-3');">resources</a></tt><tt class="py-op">.</tt><tt id="link-8" class="py-name" targets="Function resources.load()=resources-module.html#load"><a title="resources.load" class="py-name" href="#" onclick="return doclink('link-8', 'load', 'link-8');">load</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line">         </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line">        <tt class="py-comment">#Init window</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"><tt class="py-comment"></tt>        <tt class="py-name">screen</tt> <tt class="py-op">=</tt> <tt class="py-name">pyglet</tt><tt class="py-op">.</tt><tt class="py-name">window</tt><tt class="py-op">.</tt><tt class="py-name">get_platform</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">get_default_display</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">get_default_screen</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line">         </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line">        <tt class="py-name">config</tt> <tt class="py-op">=</tt> <tt class="py-name">pyglet</tt><tt class="py-op">.</tt><tt class="py-name">gl</tt><tt class="py-op">.</tt><tt class="py-name">Config</tt><tt class="py-op">(</tt><tt class="py-name">double_buffer</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-name">stencil_size</tt><tt class="py-op">=</tt><tt class="py-number">8</tt><tt class="py-op">)</tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">         </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">screen</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name" targets="Variable graphics.width=graphics-module.html#width"><a title="graphics.width" class="py-name" href="#" onclick="return doclink('link-9', 'width', 'link-9');">width</a></tt> <tt class="py-op">&lt;=</tt> <tt class="py-name">opt</tt><tt class="py-op">[</tt><tt class="py-string">'window_width'</tt><tt class="py-op">]</tt> <tt class="py-keyword">or</tt> <tt class="py-name">screen</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name" targets="Variable graphics.height=graphics-module.html#height"><a title="graphics.height" class="py-name" href="#" onclick="return doclink('link-10', 'height', 'link-10');">height</a></tt> <tt class="py-op">&lt;=</tt> <tt class="py-name">opt</tt><tt class="py-op">[</tt><tt class="py-string">'window_height'</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line">            <tt class="py-name">opt</tt><tt class="py-op">[</tt><tt class="py-string">'fullscreen'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">            <tt class="py-name">opt</tt><tt class="py-op">[</tt><tt class="py-string">'fit_window_to_screen'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">opt</tt><tt class="py-op">[</tt><tt class="py-string">'fit_window_to_screen'</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line">            <tt class="py-name">opt</tt><tt class="py-op">[</tt><tt class="py-string">'window_width'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">screen</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name"><a title="graphics.width" class="py-name" href="#" onclick="return doclink('link-11', 'width', 'link-9');">width</a></tt><tt class="py-op">-</tt><tt class="py-number">100</tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line">            <tt class="py-name">opt</tt><tt class="py-op">[</tt><tt class="py-string">'window_height'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">screen</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name"><a title="graphics.height" class="py-name" href="#" onclick="return doclink('link-12', 'height', 'link-10');">height</a></tt><tt class="py-op">-</tt><tt class="py-number">100</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">             </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">opt</tt><tt class="py-op">[</tt><tt class="py-string">'fullscreen'</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line">            <tt class="py-name">super</tt><tt class="py-op">(</tt><tt id="link-13" class="py-name" targets="Class Splatterboard.SplatterboardWindow=Splatterboard.SplatterboardWindow-class.html"><a title="Splatterboard.SplatterboardWindow" class="py-name" href="#" onclick="return doclink('link-13', 'SplatterboardWindow', 'link-13');">SplatterboardWindow</a></tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-14" class="py-name" targets="Method PaintingEnvironment.PaintingEnvironment.__init__()=PaintingEnvironment.PaintingEnvironment-class.html#__init__,Method Splatterboard.SplatterboardWindow.__init__()=Splatterboard.SplatterboardWindow-class.html#__init__,Method colorpicker.ColorPicker.__init__()=colorpicker.ColorPicker-class.html#__init__,Method gui.Button.__init__()=gui.Button-class.html#__init__,Method gui.ButtonGroup.__init__()=gui.ButtonGroup-class.html#__init__,Method gui.ColorDisplay.__init__()=gui.ColorDisplay-class.html#__init__,Method gui.ImageButton.__init__()=gui.ImageButton-class.html#__init__,Method tool.ControlSpace.__init__()=tool.ControlSpace-class.html#__init__"><a title="PaintingEnvironment.PaintingEnvironment.__init__
+Splatterboard.SplatterboardWindow.__init__
+colorpicker.ColorPicker.__init__
+gui.Button.__init__
+gui.ButtonGroup.__init__
+gui.ColorDisplay.__init__
+gui.ImageButton.__init__
+tool.ControlSpace.__init__" class="py-name" href="#" onclick="return doclink('link-14', '__init__', 'link-14');">__init__</a></tt><tt class="py-op">(</tt>   <tt id="link-15" class="py-name"><a title="graphics.width" class="py-name" href="#" onclick="return doclink('link-15', 'width', 'link-9');">width</a></tt><tt class="py-op">=</tt><tt class="py-name">opt</tt><tt class="py-op">[</tt><tt class="py-string">'window_width'</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">                                                <tt id="link-16" class="py-name"><a title="graphics.height" class="py-name" href="#" onclick="return doclink('link-16', 'height', 'link-10');">height</a></tt><tt class="py-op">=</tt><tt class="py-name">opt</tt><tt class="py-op">[</tt><tt class="py-string">'window_height'</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line">                                                <tt class="py-name">resizable</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-name">vsync</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-name">config</tt><tt class="py-op">=</tt><tt class="py-name">config</tt> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line">                                            <tt class="py-op">)</tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">            <tt class="py-name">super</tt><tt class="py-op">(</tt><tt id="link-17" class="py-name"><a title="Splatterboard.SplatterboardWindow" class="py-name" href="#" onclick="return doclink('link-17', 'SplatterboardWindow', 'link-13');">SplatterboardWindow</a></tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name"><a title="PaintingEnvironment.PaintingEnvironment.__init__
+Splatterboard.SplatterboardWindow.__init__
+colorpicker.ColorPicker.__init__
+gui.Button.__init__
+gui.ButtonGroup.__init__
+gui.ColorDisplay.__init__
+gui.ImageButton.__init__
+tool.ControlSpace.__init__" class="py-name" href="#" onclick="return doclink('link-18', '__init__', 'link-14');">__init__</a></tt><tt class="py-op">(</tt> <tt class="py-name">fullscreen</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-name">resizable</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-name">vsync</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-name">config</tt><tt class="py-op">=</tt><tt class="py-name">config</tt><tt class="py-op">)</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">         </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name" targets="Method Splatterboard.SplatterboardWindow.update_size_constants()=Splatterboard.SplatterboardWindow-class.html#update_size_constants"><a title="Splatterboard.SplatterboardWindow.update_size_constants" class="py-name" href="#" onclick="return doclink('link-19', 'update_size_constants', 'link-19');">update_size_constants</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">        <tt id="link-20" class="py-name"><a title="graphics" class="py-name" href="#" onclick="return doclink('link-20', 'graphics', 'link-0');">graphics</a></tt><tt class="py-op">.</tt><tt id="link-21" class="py-name" targets="Variable graphics.main_window=graphics-module.html#main_window"><a title="graphics.main_window" class="py-name" href="#" onclick="return doclink('link-21', 'main_window', 'link-21');">main_window</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">         </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">set_caption</tt><tt class="py-op">(</tt><tt class="py-string">'Splatterboard'</tt><tt class="py-op">)</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-22" class="py-name" targets="Method Splatterboard.SplatterboardWindow.init_cursors()=Splatterboard.SplatterboardWindow-class.html#init_cursors"><a title="Splatterboard.SplatterboardWindow.init_cursors" class="py-name" href="#" onclick="return doclink('link-22', 'init_cursors', 'link-22');">init_cursors</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">         </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">        <tt class="py-comment">#enable alpha blending, line smoothing, init glScissor</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line"><tt class="py-comment"></tt>        <tt class="py-name">pyglet</tt><tt class="py-op">.</tt><tt class="py-name">gl</tt><tt class="py-op">.</tt><tt class="py-name">glEnable</tt><tt class="py-op">(</tt><tt class="py-name">pyglet</tt><tt class="py-op">.</tt><tt class="py-name">gl</tt><tt class="py-op">.</tt><tt class="py-name">GL_BLEND</tt><tt class="py-op">)</tt> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">        <tt class="py-name">pyglet</tt><tt class="py-op">.</tt><tt class="py-name">gl</tt><tt class="py-op">.</tt><tt class="py-name">glBlendFunc</tt><tt class="py-op">(</tt><tt class="py-name">pyglet</tt><tt class="py-op">.</tt><tt class="py-name">gl</tt><tt class="py-op">.</tt><tt class="py-name">GL_SRC_ALPHA</tt><tt class="py-op">,</tt> <tt class="py-name">pyglet</tt><tt class="py-op">.</tt><tt class="py-name">gl</tt><tt class="py-op">.</tt><tt class="py-name">GL_ONE_MINUS_SRC_ALPHA</tt><tt class="py-op">)</tt> </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">        <tt class="py-name">pyglet</tt><tt class="py-op">.</tt><tt class="py-name">gl</tt><tt class="py-op">.</tt><tt class="py-name">glEnable</tt><tt class="py-op">(</tt><tt class="py-name">pyglet</tt><tt class="py-op">.</tt><tt class="py-name">gl</tt><tt class="py-op">.</tt><tt class="py-name">GL_LINE_SMOOTH</tt><tt class="py-op">)</tt> </tt>
+<a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line">        <tt class="py-name">pyglet</tt><tt class="py-op">.</tt><tt class="py-name">gl</tt><tt class="py-op">.</tt><tt class="py-name">glEnable</tt><tt class="py-op">(</tt><tt class="py-name">pyglet</tt><tt class="py-op">.</tt><tt class="py-name">gl</tt><tt class="py-op">.</tt><tt class="py-name">GL_POINT_SMOOTH</tt><tt class="py-op">)</tt> </tt>
+<a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">        <tt class="py-comment">#pyglet.gl.glHint(pyglet.gl.GL_LINE_SMOOTH_HINT,pyglet.gl.GL_NICEST)</tt> </tt>
+<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line"><tt class="py-comment"></tt>        <tt class="py-name">pyglet</tt><tt class="py-op">.</tt><tt class="py-name">gl</tt><tt class="py-op">.</tt><tt class="py-name">glScissor</tt><tt class="py-op">(</tt><tt id="link-23" class="py-name"><a title="graphics" class="py-name" href="#" onclick="return doclink('link-23', 'graphics', 'link-0');">graphics</a></tt><tt class="py-op">.</tt><tt id="link-24" class="py-name" targets="Variable graphics.canvas_x=graphics-module.html#canvas_x"><a title="graphics.canvas_x" class="py-name" href="#" onclick="return doclink('link-24', 'canvas_x', 'link-24');">canvas_x</a></tt><tt class="py-op">,</tt><tt id="link-25" class="py-name"><a title="graphics" class="py-name" href="#" onclick="return doclink('link-25', 'graphics', 'link-0');">graphics</a></tt><tt class="py-op">.</tt><tt id="link-26" class="py-name" targets="Variable graphics.canvas_y=graphics-module.html#canvas_y"><a title="graphics.canvas_y" class="py-name" href="#" onclick="return doclink('link-26', 'canvas_y', 'link-26');">canvas_y</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line">                            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-27" class="py-name"><a title="graphics.width" class="py-name" href="#" onclick="return doclink('link-27', 'width', 'link-9');">width</a></tt><tt class="py-op">-</tt><tt id="link-28" class="py-name"><a title="graphics" class="py-name" href="#" onclick="return doclink('link-28', 'graphics', 'link-0');">graphics</a></tt><tt class="py-op">.</tt><tt id="link-29" class="py-name"><a title="graphics.canvas_x" class="py-name" href="#" onclick="return doclink('link-29', 'canvas_x', 'link-24');">canvas_x</a></tt><tt class="py-op">,</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-30" class="py-name"><a title="graphics.height" class="py-name" href="#" onclick="return doclink('link-30', 'height', 'link-10');">height</a></tt><tt class="py-op">-</tt><tt id="link-31" class="py-name"><a title="graphics" class="py-name" href="#" onclick="return doclink('link-31', 'graphics', 'link-0');">graphics</a></tt><tt class="py-op">.</tt><tt id="link-32" class="py-name"><a title="graphics.canvas_y" class="py-name" href="#" onclick="return doclink('link-32', 'canvas_y', 'link-26');">canvas_y</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line">         </tt>
+<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">painting_environment</tt> <tt class="py-op">=</tt> <tt id="link-33" class="py-name"><a title="PaintingEnvironment
+PaintingEnvironment.PaintingEnvironment" class="py-name" href="#" onclick="return doclink('link-33', 'PaintingEnvironment', 'link-1');">PaintingEnvironment</a></tt><tt class="py-op">.</tt><tt id="link-34" class="py-name"><a title="PaintingEnvironment
+PaintingEnvironment.PaintingEnvironment" class="py-name" href="#" onclick="return doclink('link-34', 'PaintingEnvironment', 'link-1');">PaintingEnvironment</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">push_handlers</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">painting_environment</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line">     </tt>
+<a name="SplatterboardWindow.update_size_constants"></a><div id="SplatterboardWindow.update_size_constants-def"><a name="L56"></a><tt class="py-lineno">56</tt> <a class="py-toggle" href="#" id="SplatterboardWindow.update_size_constants-toggle" onclick="return toggle('SplatterboardWindow.update_size_constants');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Splatterboard.SplatterboardWindow-class.html#update_size_constants">update_size_constants</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="SplatterboardWindow.update_size_constants-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="SplatterboardWindow.update_size_constants-expanded"><a name="L57"></a><tt class="py-lineno">57</tt>  <tt class="py-line">        <tt id="link-35" class="py-name"><a title="graphics" class="py-name" href="#" onclick="return doclink('link-35', 'graphics', 'link-0');">graphics</a></tt><tt class="py-op">.</tt><tt id="link-36" class="py-name"><a title="graphics.width" class="py-name" href="#" onclick="return doclink('link-36', 'width', 'link-9');">width</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-37" class="py-name"><a title="graphics.width" class="py-name" href="#" onclick="return doclink('link-37', 'width', 'link-9');">width</a></tt> </tt>
+<a name="L58"></a><tt class="py-lineno">58</tt>  <tt class="py-line">        <tt id="link-38" class="py-name"><a title="graphics" class="py-name" href="#" onclick="return doclink('link-38', 'graphics', 'link-0');">graphics</a></tt><tt class="py-op">.</tt><tt id="link-39" class="py-name"><a title="graphics.height" class="py-name" href="#" onclick="return doclink('link-39', 'height', 'link-10');">height</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-40" class="py-name"><a title="graphics.height" class="py-name" href="#" onclick="return doclink('link-40', 'height', 'link-10');">height</a></tt> </tt>
+<a name="L59"></a><tt class="py-lineno">59</tt>  <tt class="py-line">        <tt id="link-41" class="py-name"><a title="graphics" class="py-name" href="#" onclick="return doclink('link-41', 'graphics', 'link-0');">graphics</a></tt><tt class="py-op">.</tt><tt id="link-42" class="py-name"><a title="graphics.canvas_x" class="py-name" href="#" onclick="return doclink('link-42', 'canvas_x', 'link-24');">canvas_x</a></tt> <tt class="py-op">=</tt> <tt id="link-43" class="py-name"><a title="gui.settings
+settings
+settings.settings" class="py-name" href="#" onclick="return doclink('link-43', 'settings', 'link-2');">settings</a></tt><tt class="py-op">.</tt><tt id="link-44" class="py-name"><a title="gui.settings
+settings
+settings.settings" class="py-name" href="#" onclick="return doclink('link-44', 'settings', 'link-2');">settings</a></tt><tt class="py-op">[</tt><tt class="py-string">'toolbar_width'</tt><tt class="py-op">]</tt> </tt>
+<a name="L60"></a><tt class="py-lineno">60</tt>  <tt class="py-line">        <tt id="link-45" class="py-name"><a title="graphics" class="py-name" href="#" onclick="return doclink('link-45', 'graphics', 'link-0');">graphics</a></tt><tt class="py-op">.</tt><tt id="link-46" class="py-name"><a title="graphics.canvas_y" class="py-name" href="#" onclick="return doclink('link-46', 'canvas_y', 'link-26');">canvas_y</a></tt> <tt class="py-op">=</tt> <tt id="link-47" class="py-name"><a title="gui.settings
+settings
+settings.settings" class="py-name" href="#" onclick="return doclink('link-47', 'settings', 'link-2');">settings</a></tt><tt class="py-op">.</tt><tt id="link-48" class="py-name"><a title="gui.settings
+settings
+settings.settings" class="py-name" href="#" onclick="return doclink('link-48', 'settings', 'link-2');">settings</a></tt><tt class="py-op">[</tt><tt class="py-string">'buttonbar_height'</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L61"></a><tt class="py-lineno">61</tt>  <tt class="py-line">     </tt>
+<a name="SplatterboardWindow.init_cursors"></a><div id="SplatterboardWindow.init_cursors-def"><a name="L62"></a><tt class="py-lineno">62</tt> <a class="py-toggle" href="#" id="SplatterboardWindow.init_cursors-toggle" onclick="return toggle('SplatterboardWindow.init_cursors');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Splatterboard.SplatterboardWindow-class.html#init_cursors">init_cursors</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="SplatterboardWindow.init_cursors-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="SplatterboardWindow.init_cursors-expanded"><a name="L63"></a><tt class="py-lineno">63</tt>  <tt class="py-line">        <tt id="link-49" class="py-name"><a title="graphics" class="py-name" href="#" onclick="return doclink('link-49', 'graphics', 'link-0');">graphics</a></tt><tt class="py-op">.</tt><tt id="link-50" class="py-name" targets="Variable graphics.cursor=graphics-module.html#cursor,Variable tool.cursor=tool-module.html#cursor"><a title="graphics.cursor
+tool.cursor" class="py-name" href="#" onclick="return doclink('link-50', 'cursor', 'link-50');">cursor</a></tt><tt class="py-op">[</tt><tt class="py-string">'CURSOR_CROSSHAIR'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">get_system_mouse_cursor</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">CURSOR_CROSSHAIR</tt><tt class="py-op">)</tt> </tt>
+<a name="L64"></a><tt class="py-lineno">64</tt>  <tt class="py-line">        <tt id="link-51" class="py-name"><a title="graphics" class="py-name" href="#" onclick="return doclink('link-51', 'graphics', 'link-0');">graphics</a></tt><tt class="py-op">.</tt><tt id="link-52" class="py-name"><a title="graphics.cursor
+tool.cursor" class="py-name" href="#" onclick="return doclink('link-52', 'cursor', 'link-50');">cursor</a></tt><tt class="py-op">[</tt><tt class="py-string">'CURSOR_HAND'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">get_system_mouse_cursor</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">CURSOR_HAND</tt><tt class="py-op">)</tt> </tt>
+<a name="L65"></a><tt class="py-lineno">65</tt>  <tt class="py-line">        <tt id="link-53" class="py-name"><a title="graphics" class="py-name" href="#" onclick="return doclink('link-53', 'graphics', 'link-0');">graphics</a></tt><tt class="py-op">.</tt><tt id="link-54" class="py-name"><a title="graphics.cursor
+tool.cursor" class="py-name" href="#" onclick="return doclink('link-54', 'cursor', 'link-50');">cursor</a></tt><tt class="py-op">[</tt><tt class="py-string">'CURSOR_TEXT'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">get_system_mouse_cursor</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">CURSOR_TEXT</tt><tt class="py-op">)</tt> </tt>
+<a name="L66"></a><tt class="py-lineno">66</tt>  <tt class="py-line">        <tt id="link-55" class="py-name"><a title="graphics" class="py-name" href="#" onclick="return doclink('link-55', 'graphics', 'link-0');">graphics</a></tt><tt class="py-op">.</tt><tt id="link-56" class="py-name"><a title="graphics.cursor
+tool.cursor" class="py-name" href="#" onclick="return doclink('link-56', 'cursor', 'link-50');">cursor</a></tt><tt class="py-op">[</tt><tt class="py-string">'CURSOR_WAIT'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">get_system_mouse_cursor</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">CURSOR_WAIT</tt><tt class="py-op">)</tt> </tt>
+<a name="L67"></a><tt class="py-lineno">67</tt>  <tt class="py-line">        <tt id="link-57" class="py-name"><a title="graphics" class="py-name" href="#" onclick="return doclink('link-57', 'graphics', 'link-0');">graphics</a></tt><tt class="py-op">.</tt><tt id="link-58" class="py-name"><a title="graphics.cursor
+tool.cursor" class="py-name" href="#" onclick="return doclink('link-58', 'cursor', 'link-50');">cursor</a></tt><tt class="py-op">[</tt><tt class="py-string">'CURSOR_DEFAULT'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">get_system_mouse_cursor</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">CURSOR_DEFAULT</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L68"></a><tt class="py-lineno">68</tt>  <tt class="py-line">     </tt>
+<a name="SplatterboardWindow.on_close"></a><div id="SplatterboardWindow.on_close-def"><a name="L69"></a><tt class="py-lineno">69</tt> <a class="py-toggle" href="#" id="SplatterboardWindow.on_close-toggle" onclick="return toggle('SplatterboardWindow.on_close');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Splatterboard.SplatterboardWindow-class.html#on_close">on_close</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="SplatterboardWindow.on_close-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="SplatterboardWindow.on_close-expanded"><a name="L70"></a><tt class="py-lineno">70</tt>  <tt class="py-line">        <tt id="link-59" class="py-name"><a title="gui.settings
+settings
+settings.settings" class="py-name" href="#" onclick="return doclink('link-59', 'settings', 'link-2');">settings</a></tt><tt class="py-op">.</tt><tt id="link-60" class="py-name" targets="Function settings.save_settings()=settings-module.html#save_settings"><a title="settings.save_settings" class="py-name" href="#" onclick="return doclink('link-60', 'save_settings', 'link-60');">save_settings</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L71"></a><tt class="py-lineno">71</tt>  <tt class="py-line">        <tt class="py-name">pyglet</tt><tt class="py-op">.</tt><tt class="py-name">app</tt><tt class="py-op">.</tt><tt class="py-name">exit</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L72"></a><tt class="py-lineno">72</tt>  <tt class="py-line">     </tt>
+<a name="L73"></a><tt class="py-lineno">73</tt>  <tt class="py-line"> </tt>
+<a name="L74"></a><tt class="py-lineno">74</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">'__main__'</tt><tt class="py-op">:</tt> </tt>
+<a name="L75"></a><tt class="py-lineno">75</tt>  <tt class="py-line">    <tt id="link-61" class="py-name"><a title="graphics" class="py-name" href="#" onclick="return doclink('link-61', 'graphics', 'link-0');">graphics</a></tt><tt class="py-op">.</tt><tt id="link-62" class="py-name"><a title="graphics.main_window" class="py-name" href="#" onclick="return doclink('link-62', 'main_window', 'link-21');">main_window</a></tt> <tt class="py-op">=</tt> <tt id="link-63" class="py-name"><a title="Splatterboard.SplatterboardWindow" class="py-name" href="#" onclick="return doclink('link-63', 'SplatterboardWindow', 'link-13');">SplatterboardWindow</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L76"></a><tt class="py-lineno">76</tt>  <tt class="py-line">    <tt class="py-name">pyglet</tt><tt class="py-op">.</tt><tt class="py-name">app</tt><tt class="py-op">.</tt><tt class="py-name">run</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L77"></a><tt class="py-lineno">77</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >Splatterboard Tool API Reference</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Fri Nov 21 23:03:29 2008
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
