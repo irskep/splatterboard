@@ -33,8 +33,8 @@ class Polygon(tool.Tool):
 	theta = math.atan2(ry - y, rx - x)
         li = []
 	for i in xrange(theta, theta + 2 * math.pi, 2 * math.pi / sides):
-            li = li.extend([radius * math.cos(i), radius * mth.sin(i)])
-        
+            li = li.extend([radius * math.cos(i), radius * math.sin(i)])
+        graphics.draw_polygon(li)
 
 default = Rectangle()
 priority = 81
