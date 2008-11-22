@@ -1,4 +1,5 @@
 import tool, resources, graphics, pyglet, random
+from pyglet.window import key
 
 class Tron(tool.Tool):
     """Simple tron tool. WTF?"""
@@ -6,15 +7,19 @@ class Tron(tool.Tool):
     x, y, d = 0, 0, 1
     color = (0, 0, 0, 0)
     running = False
+    visited = []
+    ai_enabled = True
     # direction: NORTH = 0, EAST = 1, SOUTH = 2, WEST = 3
     
     def start_drawing(self, x, y):
         if self.running:
             self.explode()
         else:
+            self.canvas_pre = graphics.get_snapshot()
             self.running = True
+            self.visited = []
             self.x, self.y = x, y
-            self.color = graphics.get_pixel_from_image(graphics.get_snapshot(), x, y)
+            self.color = graphics.get_pixel_from_image(self.canvas_pre, x, y)
             self.d = random.randint(0, 3)
             pyglet.clock.schedule(self.do_tron)
             
@@ -35,8 +40,9 @@ class Tron(tool.Tool):
             pyglet.clock.unschedule(self.do_tron)
             self.explode()
         else:
-            if random.randint(0, 19) < 1 or (random.randint(0, 9) < 1 and self.check_ahead(random.randint(1, 10))):
-                self.turn_randomly()
+            if self.ai_enabled:
+                self.do_tron_ai()
+            self.visited.append((self.x, self.y))
             self.x, self.y = xn, yn
             graphics.enter_canvas_mode()
             graphics.call_twice(pyglet.gl.glDisable, pyglet.gl.GL_POINT_SMOOTH)
@@ -46,12 +52,17 @@ class Tron(tool.Tool):
             graphics.exit_canvas_mode()
             self.do_tron(iters=iters-1)
             
+    def do_tron_ai(self):
+        return
+        if random.randint(0, 19) < 1 or (random.randint(0, 19) < 1 and self.check_ahead(random.randint(1, 10))):
+            self.turn_randomly()
+            
     def check_ahead(self, iter):
         if iter < 1: return False
         xn = self.x + iter * self.fxn()
         yn = self.y + iter * self.fyn()
-        cn = graphics.get_pixel_from_image(graphics.get_snapshot(), xn, yn)
-        return (self.color[0] != cn[0] or self.color[1] != cn[1] or self.color[2] != cn[2]) or self.check_ahead(iter - 1)
+        cn = graphics.get_pixel_from_image(self.canvas_pre, xn, yn)
+        return (self.color[0] != cn[0] or self.color[1] != cn[1] or self.color[2] != cn[2]) or self.check_ahead(iter - 1) or (xn, yn) in self.visited
             
     def explode(self):
         print "esplode!"
@@ -65,6 +76,12 @@ class Tron(tool.Tool):
         
     def turn_randomly(self):
         self.d = (self.d + 1 + 2 * random.randint(0, 1)) % 4
+        
+    def key_press(self, symbol, modifiers):
+        if symbol == key.LEFT:
+            self.turn_left()
+        elif symbol == key.RIGHT:
+            self.turn_right()
 
 default = Tron()
 priority = 95
