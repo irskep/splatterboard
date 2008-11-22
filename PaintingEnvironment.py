@@ -120,7 +120,7 @@ class PaintingEnvironment:
             if not (lastx > graphics.canvas_x and lasty > graphics.canvas_y) and self.current_tool.cursor != None:
                 graphics.main_window.set_mouse_cursor(self.current_tool.cursor)
         else:
-            if (lastx > graphics.canvas_x and lasty > graphics.canvas_y) or (lastx > graphics.width and x > graphics.canvas_x) or (lasty > graphics.height and y > graphics.canvas_height):
+            if (lastx > graphics.canvas_x and lasty > graphics.canvas_y) or (lastx > graphics.width) or (lasty > graphics.height):
                 graphics.set_cursor(graphics.cursor['CURSOR_DEFAULT'])
     
     def on_mouse_press(self, x, y, button, modifiers):

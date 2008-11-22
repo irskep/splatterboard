@@ -70,5 +70,5 @@ class Polygon(tool.Tool):
 default = Polygon()
 priority = 90
 group = 'Shapes'
-image = resources.Rectangle
+image = resources.Polygon
 cursor = graphics.cursor['CURSOR_CROSSHAIR']
