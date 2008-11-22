@@ -1,8 +1,11 @@
+"""
+name: Tool
+
+Placeholder docstring
+"""
+
 import pyglet
 import gui, resources, graphics
-
-def not_implemented(*args, **kwargs):
-    pass
 
 # =======================
 # = BEGIN TOOL TEMPLATE =
@@ -11,28 +14,49 @@ def not_implemented(*args, **kwargs):
 class Tool:
     """Abstract base tool"""
     
-    select        = not_implemented #tool is selected
-    unselect      = not_implemented #   and unselected
+    def select(self):
+        """User selects tool in toolbar. Also called in special cases like file saving/loading."""
+        pass
     
-    pre_draw      = not_implemented #mouse pressed, canvas mode not entered yet (x, y)
-    start_drawing = not_implemented #canvas mode just entered                   (x, y)
-    keep_drawing  = not_implemented #mouse dragging                             (x, y, dx, dy)
-    stop_drawing  = not_implemented #mouse released, still in canvas mode       (x, y)
-    post_draw     = not_implemented #just exited canvas mode                    (x, y)
-    text          = not_implemented #unicode text entered                       (text)
-    key_press     = not_implemented #key pressed - for keyboard commands        (symbol, modifiers)
-    key_release   = not_implemented #see key_pressed
+    def unselect(self):
+        """User selects a different tool. Perform clean-up here if necessary."""
+        pass
+    
+    def start_drawing(self, x, y):
+        """Mouse has been pressed in the canvas area."""
+        pass
+    
+    def keep_drawing(self, x, y, dx, dy):
+        """Mouse is being dragged after being pressed in the canvas area."""
+        pass
+    
+    def stop_drawing(self, x, y):
+        """Mouse is released."""
+        pass
+    
+    def text(self, text):
+        """Unicode text is being entered from the keyboard."""
+        pass
+    
+    def key_press(self, symbol, modifiers):
+        """A key has been pressed. See pyglet documentation on keyboard input for more information."""
+        pass
+    
+    def key_release(self, symbol, modifiers):
+        """A key has been released. See pyglet documentation on keyboard input for more information."""
+        pass
 
-    #return True if canvas should be grabbed and stored on undo stack.
-    #will almost always be True except for things that draw temporary
-    #borders, etc. Called immediately after pre_draw().
     def ask_undo(self):
+        """Should return True if the canvas should be grabbed and pushed onto the undo stack. Will almost always be true except when the tool draws temporary borders, like the selection tool. In that case, look at the push_undo() method."""
         return True
     
-    #Ask the tool to undo its state. Return True if 'normal' undo behavior
-    #should occur (i.e. image is popped off the main undo stack, as opposed
-    #to just moving a tool's selection area)
     def undo(self):
+        """
+        Only override this method if undo behavior is nonstandard. Nothing currently uses this; most undo behaviors can be handled via ask_undo() or push_undo().
+        
+        This method should return False if non-standard undo behavior occurred and an image should not be popped off the undo stack and drawn.
+        """
+        
         return True
     
 default = Tool()    #Instance of your class
@@ -48,12 +72,15 @@ cursor = None
 painting_env = None
 
 def push_undo(snap=None):
+    """Pushes the passed image onto the undo stack. See selection tool for an example."""
     if snap == None: snap = graphics.get_canvas()
     graphics.enter_canvas_mode()
     painting_env.push_undo(snap)
     if not graphics.drawing: graphics.exit_canvas_mode()
 
 class ControlSpace:
+    """tool.controlspace is used to add GUI components to the screen. Do not attempt to add GUI components by any other means."""
+    
     controls = []
     max_x = 0
     max_y = 0
@@ -93,6 +120,10 @@ class ControlSpace:
 controlspace = ControlSpace(0,0)
 
 def generate_brush_selector(start_x=5,start_y=5,max_x=-1,max_y=-1):
+    """
+    Generate a line of buttons that let the user change the line size.
+    """
+    
     def get_brush_drawer(x,y,w,h,size):
         if size < 1.5: size = 1.5
         def draw_brush():
@@ -131,6 +162,10 @@ def generate_brush_selector(start_x=5,start_y=5,max_x=-1,max_y=-1):
     if not size_set: newbutton.select()
 
 def generate_line_selector(start_x=5, start_y=5, max_x=-1, max_y=-1):
+    """
+    Generate a line of buttons that let the user change the line size.
+    """
+    
     def get_line_drawer(x,y,w,h,size):
         def draw_line():
             graphics.set_line_width(size)

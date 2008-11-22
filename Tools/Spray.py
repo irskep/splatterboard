@@ -13,6 +13,7 @@ class Spray(tool.Tool):
         self.canvas_pre = graphics.get_canvas()
         tool.generate_brush_selector()
         self.button_group = gui.ButtonGroup()
+        #print self.button_group.buttons
         self.button_single = gui.ImageButton(resources.SquareButton, self.select_single,
                                             5, 55, image_2 = resources.Spray, 
                                             parent_group=self.button_group)
@@ -60,7 +61,7 @@ class Spray(tool.Tool):
                     colors.extend(graphics.fill_color)
         else:
             colors = graphics.line_color * 10
-        graphics.draw_points(graphics.concat(self.make_point() for i in xrange(10)),colors)
+        graphics.draw_points(sum([self.make_point() for i in xrange(10)],[]),colors)
 
     def make_point(self):
         # Pick somewhere random to draw
@@ -70,7 +71,7 @@ class Spray(tool.Tool):
         angle = random.random() * math.pi * 2
         x = self.x + math.cos(angle) * where
         y = self.y + math.sin(angle) * where
-        return (x,y)
+        return [x,y]
 
 default = Spray()
 priority = 62

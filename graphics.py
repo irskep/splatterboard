@@ -1,34 +1,43 @@
+"""
+name: Graphics
+
+The graphics module exists primarily to solve the problems presented by a double-buffered graphics environment. Whenever you execute a normal function in the graphics module, it is actually called twice, once for each frame*. For this reason, you should never call any pure-Pyglet graphics functions by themselves. Instead, you should wrap it with graphics.call_twice().
+
+*Functions are only called once if the program is running on OS X in windowed mode due to platform-specific oddities. This is handled transparently.
+"""
+
 import math, sys
 import pyglet.graphics, pyglet.image, pyglet.gl
-from settings import *
+import settings
 
-cursor = {} #set by Splatboard.py - pyglet stores cursors in an instance of Window.
-canvas_queue = [] #[(function, args, kwargs)]
-canvas_queue_2 = []
-canvas_x, canvas_y = settings['toolbar_width'], settings['buttonbar_height']
-main_window = None
+cursor = {}         #: set by Splatboard.py - pyglet stores cursors in an instance of Window.
+canvas_queue = []   #: [(function, args, kwargs)]
+canvas_queue_2 = [] #: [(function, args, kwargs)]
+canvas_x = settings.settings['toolbar_width']       #: Start of canvas area
+canvas_y = settings.settings['buttonbar_height']    #: Start of canvas area
+main_window = None  #: Splatterboard window
 
 _in_canvas_mode = False
 
 line_color = (0.0, 0.0, 0.0, 1.0)
 fill_color = (1.0, 1.0, 1.0, 1.0)
-selected_color = 1 #0 for line_color, 1 for fill_color
+selected_color = 1  #: 0 for line_color, 1 for fill_color
 brush_size = 10.0
 line_size = 10.0
-drawing = False
-width, height = 0, 0    #set by the main window
+drawing = False         #: Ignore this, used somewhat internally
+width, height = 0, 0    #: Set by the main window
 
-def empty_wrapper(func):
+def _empty_wrapper(func):
     return func
 
-def doublecall_wrapper(func):
+def _doublecall_wrapper(func):
     def new_func(*args, **kwargs):
         global drawing
         func(*args, **kwargs)
         canvas_queue.append((func, args, kwargs, _in_canvas_mode))
     return new_func
     
-def triplecall_wrapper(func):
+def _triplecall_wrapper(func):
     def new_func(*args, **kwargs):
         global drawing
         func(*args, **kwargs)
@@ -36,16 +45,16 @@ def triplecall_wrapper(func):
         canvas_queue_2.append((func, args, kwargs, _in_canvas_mode))
     return new_func
 
-if settings['fullscreen']:
-    command_wrapper = doublecall_wrapper
+if settings.settings['fullscreen']:
+    command_wrapper = _doublecall_wrapper
 else:
-    if settings['disable_buffer_fix_in_windowed']:
-        command_wrapper = empty_wrapper
+    if settings.settings['disable_buffer_fix_in_windowed']:
+        command_wrapper = _empty_wrapper
     else:
-        command_wrapper = doublecall_wrapper
+        command_wrapper = _doublecall_wrapper
 
 def draw_all_again():
-    if settings['fullscreen'] == True or settings['disable_buffer_fix_in_windowed'] == False:
+    if settings.settings['fullscreen'] == True or settings.settings['disable_buffer_fix_in_windowed'] == False:
         global canvas_queue, canvas_queue_2
         for func, args, kwargs, go_to_cm in canvas_queue:
             if go_to_cm:
@@ -61,27 +70,48 @@ def draw_all_again():
             exit_canvas_mode()
 
 def call_twice(func, *args, **kwargs):
+    """
+    Call a function once this frame and once in the next frame. Pass the function as the first argument, and then all subsequent arguments as if you were passing them directly to the function.
+    """
+    
     func(*args,**kwargs)
     canvas_queue.append((func,args,kwargs,drawing))
 
+
 def call_thrice(func, *args, **kwargs):
+    """
+    Call a function once this frame, once in the next frame, and again in the frame after that. Pass the function as the first argument, and then all subsequent arguments as if you were passing them directly to the function.. You will probably never need this, as it is only used for special cases in which the buffers are not swapped predictably.
+    """
+    
     func(*args,**kwargs)
     canvas_queue.append((func,args,kwargs,drawing))
     canvas_queue_2.append((func,args,kwargs,drawing))
 
 def call_later(func, *args, **kwargs):
-    if settings['fullscreen'] == True or settings['disable_buffer_fix_in_windowed'] == False:
+    """
+    Put a function on the queue to be called next frame.
+    """
+    
+    if settings.settings['fullscreen'] == True or settings.settings['disable_buffer_fix_in_windowed'] == False:
         canvas_queue.append((func,args,kwargs,drawing))
     else:
         func(*args, **kwargs)
 
 def call_much_later(func, *args, **kwargs):
-    if settings['fullscreen'] == True or settings['disable_buffer_fix_in_windowed'] == False:
+    """
+    Put a function on the queue to be called in two frames.
+    """
+    
+    if settings.settings['fullscreen'] == True or settings.settings['disable_buffer_fix_in_windowed'] == False:
         canvas_queue_2.append((func,args,kwargs,drawing))
     else:
         func(*args, **kwargs)
 
 def set_selected_color(new_color):
+    """
+    Set the line or fill color, depending on the user's current selection. See the Eyedropper tool for an example.
+    """
+    
     global line_color
     global fill_color
     if selected_color == 0:
@@ -90,15 +120,24 @@ def set_selected_color(new_color):
         fill_color = new_color
 
 def get_snapshot():
+    """
+    Returns the entire screen as an image_data() view. (Treat it like a regular image.)
+    """
+    
     return pyglet.image.get_buffer_manager().get_color_buffer().get_image_data()
 
 def get_canvas():
+    """
+    Returns the canvas area as an image_data() view. (Treat it like a regular image.) This method is preferred to get_snapshot() for use in tools.
+    """
+    
     return get_snapshot().get_region(canvas_x, canvas_y, width-canvas_x, height-canvas_y)
-        
-def get_color_buffer():
-    return pyglet.image.get_buffer_manager().get_color_buffer()
 
 def get_pixel_from_image(image, x, y):
+    """
+    Returns the color of pixel (x,y) in the image as a tuple (r, g, b, a).
+    """
+    
     #Grab 1x1-pixel image. Converting entire image to ImageData takes much longer than just
     #grabbing the single pixel with get_region() and converting just that.
     image_data = image.get_region(x,y,1,1).get_image_data()
@@ -111,9 +150,15 @@ def get_pixel_from_image(image, x, y):
     return [float(c) / 255.0 for c in components]   
 
 def set_cursor(new_cursor):
-    main_window.set_mouse_cursor(cursor[new_cursor])
+    """
+    Set the mouse cursor. See pyglet documentation for how to make cursors.
+    
+    Some presets defined in this module:
+    cursor['CURSOR_DEFAULT'], cursor['CURSOR_CROSSHAIR'], cursor['CURSOR_HAND'], cursor['CURSOR_TEXT'], cursor['CURSOR_WAIT']
+    """
+    main_window.set_mouse_cursor(new_cursor)
 
-def change_canvas_area(x,y,w,h):
+def _change_canvas_area(x,y,w,h):
     pyglet.gl.glViewport(x,y,w,h)
     pyglet.gl.glMatrixMode(pyglet.gl.GL_PROJECTION)
     pyglet.gl.glLoadIdentity()
@@ -121,6 +166,7 @@ def change_canvas_area(x,y,w,h):
     pyglet.gl.glMatrixMode(pyglet.gl.GL_PROJECTION)
 
 def enter_canvas_mode():
+    """Ignore this method. Used internally."""
     pyglet.gl.glEnable(pyglet.gl.GL_SCISSOR_TEST)
     pyglet.gl.glDisable(pyglet.gl.GL_BLEND)
     #pyglet.gl.glDisable(pyglet.gl.GL_LINE_SMOOTH)
@@ -129,6 +175,7 @@ def enter_canvas_mode():
     if not _in_canvas_mode: _in_canvas_mode = True
 
 def exit_canvas_mode():
+    """Ignore this method. Used internally."""
     pyglet.gl.glDisable(pyglet.gl.GL_SCISSOR_TEST)
     pyglet.gl.glEnable(pyglet.gl.GL_BLEND)
     #pyglet.gl.glEnable(pyglet.gl.GL_LINE_SMOOTH)
@@ -155,12 +202,12 @@ def set_color(r=0.0, g=0.0, b=0.0, a=1.0, color=None):
     if color is not None: pyglet.gl.glColor4f(*color)
     else: pyglet.gl.glColor4f(r,g,b,a)
 
-@triplecall_wrapper
+@_triplecall_wrapper
 def set_color_extra(r=0.0, g=0.0, b=0.0, a=1.0, color=None):
     if color is not None: pyglet.gl.glColor4f(*color)
     else: pyglet.gl.glColor4f(r,g,b,a)
 
-@triplecall_wrapper
+@_triplecall_wrapper
 def clear(r=1.0, g=1.0, b=1.0, a=1.0, color=None):
     if color is not None: pyglet.gl.glClearColor(*color)
     else: pyglet.gl.glClearColor(r,g,b,a);
@@ -174,7 +221,7 @@ def draw_image(img, x, y):
     if _in_canvas_mode: pyglet.gl.glDisable(pyglet.gl.GL_BLEND)
     
 
-@triplecall_wrapper
+@_triplecall_wrapper
 def draw_image_extra(img, x, y):
     img.blit(x,y)
     if _in_canvas_mode: pyglet.gl.glDisable(pyglet.gl.GL_BLEND)

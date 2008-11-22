@@ -19,7 +19,7 @@ class NormalPainter:
     def init(self):
         if not self.should_init: return
         self.should_init = False
-        graphics.set_cursor('CURSOR_WAIT')
+        graphics.set_cursor(graphics.cursor['CURSOR_WAIT'])
         #Get canvas as image. Essentially an alias for image.get_buffer_manager().get_color_buffer().get_image_data().
         self.canvas_pre = graphics.get_canvas()
         #Convert to array
@@ -27,7 +27,7 @@ class NormalPainter:
         data = self.canvas_pre.get_data('RGBA',self.canvas_pre.width*4)
         #Convert to integer
         self.pixel_data = map(ord, list(data))
-        graphics.set_cursor('CURSOR_DEFAULT')
+        graphics.set_cursor(graphics.cursor['CURSOR_DEFAULT'])
     
     def get_pixel(self, x, y):
         #Image data array is one-dimensional, so we need to find pixel's position in it

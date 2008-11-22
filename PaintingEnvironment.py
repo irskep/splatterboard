@@ -87,7 +87,7 @@ class PaintingEnvironment:
     
     def on_key_press(self, symbol, modifiers):
         self.try_redraw()
-        if not graphics.drawing and self.current_tool.key_press != tool.not_implemented:
+        if not graphics.drawing and self.current_tool.key_press != tool.Tool.key_press:
             graphics.enter_canvas_mode()
             graphics.drawing = True
             self.current_tool.key_press(symbol, modifiers)
@@ -99,7 +99,7 @@ class PaintingEnvironment:
 
     def on_key_release(self, symbol, modifiers):
         self.try_redraw()
-        if not graphics.drawing and self.current_tool.key_release != tool.not_implemented:
+        if not graphics.drawing and self.current_tool.key_release != tool.Tool.key_release:
             graphics.enter_canvas_mode()
             graphics.drawing = True
             self.current_tool.key_release(symbol, modifiers)
@@ -108,7 +108,7 @@ class PaintingEnvironment:
 
     def on_text(self, text):
         self.try_redraw()
-        if not graphics.drawing and self.current_tool.text != tool.not_implemented:
+        if not graphics.drawing and self.current_tool.text != tool.Tool.text:
             graphics.enter_canvas_mode()
             graphics.drawing = True
             self.current_tool.text(text)
@@ -123,12 +123,11 @@ class PaintingEnvironment:
                 graphics.main_window.set_mouse_cursor(self.current_tool.cursor)
         else:
             if lastx > graphics.canvas_x and lasty > graphics.canvas_y:
-                graphics.set_cursor('CURSOR_DEFAULT')
+                graphics.set_cursor(graphics.cursor['CURSOR_DEFAULT'])
     
     def on_mouse_press(self, x, y, button, modifiers):
         self.try_redraw()
         if x > graphics.canvas_x and y > graphics.canvas_y:
-            self.current_tool.pre_draw(x,y)
             if self.current_tool.ask_undo():
                 self.undo_queue.append(graphics.get_canvas())
             graphics.drawing = True
@@ -159,7 +158,6 @@ class PaintingEnvironment:
             self.current_tool.stop_drawing(x,y)
             graphics.drawing = False
             graphics.exit_canvas_mode()
-            self.current_tool.post_draw(x, y)
     
     def on_close(self):
         save_settings()

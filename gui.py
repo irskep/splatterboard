@@ -40,7 +40,7 @@ class Button():
         if self.pressed:
             if self.parent_group != None: self.parent_group.select(self)
             self.action()
-        self.pressed = False
+            self.pressed = False
     
     def select(self):
         if self.parent_group != None: self.parent_group.select(self)
@@ -62,16 +62,21 @@ class ImageButton(Button):
         graphics.draw_image(self.image,self.x,self.y)
         if self.image_2 != None: graphics.draw_image(self.image_2, self.x, self.y)
 
-class ButtonGroup:
-    def __init__(self, buttons=[]):
+class ButtonGroup():
+    def __init__(self, buttons=None):
+        #Weird shit was going on here. Button groups were somehow inheriting the lists
+        #of previous other groups. This little idiom seems to have fixed that problem, 
+        #though I'm not exactly sure why.
+        if buttons == None: buttons = []
         self.buttons = buttons
-        if len(buttons) > 0:
-            buttons[0].selected = True
+        if len(self.buttons) > 0:
+            self.buttons[0].selected = True
     
     def add(self, button):
         self.buttons.append(button)
     
     def select(self, select_button):
+        if not select_button in self.buttons: return
         for button in self.buttons:
             if button == select_button:
                 button.selected = True
