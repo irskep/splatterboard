@@ -13,7 +13,7 @@ class Spray(tool.Tool):
         self.canvas_pre = graphics.get_canvas()
         tool.generate_brush_selector()
         self.button_group = gui.ButtonGroup()
-        #print self.button_group.buttons
+        
         self.button_single = gui.ImageButton(resources.SquareButton, self.select_single,
                                             5, 55, image_2 = resources.Spray, 
                                             parent_group=self.button_group)
@@ -22,8 +22,6 @@ class Spray(tool.Tool):
                                             parent_group=self.button_group)
         tool.controlspace.add(self.button_single)
         tool.controlspace.add(self.button_double)
-        self.button_group.add(self.button_single)
-        self.button_group.add(self.button_double)
         self.button_single.select()
     
     def select_single(self):

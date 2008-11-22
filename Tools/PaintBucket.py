@@ -153,8 +153,6 @@ class PaintBucket(tool.Tool):
                                             parent_group=self.button_group)
         tool.controlspace.add(self.button_normal)
         tool.controlspace.add(self.button_noisy)
-        self.button_group.add(self.button_normal)
-        self.button_group.add(self.button_noisy)
         self.button_normal.select()
         self.painter.init()
     

@@ -17,6 +17,16 @@ Writing a Tool
         group = 'Example'       #: Grouping - Drawing, Shapes, etc
         image = None            #: Icon
         cursor = None           #: Default cursor
+
+Adding Buttons
+==============
+    1. Make a button. See L{Button<gui.Button>} and L{ImageButton<gui.ImageButton>}.
+    
+    2. Add it to the control space with L{tool.controlspace.add()<tool.ControlSpace.add()>}.
+    
+    3. Repeat as necessary.
+    
+    4. If you want radio button behavior (only one button selected at a time), 
 """
 
 import pyglet
@@ -133,6 +143,11 @@ controlspace = ControlSpace()
 def generate_brush_selector(start_x=5,start_y=5,max_x=-1,max_y=-1):
     """
     Generate a line of buttons that let the user change the brush size. See Brush tool for an example.
+    
+    @param start_x, start_y: Bottom left corner of the button row
+    @param max_x, max_y: Maximum values for button positions. Should generally be ignored.
+    @rtype: ButtonGroup
+    @return: The ButtonGroup that owns the generated buttons
     """
     
     def get_brush_drawer(x,y,w,h,size):
@@ -164,17 +179,22 @@ def generate_brush_selector(start_x=5,start_y=5,max_x=-1,max_y=-1):
                                         more_draw=get_brush_drawer(x, start_y, w, h, current_width),
                                         parent_group=brush_group)
         controlspace.add(newbutton)
-        brush_group.add(newbutton)
         if graphics.brush_size <= current_width and not size_set:
             newbutton.action()
             newbutton.select()
             size_set = True
         current_width += width_inc
     if not size_set: newbutton.select()
+    return brush_group
 
 def generate_line_selector(start_x=5, start_y=5, max_x=-1, max_y=-1):
     """
     Generate a line of buttons that let the user change the line size. See the Line tool for an example.
+    
+    @param start_x, start_y: Bottom left corner of the button row
+    @param max_x, max_y: Maximum values for button positions. Should generally be ignored.
+    @rtype: ButtonGroup
+    @return: The ButtonGroup that owns the generated buttons
     """
     
     def get_line_drawer(x,y,w,h,size):
@@ -205,10 +225,10 @@ def generate_line_selector(start_x=5, start_y=5, max_x=-1, max_y=-1):
                                         more_draw=get_line_drawer(x, start_y, w, h, current_width),
                                         parent_group=line_group)
         controlspace.add(newbutton)
-        line_group.add(newbutton)
         if graphics.line_size <= current_width and not size_set:
             newbutton.action()
             newbutton.select()
             size_set = True
         current_width += width_inc
     if not size_set: newbutton.select()
+    return line_group
