@@ -1,7 +1,22 @@
 """
-name: Tool
+Base class and utilities for tools.
 
-Placeholder docstring
+Writing a Tool
+==============
+
+    1. B{Subclass I{Tool}}
+    
+    2. B{Override Appropriate Methods}
+    
+    Most simple tools will want to at least override start_drawing() and keep_drawing(). More sophisticated tools will need to override more methods to achieve the desired behavior.
+    
+    3. B{Set Module Properties}
+    ::
+        default = YourClass()   #: Instance of your class
+        priority = 1000         #: Rank
+        group = 'Example'       #: Grouping - Drawing, Shapes, etc
+        image = None            #: Icon
+        cursor = None           #: Default cursor
 """
 
 import pyglet
@@ -59,55 +74,44 @@ class Tool:
         
         return True
     
-default = Tool()    #Instance of your class
-priority = 1000     #Position in toolbar
-group = 'Example'   #Toolbar grouping - Drawing, Shapes, etc
-image = None        #Toolbar icon
-cursor = None
+default = Tool()    #: Instance of your class
+priority = 1000     #: Position in toolbar
+group = 'Example'   #: Toolbar grouping - Drawing, Shapes, etc
+image = None        #: Toolbar icon
+cursor = None       #: Default cursor
 
 # =====================
 # = END TOOL TEMPLATE =
 # =====================
 
-painting_env = None
-
-def push_undo(snap=None):
-    """Pushes the passed image onto the undo stack. See selection tool for an example."""
-    if snap == None: snap = graphics.get_canvas()
-    graphics.enter_canvas_mode()
-    painting_env.push_undo(snap)
-    if not graphics.drawing: graphics.exit_canvas_mode()
-
 class ControlSpace:
-    """tool.controlspace is used to add GUI components to the screen. Do not attempt to add GUI components by any other means."""
-    
+    """A singleton that allows tools to add GUI elements to the bottom bar"""
+
     controls = []
     max_x = 0
     max_y = 0
-    
-    def __init__(self, max_x, max_y):
-        self.max_x = max_x
-        self.max_y = max_y
-    
+
     def draw(self):
+        """Draw all controls added by the tool. Called by the main loop."""
         for control in self.controls:
             control.draw()
-    
-    def add(self, newbutton):
-        if newbutton.x >= 0 and newbutton.y >= 0 and newbutton.x+newbutton.width <= self.max_x and newbutton.y+newbutton.height <= self.max_y:
-            self.controls.append(newbutton)
+
+    def add(self, new_object):
+        """
+        Add a new button to the control space.
+        
+        @param new_object: GUI object to add to the control space
+        """
+        if new_object.x >= 0 and new_object.y >= 0 and new_object.x+new_object.width <= self.max_x and new_object.y+new_object.height <= self.max_y:
+            self.controls.append(new_object)
+            return True
         else:
             print "Attempt to add button failed. Out of bounds."
-    
-    def add_image_button(self, x, y, img_name):
-        pass
-    
-    def add_slider(self, x, y, text):
-        pass
-    
+            return False
+
     def clear(self):
         self.controls = []
-    
+
     def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
         for control in self.controls: control.on_mouse_drag(x,y,dx,dy,buttons,modifiers)
 
@@ -117,11 +121,18 @@ class ControlSpace:
     def on_mouse_release(self, x, y, button, modifiers):
         for control in self.controls: control.on_mouse_release(x,y,button,modifiers)
 
-controlspace = ControlSpace(0,0)
+painting_env = None
+
+def push_undo(canvas_image_to_push=None):
+    """Pushes the passed image onto the undo stack. See selection tool for an example."""
+    if canvas_image_to_push == None: canvas_image_to_push = graphics.get_canvas()
+    painting_env.push_undo(canvas_image_to_push)
+
+controlspace = ControlSpace()
 
 def generate_brush_selector(start_x=5,start_y=5,max_x=-1,max_y=-1):
     """
-    Generate a line of buttons that let the user change the line size.
+    Generate a line of buttons that let the user change the brush size. See Brush tool for an example.
     """
     
     def get_brush_drawer(x,y,w,h,size):
@@ -163,7 +174,7 @@ def generate_brush_selector(start_x=5,start_y=5,max_x=-1,max_y=-1):
 
 def generate_line_selector(start_x=5, start_y=5, max_x=-1, max_y=-1):
     """
-    Generate a line of buttons that let the user change the line size.
+    Generate a line of buttons that let the user change the line size. See the Line tool for an example.
     """
     
     def get_line_drawer(x,y,w,h,size):

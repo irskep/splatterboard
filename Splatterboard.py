@@ -3,28 +3,33 @@
 import pyglet
 import graphics
 import PaintingEnvironment
-from settings import settings, save_settings
+import settings
+import resources
 
 class SplatterboardWindow(pyglet.window.Window):
     
     drawn_this_frame = False
     
     def __init__(self):
+        
+        opt = settings.settings #ugly shortcut
+        resources.load()
+        
         #Init window
         screen = pyglet.window.get_platform().get_default_display().get_default_screen()
         
         config = pyglet.gl.Config(double_buffer=True, stencil_size=8)
         
-        if screen.width <= settings['window_width'] or screen.height <= settings['window_height']:
-            settings['fullscreen'] = True
-            settings['fit_window_to_screen'] = True
-        if settings['fit_window_to_screen']:
-            settings['window_width'] = screen.width-100
-            settings['window_height'] = screen.height-100
+        if screen.width <= opt['window_width'] or screen.height <= opt['window_height']:
+            opt['fullscreen'] = True
+            opt['fit_window_to_screen'] = True
+        if opt['fit_window_to_screen']:
+            opt['window_width'] = screen.width-100
+            opt['window_height'] = screen.height-100
             
-        if not settings['fullscreen']:
-            super(SplatterboardWindow, self).__init__(   width=settings['window_width'],
-                                                height=settings['window_height'],
+        if not opt['fullscreen']:
+            super(SplatterboardWindow, self).__init__(   width=opt['window_width'],
+                                                height=opt['window_height'],
                                                 resizable=False, vsync=True, config=config
                                             )
         else:
@@ -51,8 +56,8 @@ class SplatterboardWindow(pyglet.window.Window):
     def update_size_constants(self):
         graphics.width = self.width
         graphics.height = self.height
-        graphics.canvas_x = settings['toolbar_width']
-        graphics.canvas_y = settings['buttonbar_height']
+        graphics.canvas_x = settings.settings['toolbar_width']
+        graphics.canvas_y = settings.settings['buttonbar_height']
     
     def init_cursors(self):
         graphics.cursor['CURSOR_CROSSHAIR'] = self.get_system_mouse_cursor(self.CURSOR_CROSSHAIR)
@@ -62,7 +67,7 @@ class SplatterboardWindow(pyglet.window.Window):
         graphics.cursor['CURSOR_DEFAULT'] = self.get_system_mouse_cursor(self.CURSOR_DEFAULT)
     
     def on_close(self):
-        save_settings()
+        settings.save_settings()
         pyglet.app.exit()
     
 

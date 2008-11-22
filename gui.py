@@ -1,9 +1,22 @@
+"""
+Buttons, etc.
+"""
+
 import pyglet, resources, graphics
 from settings import settings
 from dialogs import *
 
 class Button():
+    """Basic button class."""
     def __init__(self, image, action, x, y, text="", parent_group = None, more_draw = None):
+        """
+        @param image:           Button background image
+        @param action:          Function to call when pressed
+        @param x, y:            Bottom left corner position
+        @param text:            Label text
+        @param parent_group:    L{ButtonGroup} that owns this object.
+        @param more_draw:       Function to draw more over the label. See tool.generate_brush_selector() for an example.
+        """
         self.action = action
         self.x, self.y = x, y
         self.selected = False

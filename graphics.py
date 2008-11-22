@@ -1,7 +1,9 @@
 """
-name: Graphics
+Everything to do with drawing.
 
 The graphics module exists primarily to solve the problems presented by a double-buffered graphics environment. Whenever you execute a normal function in the graphics module, it is actually called twice, once for each frame*. For this reason, you should never call any pure-Pyglet graphics functions by themselves. Instead, you should wrap it with graphics.call_twice().
+
+Functions with an "_extra" suffix are called three times instead of the usual one or two. You will probably never need them, as they are only used for special cases in which the buffers are not swapped predictably.
 
 *Functions are only called once if the program is running on OS X in windowed mode due to platform-specific oddities. This is handled transparently.
 """
@@ -10,27 +12,35 @@ import math, sys
 import pyglet.graphics, pyglet.image, pyglet.gl
 import settings
 
-cursor = {}         #: set by Splatboard.py - pyglet stores cursors in an instance of Window.
-canvas_queue = []   #: [(function, args, kwargs)]
-canvas_queue_2 = [] #: [(function, args, kwargs)]
-canvas_x = settings.settings['toolbar_width']       #: Start of canvas area
-canvas_y = settings.settings['buttonbar_height']    #: Start of canvas area
-main_window = None  #: Splatterboard window
+#: set by Splatboard.py - pyglet stores cursors in an instance of Window.
+cursor = {}
+#: [(function, args, kwargs)]
+canvas_queue, canvas_queue_2 = [], []
+#: Start of canvas area
+canvas_x, canvas_y = settings.settings['toolbar_width'], settings.settings['buttonbar_height']    
+#: Splatterboard window instance
+main_window = None
 
 _in_canvas_mode = False
 
 line_color = (0.0, 0.0, 0.0, 1.0)
 fill_color = (1.0, 1.0, 1.0, 1.0)
-selected_color = 1  #: 0 for line_color, 1 for fill_color
+#: 0 for line_color, 1 for fill_color
+selected_color = 1
 brush_size = 10.0
 line_size = 10.0
-drawing = False         #: Ignore this, used somewhat internally
-width, height = 0, 0    #: Set by the main window
+#: Ignore this, used somewhat internally
+drawing = False
+#: Set by the main window
+width, height = 0, 0
 
 def _empty_wrapper(func):
+    #Ignore this docstring. It is included because of an epydoc oddity.
+    """Every graphics function that has to do with the act of drawing is decorated with command_wrapper. The command_wrapper functions itself can actually be one of two things depending on the user's operating system and fullscreen settings."""
     return func
 
 def _doublecall_wrapper(func):
+    """Decorator to wrap all drawing functions in to make them get called twice"""
     def new_func(*args, **kwargs):
         global drawing
         func(*args, **kwargs)
@@ -38,6 +48,7 @@ def _doublecall_wrapper(func):
     return new_func
     
 def _triplecall_wrapper(func):
+    """Decorator to wrap all drawing functions in to make them get called three times"""
     def new_func(*args, **kwargs):
         global drawing
         func(*args, **kwargs)
@@ -54,6 +65,7 @@ else:
         command_wrapper = _doublecall_wrapper
 
 def draw_all_again():
+    """Call all functions in the queue. Used internally, do not call this."""
     if settings.settings['fullscreen'] == True or settings.settings['disable_buffer_fix_in_windowed'] == False:
         global canvas_queue, canvas_queue_2
         for func, args, kwargs, go_to_cm in canvas_queue:
@@ -80,7 +92,7 @@ def call_twice(func, *args, **kwargs):
 
 def call_thrice(func, *args, **kwargs):
     """
-    Call a function once this frame, once in the next frame, and again in the frame after that. Pass the function as the first argument, and then all subsequent arguments as if you were passing them directly to the function.. You will probably never need this, as it is only used for special cases in which the buffers are not swapped predictably.
+    Call a function once this frame, once in the next frame, and again in the frame after that. Pass the function as the first argument, and then all subsequent arguments as if you were passing them directly to the function. You will probably never need this, as it is only used for special cases in which the buffers are not swapped predictably.
     """
     
     func(*args,**kwargs)
@@ -88,9 +100,7 @@ def call_thrice(func, *args, **kwargs):
     canvas_queue_2.append((func,args,kwargs,drawing))
 
 def call_later(func, *args, **kwargs):
-    """
-    Put a function on the queue to be called next frame.
-    """
+    """Put a function on the queue to be called next frame."""
     
     if settings.settings['fullscreen'] == True or settings.settings['disable_buffer_fix_in_windowed'] == False:
         canvas_queue.append((func,args,kwargs,drawing))
@@ -98,9 +108,7 @@ def call_later(func, *args, **kwargs):
         func(*args, **kwargs)
 
 def call_much_later(func, *args, **kwargs):
-    """
-    Put a function on the queue to be called in two frames.
-    """
+    """Put a function on the queue to be called in two frames."""
     
     if settings.settings['fullscreen'] == True or settings.settings['disable_buffer_fix_in_windowed'] == False:
         canvas_queue_2.append((func,args,kwargs,drawing))
@@ -108,9 +116,7 @@ def call_much_later(func, *args, **kwargs):
         func(*args, **kwargs)
 
 def set_selected_color(new_color):
-    """
-    Set the line or fill color, depending on the user's current selection. See the Eyedropper tool for an example.
-    """
+    """Set the line or fill color, depending on the user's current selection. See the Eyedropper tool for an example."""
     
     global line_color
     global fill_color
@@ -120,9 +126,7 @@ def set_selected_color(new_color):
         fill_color = new_color
 
 def get_snapshot():
-    """
-    Returns the entire screen as an image_data() view. (Treat it like a regular image.)
-    """
+    """Returns the entire screen as an image_data() view. (Treat it like a regular image.)"""
     
     return pyglet.image.get_buffer_manager().get_color_buffer().get_image_data()
 
@@ -134,9 +138,7 @@ def get_canvas():
     return get_snapshot().get_region(canvas_x, canvas_y, width-canvas_x, height-canvas_y)
 
 def get_pixel_from_image(image, x, y):
-    """
-    Returns the color of pixel (x,y) in the image as a tuple (r, g, b, a).
-    """
+    """Returns the color of pixel (x,y) in the image as a tuple (r, g, b, a)."""
     
     #Grab 1x1-pixel image. Converting entire image to ImageData takes much longer than just
     #grabbing the single pixel with get_region() and converting just that.
@@ -153,8 +155,13 @@ def set_cursor(new_cursor):
     """
     Set the mouse cursor. See pyglet documentation for how to make cursors.
     
-    Some presets defined in this module:
-    cursor['CURSOR_DEFAULT'], cursor['CURSOR_CROSSHAIR'], cursor['CURSOR_HAND'], cursor['CURSOR_TEXT'], cursor['CURSOR_WAIT']
+    Some presets defined in this module::
+    
+        cursor['CURSOR_CROSSHAIR']
+        cursor['CURSOR_DEFAULT']
+        cursor['CURSOR_HAND']
+        cursor['CURSOR_TEXT']
+        cursor['CURSOR_WAIT']
     """
     main_window.set_mouse_cursor(new_cursor)
 
@@ -166,7 +173,7 @@ def _change_canvas_area(x,y,w,h):
     pyglet.gl.glMatrixMode(pyglet.gl.GL_PROJECTION)
 
 def enter_canvas_mode():
-    """Ignore this method. Used internally."""
+    """Ignore this method - used internally."""
     pyglet.gl.glEnable(pyglet.gl.GL_SCISSOR_TEST)
     pyglet.gl.glDisable(pyglet.gl.GL_BLEND)
     #pyglet.gl.glDisable(pyglet.gl.GL_LINE_SMOOTH)
@@ -175,7 +182,7 @@ def enter_canvas_mode():
     if not _in_canvas_mode: _in_canvas_mode = True
 
 def exit_canvas_mode():
-    """Ignore this method. Used internally."""
+    """Ignore this method - used internally."""
     pyglet.gl.glDisable(pyglet.gl.GL_SCISSOR_TEST)
     pyglet.gl.glEnable(pyglet.gl.GL_BLEND)
     #pyglet.gl.glEnable(pyglet.gl.GL_LINE_SMOOTH)
@@ -185,11 +192,13 @@ def exit_canvas_mode():
 
 @command_wrapper
 def set_line_width(width):
+    """Calls glLineWidth() and glPointSize()."""
     pyglet.gl.glPointSize(width)
     pyglet.gl.glLineWidth(width)
 
 @command_wrapper
 def enable_line_stipple():
+    """Makes lines dashed."""
     pyglet.gl.glEnable(pyglet.gl.GL_LINE_STIPPLE)
     pyglet.gl.glLineStipple(2, 63)
 
@@ -209,6 +218,7 @@ def set_color_extra(r=0.0, g=0.0, b=0.0, a=1.0, color=None):
 
 @_triplecall_wrapper
 def clear(r=1.0, g=1.0, b=1.0, a=1.0, color=None):
+    """Clears the screen. Always called three times instead of the usual one or two."""
     if color is not None: pyglet.gl.glClearColor(*color)
     else: pyglet.gl.glClearColor(r,g,b,a);
     #for window in pyglet.app.windows.__iter__():
@@ -228,6 +238,7 @@ def draw_image_extra(img, x, y):
 
 @command_wrapper
 def draw_label(label):
+    """Draws a Pyglet label."""
     label.draw()
 
 @command_wrapper
@@ -255,7 +266,7 @@ def draw_points(points, colors=None):
 def concat(it):
     return list(y for x in it for y in x)
 
-def iter_ellipse(x1, y1, x2, y2, da=None, step=None, dashed=False):
+def _iter_ellipse(x1, y1, x2, y2, da=None, step=None, dashed=False):
     xrad = abs((x2-x1) / 2.0)
     yrad = abs((y2-y1) / 2.0)
     x = (x1+x2) / 2.0
@@ -285,12 +296,13 @@ def iter_ellipse(x1, y1, x2, y2, da=None, step=None, dashed=False):
         if dashed: a += da
 
 @command_wrapper
-def draw_ellipse(x1, y1, x2, y2, dashed=False):
-    points = concat(iter_ellipse(x1, y1, x2, y2, dashed=dashed))
+def draw_ellipse(x1, y1, x2, y2):
+    points = concat(_iter_ellipse(x1, y1, x2, y2))
     pyglet.graphics.draw(len(points)/2, pyglet.gl.GL_TRIANGLE_FAN, ('v2f', points))
 
 @command_wrapper
 def draw_ellipse_outline(x1, y1, x2, y2, dashed=False):
+    """Set dashed=True if you want a dashed ellipse outline."""
     if abs(x2-x1) < 1.0 or abs(y2-y1) < 1.0: return
     w2 = line_size / 2.0
     x_dir = 1 if x2 > x1 else -1
@@ -306,8 +318,8 @@ def draw_ellipse_outline(x1, y1, x2, y2, dashed=False):
     y2_out = y2 + y_dir * w2
     y2_in = y2 - y_dir * w2
 
-    points_inner = list(iter_ellipse(x1_in, y1_in, x2_in, y2_in, da=0.1, dashed=dashed))
-    points_outer = list(iter_ellipse(x1_out, y1_out, x2_out, y2_out, da=0.1, dashed=dashed))
+    points_inner = list(_iter_ellipse(x1_in, y1_in, x2_in, y2_in, da=0.1, dashed=dashed))
+    points_outer = list(_iter_ellipse(x1_out, y1_out, x2_out, y2_out, da=0.1, dashed=dashed))
 
     points_stroke = concat(concat(zip(points_inner, points_outer)))
     points_stroke.extend(points_stroke[:4]) # draw the first *two* points again
@@ -329,6 +341,7 @@ def draw_quad(*args):
 
 @command_wrapper
 def init_stencil_mode():
+    """Stencil mode. Umm, I will explain this later."""
     #pyglet.gl.glClearColor(0,0,0,1)
     pyglet.gl.glClearStencil(0)
     pyglet.gl.glEnable(pyglet.gl.GL_STENCIL_TEST)

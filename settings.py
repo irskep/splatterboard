@@ -1,16 +1,23 @@
 """
-1. Put your game's name as the parameter in the settings_dir line
-2. List your game's options and saved state necessities in the settings dict
-3. "from settings import *" in other files and refer to settings['screen_width']
-   or something.
-4. Call save_settings() whenever you update the settings dictionary.
-5. There is no step 5, because everything is loaded automatically at startup.
+Save and load settings with minimal effort.
+
+    1. Put your game's name as the parameter in the settings_dir line
+
+    2. List your game's options and saved state necessities in the settings dict
+
+    3. "from settings import *" in other files and refer to settings['screen_width']
+       or something.
+   
+    4. Call save_settings() whenever you update the settings dictionary.
+
+    5. There is no step 5, because everything is loaded automatically at startup.
 
 If you add settings that aren't in the save file and would be overwritten by the
 loading step, then add the following lines to your game, run it once, and then
-remove them:
-settings = default_settings()
-save_settings()
+remove them::
+
+    settings = default_settings()
+    save_settings()
 """
 
 def default_settings():

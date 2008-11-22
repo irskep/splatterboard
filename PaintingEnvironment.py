@@ -10,8 +10,8 @@ import random, time
 import resources, graphics, tool
 import sys, os, time
 from pyglet.window import key
-from settings import settings, save_settings
-from collections import defaultdict
+import settings
+import collections
 
 class PaintingEnvironment:
     
@@ -30,7 +30,7 @@ class PaintingEnvironment:
         self.open_button = gui.Button(resources.Button, self.open, 
                                         self.save_button.x, resources.Button.height+10, text='Open')
         self.swap_button = gui.ImageButton(resources.ColorSwitch, self.swap_colors,
-                    graphics.width-440, settings['buttonbar_height']/2-resources.ColorSwitch.height/2)
+                    graphics.width-440, settings.settings['buttonbar_height']/2-resources.ColorSwitch.height/2)
         self.undo_button = gui.ImageButton(resources.Rewind, self.undo, 5, graphics.canvas_y+5)
         self.buttons = [self.save_button, self.open_button, self.swap_button, self.undo_button]
         
@@ -160,7 +160,7 @@ class PaintingEnvironment:
             graphics.exit_canvas_mode()
     
     def on_close(self):
-        save_settings()
+        settings.save_settings()
         pyglet.app.exit()
     
     def push_undo(self, snap):
@@ -187,7 +187,7 @@ class PaintingEnvironment:
         sorted_tools = sorted(tools.values(), key=lambda tool:tool.priority)
         
         #Categorize them by group - remain sorted
-        self.grouped_tools = defaultdict(list)
+        self.grouped_tools = collections.defaultdict(list)
         for tool in sorted_tools:
             self.grouped_tools[tool.group].append(tool)
         
@@ -242,7 +242,7 @@ class PaintingEnvironment:
         graphics.fill_color, graphics.line_color = graphics.line_color, graphics.fill_color
     
     def open(self):
-        if not settings['fullscreen']:
+        if not settings.settings['fullscreen']:
             self.open_2()
             return
         graphics.main_window.set_fullscreen(False)
@@ -251,10 +251,10 @@ class PaintingEnvironment:
     def open_2(self, dt=0):    
         path = gui.open_file(type_list = resources.supported_image_formats)
         if path == None: return
-        if not settings['fullscreen']:
+        if not settings.settings['fullscreen']:
             self.open_3(0,path)
             return
-        graphics.main_window.set_fullscreen(settings['fullscreen'])
+        graphics.main_window.set_fullscreen(settings.settings['fullscreen'])
         pyglet.clock.schedule_once(self.open_3, 0.5, path)
         
     def open_3(self, dt=0, path=None):
@@ -270,7 +270,7 @@ class PaintingEnvironment:
     def save(self):
         img = graphics.get_canvas()
         img = img.get_region(1,1,img.width-1,img.height-1)
-        if not settings['fullscreen']:
+        if not settings.settings['fullscreen']:
             self.save_2(0,img)
             return
         graphics.main_window.set_fullscreen(False)
@@ -280,10 +280,10 @@ class PaintingEnvironment:
         path = gui.save_file(default_name="My Picture.png")
         if path == None: return
         img.save(path)
-        if not settings['fullscreen']:
+        if not settings.settings['fullscreen']:
             self.save_3(0,img,path)
             return
-        graphics.main_window.set_fullscreen(settings['fullscreen'])
+        graphics.main_window.set_fullscreen(settings.settings['fullscreen'])
         pyglet.clock.schedule_once(self.save_3, 0.5, img, path)
     
     def save_3(self, dt=0, img = None, path = None):
