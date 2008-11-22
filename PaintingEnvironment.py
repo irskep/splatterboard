@@ -290,6 +290,6 @@ class PaintingEnvironment:
             graphics.clear(1,1,1,1)
             graphics.set_color_extra(1,1,1,1)
             graphics.call_thrice(graphics.enter_canvas_mode)
-            graphics.draw_image_extra(img,graphics.canvas_x,graphics.canvas_y)
+            graphics.draw_image_extra(img,graphics.canvas_x+1,graphics.canvas_y+1)
             graphics.call_thrice(graphics.exit_canvas_mode)
             graphics.call_much_later(self.current_tool.select())
