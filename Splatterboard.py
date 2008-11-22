@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 
+"""
+Main file. Compile this.
+
+I suppose that in a perfect world, some sort of overall code summary would go here.
+"""
+
 import pyglet
 import graphics
 import PaintingEnvironment

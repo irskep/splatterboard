@@ -1,8 +1,6 @@
-#!/usr/bin/env python
-
-# ===============================================
-# = WARNING: THIS FILE IS CLASSIFIED AS "GRODY" =
-# ===============================================
+"""
+A big ball of superglue - stay clear.
+"""
 
 import pyglet
 import gui, colorpicker

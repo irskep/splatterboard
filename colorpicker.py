@@ -1,7 +1,16 @@
+"""
+Just a color picker object. This was in gui, but it was big and encapsulated, so now it has its own module. Essentially, it just draws a bunch of rectangles to an image, draws the image, and can return what color the image is at any given point.
+"""
+
 import pyglet, graphics
 
 class ColorPicker():
-    def __init__(self, x, y, width, height, step_x=10,step_y=10):
+    def __init__(self, x, y, width, height, step_x=15,step_y=15):
+        """
+        @param x, y: Position of the bottom left corner
+        @param width, height: Graphical size
+        @param step_x, step_y: Size of the color blocks
+        """
         self.x = x
         self.y = y
         self.width = float(width)
@@ -12,6 +21,7 @@ class ColorPicker():
         self.image = None
     
     def draw_initial(self):
+        """Render the image"""
         graphics.set_color(1,1,1,1)
         graphics.draw_rect(self.x,self.y+self.height/2,self.x+self.width,self.y+self.height)
         graphics.set_color(0,0,0,1)
@@ -60,6 +70,7 @@ class ColorPicker():
         self.image = temp_image.get_texture().get_region(self.x, self.y, int(self.width), int(self.height))
     
     def draw(self):
+        """Render the image if it has not been rendered yet. Just draw the image if it has."""
         if self.rendered:
             graphics.set_color(1,1,1,1)
             graphics.draw_image(self.image,self.x,self.y)
@@ -71,8 +82,10 @@ class ColorPicker():
         graphics.draw_rect_outline(self.x,self.y,self.x+self.width,self.y+self.height)
     
     def get_color(self, x, y):
+        """Get the color at position (x,y), where x and y are absolute coordinates, not relative to the picker's position."""
         color = graphics.get_pixel_from_image(self.image, x-self.x, y-self.y)
         return (color[0],color[1],color[2],1.0)
     
     def coords_inside(self, x, y):
+        """Determine if the given coordinates are inside the picker."""
         return x >= self.x and y >= self.y and x <= self.x + self.width and y <= self.y + self.height
