@@ -9,6 +9,7 @@ class Tron(tool.Tool):
     running = False
     visited = []
     ai_enabled = True
+    explode_radius = 5
     # direction: NORTH = 0, EAST = 1, SOUTH = 2, WEST = 3
     
     def start_drawing(self, x, y):
@@ -29,7 +30,7 @@ class Tron(tool.Tool):
     def fyn(self):
         return ((self.d + 1) % 2) * (self.d - 1)
         
-    def do_tron(self, dt=0, iters=2):
+    def do_tron(self, dt=0, iters=3):
         if iters < 1: return
         if not self.running:
             pyglet.clock.unschedule(self.do_tron)
@@ -44,16 +45,16 @@ class Tron(tool.Tool):
                 self.do_tron_ai()
             self.visited.append((self.x, self.y))
             self.x, self.y = xn, yn
-            graphics.enter_canvas_mode()
-            graphics.call_twice(pyglet.gl.glDisable, pyglet.gl.GL_POINT_SMOOTH)
-            graphics.set_color(color=graphics.line_color)
-            graphics.draw_points([self.x, self.y])
-            graphics.call_twice(pyglet.gl.glEnable, pyglet.gl.GL_POINT_SMOOTH)
-            graphics.exit_canvas_mode()
+            graphics.call_thrice(graphics.enter_canvas_mode)
+            graphics.call_thrice(pyglet.gl.glDisable, pyglet.gl.GL_POINT_SMOOTH)
+            graphics.set_color_extra(color=graphics.line_color)
+            graphics.call_thrice(graphics.draw_points, [self.x, self.y])
+            graphics.call_thrice(pyglet.gl.glEnable, pyglet.gl.GL_POINT_SMOOTH)
+            graphics.call_thrice(graphics.exit_canvas_mode)
             self.do_tron(iters=iters-1)
             
     def do_tron_ai(self):
-        if random.randint(0, 19) < 1 or (random.randint(0, 19) < 1 and self.check_ahead(random.randint(1, 10))):
+        if random.randint(0, 80) < 1 or self.check_ahead(random.randint(1, 10)) or self.check_ahead(random.randint(1, 10)):
             self.turn_randomly()
             
     def check_ahead(self, iter):
@@ -61,10 +62,16 @@ class Tron(tool.Tool):
         xn = self.x + iter * self.fxn()
         yn = self.y + iter * self.fyn()
         cn = graphics.get_pixel_from_image(self.canvas_pre, xn, yn)
-        return (self.color[0] != cn[0] or self.color[1] != cn[1] or self.color[2] != cn[2]) or self.check_ahead(iter - 1) or (xn, yn) in self.visited
+        if  self.color[0] != cn[0] or self.color[1] != cn[1] or self.color[2] != cn[2] \
+            or self.x > graphics.width or self.y > graphics.height \
+            or self.x < graphics.canvas_x or self.y < graphics.canvas_y \
+            or (xn, yn) in self.visited:
+            return True
             
     def explode(self):
-        print "esplode!"
+        graphics.set_color(1,0,0,1)
+        graphics.draw_ellipse(  self.x-self.explode_radius,self.y-self.explode_radius,
+                                self.x+self.explode_radius,self.y+self.explode_radius)
         self.running = False
         
     def turn_left(self):
@@ -85,5 +92,5 @@ class Tron(tool.Tool):
 default = Tron()
 priority = 95
 group = 'WTF'
-image = resources.Rectangle
+image = resources.Tron
 cursor = graphics.cursor['CURSOR_CROSSHAIR']
