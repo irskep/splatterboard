@@ -79,8 +79,10 @@ class PaintingEnvironment:
             #divider lines
             graphics.set_color(0,0,0,1)
             graphics.set_line_width(1.0)
+            graphics.call_twice(pyglet.gl.glDisable,pyglet.gl.GL_BLEND)
             graphics.draw_line(0, graphics.canvas_y, graphics.width, graphics.canvas_y)
             graphics.draw_line(graphics.canvas_x, graphics.canvas_y, graphics.canvas_x, graphics.height)
+            graphics.call_twice(pyglet.gl.glEnable,pyglet.gl.GL_BLEND)
         self.drawn_this_frame = False
     
     def on_key_press(self, symbol, modifiers):

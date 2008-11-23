@@ -64,7 +64,7 @@ class Spray(tool.Tool):
     def make_point(self):
         # Pick somewhere random to draw
         # based on (x,y), radius, and brush_size.
-        radius = self.radius * graphics.brush_size
+        radius = max(self.radius * graphics.brush_size, 8)
         where = random.random() * radius
         angle = random.random() * math.pi * 2
         x = self.x + math.cos(angle) * where
@@ -74,5 +74,5 @@ class Spray(tool.Tool):
 default = Spray()
 priority = 62
 group = 'Drawing'
-image = resources.Spray
+image = resources.Spraycan
 cursor = None

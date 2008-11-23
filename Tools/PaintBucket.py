@@ -11,6 +11,8 @@ class NormalPainter:
     pixels_old = []
     pixel_colors_old = []
     pixel_data = None
+    
+    start_x, start_y = 0,0
 
     drawing = False
     should_init = True
@@ -42,6 +44,7 @@ class NormalPainter:
             self.drawing = True
             x -= graphics.canvas_x
             y -= graphics.canvas_y
+            self.start_x, self.start_y = x, y
             self.original_color = self.get_pixel(x,y)
             difference =  abs(graphics.fill_color[0]-self.original_color[0])
             difference += abs(graphics.fill_color[1]-self.original_color[1])
@@ -137,23 +140,46 @@ class NoisyPainter(NormalPainter):
             graphics.fill_color[2]+lightness
         ]
 
+class CheckerPainter(NoisyPainter):
+    def color_function(self, x, y):
+        if (x/10 + y/10) % 2 == 0: return graphics.fill_color[0:3]
+        return graphics.line_color[0:3]
+
+class TargetPainter(NoisyPainter):
+    def color_function(self, x, y):
+        if math.sqrt((self.start_x-x)*(self.start_x-x)+(self.start_y-y)*(self.start_y-y)) % 100 < 50:
+            return graphics.fill_color[0:3]
+        return graphics.line_color[0:3]
+
 class PaintBucket(tool.Tool):
     """Simple paint bucket tool"""
     
     def select(self):
         self.painter_normal = NormalPainter()
         self.painter_noisy = NoisyPainter()
+        self.painter_checker = CheckerPainter()
+        self.painter_target = TargetPainter()
         self.painter = self.painter_normal
         self.button_group = gui.ButtonGroup()
-        self.button_normal = gui.ImageButton(resources.SquareButton, self.switch_normal, 
-                                            5, 60, image_2 = resources.PaintBucket, 
-                                            parent_group=self.button_group)
-        self.button_noisy = gui.ImageButton(resources.SquareButton, self.switch_noisy, 
-                                            55, 60, image_2 = resources.PaintBucket_noise, 
-                                            parent_group=self.button_group)
-        tool.controlspace.add(self.button_normal)
-        tool.controlspace.add(self.button_noisy)
-        self.button_normal.select()
+    
+        def painter_switch_function(painter):
+            def temp_func():
+                self.painter.stop()
+                self.painter = painter
+                self.painter.init()
+            return temp_func
+        
+        images = [resources.PaintBucket, resources.PaintBucket_noise, 
+                    resources.PaintBucket_checker, resources.PaintBucket_target]
+        painters = [self.painter_normal, self.painter_noisy, self.painter_checker, self.painter_target]
+        buttons = []
+        
+        for i in xrange(len(painters)):
+            temp_button = gui.ImageButton(resources.SquareButton, painter_switch_function(painters[i]),
+                                5+i*50, 55, image_2 = images[i], parent_group = self.button_group)
+            buttons.append(temp_button)
+            tool.controlspace.add(temp_button)
+        buttons[0].select()
         self.painter.init()
     
     def start_drawing(self, x, y):
@@ -161,16 +187,6 @@ class PaintBucket(tool.Tool):
     
     def unselect(self):
         self.painter.stop()
-    
-    def switch_normal(self):
-        self.painter.stop()
-        self.painter = self.painter_normal
-        self.painter.init()
-    
-    def switch_noisy(self):
-        self.painter.stop()
-        self.painter = self.painter_noisy
-        self.painter.init()
 
 default = PaintBucket()
 priority = 69
