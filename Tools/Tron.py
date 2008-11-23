@@ -53,7 +53,6 @@ class Tron(tool.Tool):
             self.do_tron(iters=iters-1)
             
     def do_tron_ai(self):
-        return
         if random.randint(0, 19) < 1 or (random.randint(0, 19) < 1 and self.check_ahead(random.randint(1, 10))):
             self.turn_randomly()
             
