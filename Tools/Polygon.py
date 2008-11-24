@@ -45,14 +45,15 @@ class Polygon(tool.Tool):
     
     def keep_drawing(self, x, y, dx, dy):
         self.rx, self.ry = x, y
+        poly = self.generate_polygon(self.x,self.y,self.rx,self.ry,self.sides)
         graphics.set_color(1,1,1,1)
         graphics.draw_image(self.canvas_pre,graphics.canvas_x,graphics.canvas_y)
         graphics.set_line_width(graphics.line_size)
         graphics.set_color(color=graphics.fill_color)
-        graphics.draw_polygon(self.generate_polygon(self.x,self.y,self.rx,self.ry,self.sides));
+        graphics.draw_polygon(poly);
         graphics.set_color(color=graphics.line_color)
-        graphics.draw_polygon_outline(self.generate_polygon(self.x,self.y,self.rx,self.ry,self.sides));
-        graphics.draw_points(self.generate_polygon(self.x,self.y,self.rx,self.ry,self.sides));
+        graphics.draw_polygon_outline(poly);
+        graphics.draw_points(poly);
     
     def stop_drawing(self, x, y):
         self.keep_drawing(x, y, 0, 0)

@@ -3,26 +3,31 @@ from settings import *
 import time, random, math
 
 class NormalPainter:
-    original_color = (1.0, 1.0, 1.0, 1.0)
-    threshold = 0.1
-    canvas_pre = None
-    pixels = []
-    pixel_colors = []
-    pixels_old = []
-    pixel_colors_old = []
-    pixel_data = None
+    def __init__(self):
+        self.original_color = (1.0, 1.0, 1.0, 1.0)
+        self.threshold = 0.1
+        self.canvas_pre = None
+        self.pixels = []
+        self.pixel_colors = []
+        self.pixels_old = []
+        self.pixel_colors_old = []
+        self.pixel_data = None
     
-    start_x, start_y = 0,0
+        self.start_x, start_y = 0,0
 
-    drawing = False
-    should_init = True
-    should_stop = False
+        self.drawing = False
+        self.should_init = True
+        self.should_stop = False
+    
+        self.fill_same_color = False
+        self.point_size = 1.0
+        self.smooth_points = False
     
     def init(self):
+        print "init"
         if not self.should_init: return
         self.should_init = False
         graphics.set_cursor(graphics.cursor['CURSOR_WAIT'])
-        #Get canvas as image. Essentially an alias for image.get_buffer_manager().get_color_buffer().get_image_data().
         self.canvas_pre = graphics.get_canvas()
         #Convert to array
         data = ""
@@ -36,6 +41,9 @@ class NormalPainter:
         pos = y * self.canvas_pre.width * 4 + x * 4
         return (self.pixel_data[pos]/255.0,  self.pixel_data[pos+1]/255.0,
                 self.pixel_data[pos+2]/255.0,self.pixel_data[pos+3]/255.0)
+    
+    def get_pixel_array_pos(self,x,y):
+        return y * self.canvas_pre.width * 4 + x * 4
 
     def start_drawing(self, x, y):
         if self.drawing:
@@ -49,7 +57,7 @@ class NormalPainter:
             difference =  abs(graphics.fill_color[0]-self.original_color[0])
             difference += abs(graphics.fill_color[1]-self.original_color[1])
             difference += abs(graphics.fill_color[2]-self.original_color[2])
-            if self.test_difference(difference):
+            if not self.fill_same_color and difference < self.threshold:
                 self.drawing = False
                 self.init()
                 return
@@ -70,17 +78,18 @@ class NormalPainter:
             for x, y, ox, oy in self.to_check:
                 if x >= 0 and y >= 0 and x < self.canvas_pre.width and y < self.canvas_pre.height:
                     if self.checked_pixels[x][y] == 0:
-                        color = self.get_pixel(x,y)
+                        #color = self.get_pixel(x,y)
+                        pos = self.get_pixel_array_pos(x,y)
+                        r, g = self.pixel_data[pos]/255.0, self.pixel_data[pos+1]/255.0
+                        b, a = self.pixel_data[pos+2]/255.0, self.pixel_data[pos+3]/255.0
                         self.checked_pixels[x][y] = 1
-                        difference =  abs(color[0]-self.original_color[0])
-                        difference += abs(color[1]-self.original_color[1])
-                        difference += abs(color[2]-self.original_color[2])
+                        difference =  abs(r-self.original_color[0])
+                        difference += abs(g-self.original_color[1])
+                        difference += abs(b-self.original_color[2])
                         if difference < self.threshold:
-                            self.pixels.extend((x+graphics.canvas_x,y+graphics.canvas_y))
-                            #alpha = 1.0 - difference / self.threshold
-                            alpha = 1.0
-                            self.pixel_colors.extend(self.color_function(x, y))
-                            self.pixel_colors.append(alpha)
+                            if self.point_test(x,y):
+                                self.pixels.extend((x+graphics.canvas_x,y+graphics.canvas_y))
+                                self.pixel_colors.extend(self.color_function(x, y))
                             if x-1 != ox: self.new_pixels.append((x-1,y,x,y))
                             if x+1 != ox: self.new_pixels.append((x+1,y,x,y))
                             if y-1 != oy: self.new_pixels.append((x,y-1,x,y))
@@ -99,11 +108,11 @@ class NormalPainter:
 
     def draw_fill(self):
         graphics.enter_canvas_mode()
-        graphics.set_line_width(1.0)
-        graphics.call_twice(pyglet.gl.glDisable, pyglet.gl.GL_POINT_SMOOTH)
+        graphics.set_line_width(self.point_size)
+        if not self.smooth_points: graphics.call_twice(pyglet.gl.glDisable, pyglet.gl.GL_POINT_SMOOTH)
         graphics.draw_points(self.pixels_old, self.pixel_colors_old)
         graphics.draw_points(self.pixels, self.pixel_colors)
-        graphics.call_twice(pyglet.gl.glEnable, pyglet.gl.GL_POINT_SMOOTH)
+        if not self.smooth_points: graphics.call_twice(pyglet.gl.glEnable, pyglet.gl.GL_POINT_SMOOTH)
         self.pixels_old, self.pixel_colors_old = self.pixels, self.pixel_colors
         self.pixels, self.pixel_colors = [], []
         graphics.exit_canvas_mode()
@@ -126,30 +135,54 @@ class NormalPainter:
         if difference < self.threshold: return True
     
     def color_function(self, x, y):
-        return graphics.fill_color[0:3]
+        return graphics.fill_color
+    
+    def point_test(self, x, y):
+        return True
 
 class NoisyPainter(NormalPainter):
-    def test_difference(self, difference):
-        return False
+    def __init__(self):
+        NormalPainter.__init__(self)
+        self.fill_same_color = True
     
     def color_function(self, x, y):
         lightness = random.random()*0.4-0.2
         return [
             graphics.fill_color[0]+lightness,
             graphics.fill_color[1]+lightness,
-            graphics.fill_color[2]+lightness
+            graphics.fill_color[2]+lightness,
+            graphics.fill_color[3]
         ]
 
-class CheckerPainter(NoisyPainter):
+class CheckerPainter(NormalPainter):
+    def __init__(self):
+        NormalPainter.__init__(self)
+        self.fill_same_color = True
+    
     def color_function(self, x, y):
-        if (x/10 + y/10) % 2 == 0: return graphics.fill_color[0:3]
-        return graphics.line_color[0:3]
+        if (x/10 + y/10) % 2 == 0: return graphics.fill_color
+        return graphics.line_color
 
-class TargetPainter(NoisyPainter):
+class TargetPainter(NormalPainter):
+    def __init__(self):
+        NormalPainter.__init__(self)
+        self.fill_same_color = True
+    
     def color_function(self, x, y):
         if math.sqrt((self.start_x-x)*(self.start_x-x)+(self.start_y-y)*(self.start_y-y)) % 100 < 50:
-            return graphics.fill_color[0:3]
-        return graphics.line_color[0:3]
+            return graphics.fill_color
+        return graphics.line_color
+
+class DotPainter(NormalPainter):
+    def __init__(self):
+        NormalPainter.__init__(self)
+        self.point_size = 5
+        self.point_spread = 25
+        self.fill_same_color = True
+        self.smooth_points = True
+    
+    def point_test(self, x, y):
+        return random.randint(0,self.point_size * self.point_spread) == 0
 
 class PaintBucket(tool.Tool):
     """Simple paint bucket tool"""
@@ -159,6 +192,7 @@ class PaintBucket(tool.Tool):
         self.painter_noisy = NoisyPainter()
         self.painter_checker = CheckerPainter()
         self.painter_target = TargetPainter()
+        self.painter_dot = DotPainter()
         self.painter = self.painter_normal
         self.button_group = gui.ButtonGroup()
     
@@ -166,12 +200,13 @@ class PaintBucket(tool.Tool):
             def temp_func():
                 self.painter.stop()
                 self.painter = painter
-                self.painter.init()
+                painter.__init__()
+                painter.init()
             return temp_func
         
-        images = [resources.PaintBucket, resources.PaintBucket_noise, 
-                    resources.PaintBucket_checker, resources.PaintBucket_target]
-        painters = [self.painter_normal, self.painter_noisy, self.painter_checker, self.painter_target]
+        images = [resources.PaintBucket, resources.PaintBucket_noise, resources.PaintBucket_checker, 
+                    resources.PaintBucket_target, resources.PaintBucket_dot]
+        painters = [self.painter_normal, self.painter_noisy, self.painter_checker, self.painter_target, self.painter_dot]
         buttons = []
         
         for i in xrange(len(painters)):

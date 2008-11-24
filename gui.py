@@ -2,13 +2,13 @@
 Buttons, etc.
 """
 
-import pyglet, resources, graphics
+import pyglet, resources, graphics, math
 from settings import settings
 from dialogs import *
 
 class Button():
     """Basic button class. Ignore all methods except the constructor."""
-    def __init__(self, image, action, x, y, text="", parent_group = None, more_draw = None, select_when_pressed = True):
+    def __init__(self, image, action, x, y, text="", parent_group = None, more_draw = None):
         """
         @param image:   Button background image
         @param action:  Function to call when pressed
@@ -29,14 +29,13 @@ class Button():
         self.width = self.image.width
         self.height = self.image.height
         self.more_draw = more_draw
-        self.select_when_pressed = select_when_pressed
         self.parent_group = parent_group
         if self.parent_group != None: self.parent_group.add(self)
 
     def draw(self):
         """Internal use only."""
         color = (1,1,1,1)
-        if self.select_when_pressed and self.selected: color = (0.8, 0.8, 0.8, 1)
+        if self.parent_group != None and self.selected: color = (0.8, 0.8, 0.8, 1)
         if self.pressed: color = (0.7, 0.7, 0.7, 1)
         graphics.set_color(color=color)
         graphics.draw_image(self.image,self.x,self.y)
@@ -76,13 +75,47 @@ class Button():
         """
         return x >= self.x and y >= self.y and x <= self.x + self.image.width and y <= self.y + self.image.height
 
+class PolygonButton(Button):
+    def __init__(self, image, action, x, y, parent_group = None, fill=True, outline=True, sides=5):
+        Button.__init__(self, image, action, x, y, "", parent_group, None)
+        self.fill = fill
+        self.outline = outline
+        self.sides = sides
+    
+    def draw(self):
+        color = (1,1,1,1)
+        if self.parent_group != None and self.selected: color = (0.8, 0.8, 0.8, 1)
+        if self.pressed: color = (0.7, 0.7, 0.7, 1)
+        graphics.set_color(color=color)
+        graphics.draw_image(self.image,self.x,self.y)
+        
+        x, y = self.x+self.width/2, self.y+self.height/2
+        poly = self.generate_polygon(x,y,x,self.y+self.height*0.9,self.sides)
+        if self.fill:
+            graphics.set_color(color=graphics.fill_color)
+            graphics.draw_polygon(poly)
+        if self.outline:
+            graphics.set_line_width(2)
+            graphics.set_color(color=graphics.line_color)
+            graphics.draw_polygon_outline(poly)
+            graphics.draw_points(poly)
+    
+    def generate_polygon(self, x, y, rx, ry, n):
+        radius = math.sqrt((rx - x)*(rx - x)+(ry - y)*(ry - y))
+        theta = math.atan2(ry - y, rx - x)
+        li = []
+        for i in xrange(n):
+            theta += 2 * math.pi / n
+            li.extend([radius * math.cos(theta) + x, radius * math.sin(theta) + y])
+        return li
+
 class ImageButton(Button):
     """
     Like Button, takes two images as arguments instead of more_draw. ImageButtons are much more common than regular Buttons in Splatterboard because the interface is almost entirely without text.
     
     Most ImageButtons will want to use resources.SquareButton as the background image.
     """
-    def __init__(self, image, action, x, y, parent_group = None, image_2=None, select_when_pressed = True):
+    def __init__(self, image, action, x, y, parent_group = None, image_2=None):
         """
         @param image: Button background image
         @param action: Function to call when pressed
@@ -92,12 +125,12 @@ class ImageButton(Button):
         @param select_when_pressed: Make button darker when it was the last button clicked. Make False for "normal" button behavior, leave True for radio button behavior. Defaults to True because almost all buttons are radio buttons in Splatterboard.
         """
         #For some reason, Python doesn't like me to use super() here.
-        Button.__init__(self, image, action, x, y, "", parent_group, None, select_when_pressed)
+        Button.__init__(self, image, action, x, y, "", parent_group, None)
         self.image_2 = image_2
 
     def draw(self):
         color = (1,1,1,1)
-        if self.select_when_pressed and self.selected: color = (0.8, 0.8, 0.8, 1)
+        if self.parent_group != None and self.selected: color = (0.8, 0.8, 0.8, 1)
         if self.pressed: color = (0.7, 0.7, 0.7, 1)
         graphics.set_color(color=color)
         graphics.draw_image(self.image,self.x,self.y)

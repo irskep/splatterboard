@@ -25,6 +25,8 @@ _in_canvas_mode = False
 
 line_color = (0.0, 0.0, 0.0, 1.0)
 fill_color = (1.0, 1.0, 1.0, 1.0)
+outline_shapes = True
+fill_shapes = True
 #: 0 for line_color, 1 for fill_color
 selected_color = 1
 brush_size = 10.0

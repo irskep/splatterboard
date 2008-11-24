@@ -28,15 +28,32 @@ class PaintingEnvironment:
         self.open_button = gui.Button(resources.Button, self.open, 
                                         self.save_button.x, resources.Button.height+10, text='Open')
         self.swap_button = gui.ImageButton(resources.ColorSwitch, self.swap_colors,
-                    graphics.width-440, settings.settings['buttonbar_height']/2-resources.ColorSwitch.height/2)
+                                        graphics.width-440, graphics.canvas_y/2-resources.ColorSwitch.height/2)
         self.undo_button = gui.ImageButton(resources.Rewind, self.undo, 5, graphics.canvas_y+5)
-        self.buttons = [self.save_button, self.open_button, self.swap_button, self.undo_button]
+        
+        
+        self.fill_outline_button_group = gui.ButtonGroup()
+        
+        self.outline_button = gui.PolygonButton(resources.FillOutlineButton_background, self.set_outline,
+                                        graphics.width-480, 2, fill=False,
+                                        parent_group=self.fill_outline_button_group)
+        self.fill_button = gui.PolygonButton(resources.FillOutlineButton_background, self.set_fill,
+                                        graphics.width-480, 37, outline=False,
+                                        parent_group=self.fill_outline_button_group)
+        self.fill_outline_button = gui.PolygonButton(resources.FillOutlineButton_background, self.set_fill_outline,
+                                        graphics.width-480, 72, parent_group=self.fill_outline_button_group)
+        self.fill_outline_button.select()
+                                        
+                                        
+                                        
+        self.buttons = [self.save_button, self.open_button, self.swap_button, self.undo_button, 
+                        self.outline_button, self.fill_button, self.fill_outline_button]
         
         for button in self.buttons: graphics.main_window.push_handlers(button)
         
         #init tool control space
         self.toolbar_group = gui.ButtonGroup()
-        tool.controlspace.max_x = self.swap_button.x-5
+        tool.controlspace.max_x = self.outline_button.x-5
         tool.controlspace.max_y = graphics.canvas_y
         graphics.main_window.push_handlers(tool.controlspace)
         
@@ -48,7 +65,7 @@ class PaintingEnvironment:
         self.load_tools()
         
         #color picker stuff
-        self.colorpicker = colorpicker.ColorPicker(graphics.width-370,10,240,90,step_x=15,step_y=15)
+        self.colorpicker = colorpicker.ColorPicker(graphics.width-370,10,15*12,15*6,step_x=15,step_y=15)
         self.colordisplay = gui.ColorDisplay(graphics.width-410, 10, 25, 90)
         graphics.main_window.push_handlers(self.colorpicker, self.colordisplay)
         
@@ -240,6 +257,18 @@ class PaintingEnvironment:
     
     def swap_colors(self):
         graphics.fill_color, graphics.line_color = graphics.line_color, graphics.fill_color
+    
+    def set_outline(self):
+        graphics.outline_shapes = True
+        graphics.fill_shapes = False
+    
+    def set_fill(self):
+        graphics.outline_shapes = False
+        graphics.fill_shapes = True
+    
+    def set_fill_outline(self):
+        graphics.outline_shapes = True
+        graphics.fill_shapes = True
     
     def open(self):
         if not settings.settings['fullscreen']:
