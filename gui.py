@@ -16,7 +16,6 @@ class Button():
         @param text:    Label text
         @param parent_group: L{ButtonGroup} that owns this object.
         @param more_draw: Function called immediately after the button is drawn. Use if you want to draw more stuff on top of the button other than an image. See L{tool.generate_brush_selector()} for an example.
-        @param select_when_pressed: Make button darker when it was the last button clicked. Make False for "normal" button behavior, leave True for radio button behavior. Defaults to True because almost all buttons are radio buttons in Splatterboard.
         """
         self.action = action
         self.x, self.y = x, y
@@ -73,9 +72,40 @@ class Button():
         Check if (x,y) is inside the button.
         @rtype: boolean
         """
-        return x >= self.x and y >= self.y and x <= self.x + self.image.width and y <= self.y + self.image.height
+        return x >= self.x and y >= self.y and x <= self.x + self.width and y <= self.y + self.height
+
+class ColorButton(Button):
+    """Used for selecting which color the color picker changes."""
+    def __init__(self, x, y, w, h, parent_group = None, which_color = 0):
+        self.x, self.y = x, y
+        self.width, self.height = w, h
+        self.which_color = which_color
+        self.action = self.get_color
+        self.selected = False
+        self.pressed = False
+        self.parent_group = parent_group
+        if self.parent_group != None: self.parent_group.add(self)
+    
+    def draw(self):
+        if self.which_color == 0: graphics.set_color(color=graphics.line_color)
+        else: graphics.set_color(color=graphics.fill_color)
+        
+        graphics.draw_rect(self.x, self.y, self.x+self.width, self.y+self.height)
+        
+        if self.selected:
+            graphics.set_color(1,1,1,1)
+            graphics.draw_ellipse_outline(self.x+5, self.y+5, self.x+self.width-5, self.y+self.height-5, linesize=1)
+            graphics.set_color(0,0,0,1)
+            graphics.draw_ellipse_outline(self.x+7, self.y+7, self.x+self.width-7, self.y+self.height-7, linesize=1)
+        graphics.set_line_width(1.0)    
+        graphics.set_color(0,0,0,1)
+        graphics.draw_rect_outline(self.x, self.y, self.x+self.width, self.y+self.height)
+    
+    def get_color(self):
+        graphics.selected_color = self.which_color
 
 class PolygonButton(Button):
+    """Used for turning outline/fill on and off."""
     def __init__(self, image, action, x, y, parent_group = None, fill=True, outline=True, sides=5):
         Button.__init__(self, image, action, x, y, "", parent_group, None)
         self.fill = fill
@@ -122,7 +152,6 @@ class ImageButton(Button):
         @param x, y: Bottom left corner position
         @param parent_group: L{ButtonGroup} that owns this object
         @param image_2: Second image to draw over background.
-        @param select_when_pressed: Make button darker when it was the last button clicked. Make False for "normal" button behavior, leave True for radio button behavior. Defaults to True because almost all buttons are radio buttons in Splatterboard.
         """
         #For some reason, Python doesn't like me to use super() here.
         Button.__init__(self, image, action, x, y, "", parent_group, None)
@@ -165,40 +194,3 @@ class ButtonGroup():
                 button.selected = True
             else:
                 button.selected = False
-
-class ColorDisplay():
-    """
-    The button that selects whether the user is changing the fill color or the line color. Entirely uninteresting to pretty much everyone.
-    """
-    def __init__(self, x, y, width, height):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-    
-    def draw(self):
-        graphics.set_color(color=graphics.line_color)
-        graphics.draw_rect(self.x,self.y+self.height,self.x+self.width,self.y+self.height/2+2)
-        graphics.set_color(color=graphics.fill_color)
-        graphics.draw_rect(self.x,self.y,self.x+self.width,self.y+self.height/2-2)
-        if graphics.selected_color == 0: graphics.set_line_width(3.0)
-        else: graphics.set_line_width(1.0)
-        #graphics.set_color(color=graphics.fill_color)
-        graphics.set_color(color=(0,0,0,1))
-        graphics.draw_rect_outline(self.x,self.y+self.height,self.x+self.width,self.y+self.height/2+2)
-        if graphics.selected_color == 1: graphics.set_line_width(3.0)
-        else: graphics.set_line_width(1.0)
-        #graphics.set_color(color=graphics.line_color)
-        graphics.set_color(color=(0,0,0,1))
-        graphics.draw_rect_outline(self.x,self.y,self.x+self.width,self.y+self.height/2-2)
-        graphics.set_line_width(1.0)
-    
-    def on_mouse_press(self, x, y, button, modifiers):
-        if self.coords_inside(x,y):
-            if y < self.y + self.height/2:
-                graphics.selected_color = 1
-            else:
-                graphics.selected_color = 0
-    
-    def coords_inside(self, x, y):
-        return x >= self.x and y >= self.y and x <= self.x + self.width and y <= self.y + self.height

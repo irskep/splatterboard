@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>gui.ImageButton</title>
+  <title>gui.ColorButton</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -40,7 +40,7 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="gui-module.html">Module&nbsp;gui</a> ::
-        Class&nbsp;ImageButton
+        Class&nbsp;ColorButton
       </span>
     </td>
     <td>
@@ -48,26 +48,22 @@
         <!-- hide/show private -->
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="gui.ImageButton-class.html"
+            >]&nbsp;|&nbsp;<a href="gui.ColorButton-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class ImageButton</h1><p class="nomargin-top"></p>
+<h1 class="epydoc">Class ColorButton</h1><p class="nomargin-top"></p>
 <pre class="base-tree">
 <a href="gui.Button-class.html">Button</a> --+
          |
-        <strong class="uidshort">ImageButton</strong>
+        <strong class="uidshort">ColorButton</strong>
 </pre>
 
 <hr />
-<p>Like Button, takes two images as arguments instead of more_draw. 
-  ImageButtons are much more common than regular Buttons in Splatterboard 
-  because the interface is almost entirely without text.</p>
-  <p>Most ImageButtons will want to use resources.SquareButton as the 
-  background image.</p>
+<p>Used for selecting which color the color picker changes.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -83,13 +79,13 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="gui.ImageButton-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">image</span>,
-        <span class="summary-sig-arg">action</span>,
+          <td><span class="summary-sig"><a href="gui.ColorButton-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">x</span>,
         <span class="summary-sig-arg">y</span>,
+        <span class="summary-sig-arg">w</span>,
+        <span class="summary-sig-arg">h</span>,
         <span class="summary-sig-arg">parent_group</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">image_2</span>=<span class="summary-sig-default">None</span>)</span></td>
+        <span class="summary-sig-arg">which_color</span>=<span class="summary-sig-default">0</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -105,8 +101,24 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="gui.ImageButton-class.html#draw" class="summary-sig-name">draw</a>(<span class="summary-sig-arg">self</span>)</span><br />
+          <td><span class="summary-sig"><a href="gui.ColorButton-class.html#draw" class="summary-sig-name">draw</a>(<span class="summary-sig-arg">self</span>)</span><br />
       Internal use only.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="get_color"></a><span class="summary-sig-name">get_color</span>(<span class="summary-sig-arg">self</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -145,12 +157,12 @@
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">image</span>,
-        <span class="sig-arg">action</span>,
         <span class="sig-arg">x</span>,
         <span class="sig-arg">y</span>,
+        <span class="sig-arg">w</span>,
+        <span class="sig-arg">h</span>,
         <span class="sig-arg">parent_group</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">image_2</span>=<span class="sig-default">None</span>)</span>
+        <span class="sig-arg">which_color</span>=<span class="sig-default">0</span>)</span>
     <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
@@ -165,12 +177,17 @@
         <li><strong class="pname"><code>image</code></strong> - Button background image</li>
         <li><strong class="pname"><code>action</code></strong> - Function to call when pressed</li>
         <li><strong class="pname"><code>x</code></strong>, <strong class="pname"><code>y</code></strong> - Bottom left corner position</li>
+        <li><strong class="pname"><code>text</code></strong> - Label text</li>
         <li><strong class="pname"><code>parent_group</code></strong> - <a href="gui.ButtonGroup-class.html" class="link">ButtonGroup</a>
-          that owns this object</li>
-        <li><strong class="pname"><code>image_2</code></strong> - Second image to draw over background.</li>
+          that owns this object.</li>
+        <li><strong class="pname"><code>more_draw</code></strong> - Function called immediately after the button is drawn. Use if you
+          want to draw more stuff on top of the button other than an image.
+          See <a href="tool-module.html#generate_brush_selector" 
+          class="link">tool.generate_brush_selector()</a> for an example.</li>
     </ul></dd>
     <dt>Overrides:
         <a href="gui.Button-class.html#__init__">Button.__init__</a>
+        <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
   </dl>
 </td></tr></table>

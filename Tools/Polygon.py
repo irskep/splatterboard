@@ -23,11 +23,14 @@ class Polygon(tool.Tool):
         
         def generate_poly_button(x, y, w, h, n):
             def poly_func():
+                offset_y = 0
+                if n == 3: offset_y = -5
+                poly = self.generate_polygon(x+w/2,y+h/2+offset_y,x+w/2,y+h-5+offset_y,n)
                 graphics.set_color(1,1,1,1)
-                graphics.draw_polygon(self.generate_polygon(x+w/2,y+h/2,x+w/2,y+h-5,n))
+                graphics.draw_polygon(poly)
                 graphics.set_color(0,0,0,1)
                 graphics.set_line_width(1)
-                graphics.draw_polygon_outline(self.generate_polygon(x+w/2,y+h/2,x+w/2,y+h-3,n))
+                graphics.draw_polygon_outline(poly)
             return poly_func
         
         w, h = resources.SquareButton.width, resources.SquareButton.height
@@ -48,12 +51,14 @@ class Polygon(tool.Tool):
         poly = self.generate_polygon(self.x,self.y,self.rx,self.ry,self.sides)
         graphics.set_color(1,1,1,1)
         graphics.draw_image(self.canvas_pre,graphics.canvas_x,graphics.canvas_y)
-        graphics.set_line_width(graphics.line_size)
-        graphics.set_color(color=graphics.fill_color)
-        graphics.draw_polygon(poly);
-        graphics.set_color(color=graphics.line_color)
-        graphics.draw_polygon_outline(poly);
-        graphics.draw_points(poly);
+        if graphics.fill_shapes:
+            graphics.set_color(color=graphics.fill_color)
+            graphics.draw_polygon(poly);
+        if graphics.outline_shapes:
+            graphics.set_line_width(graphics.line_size)
+            graphics.set_color(color=graphics.line_color)
+            graphics.draw_polygon_outline(poly);
+            graphics.draw_points(poly);
     
     def stop_drawing(self, x, y):
         self.keep_drawing(x, y, 0, 0)

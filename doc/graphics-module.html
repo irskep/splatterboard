@@ -178,9 +178,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="graphics-module.html#command_wrapper" class="summary-sig-name">command_wrapper</a>(<span class="summary-sig-arg">func</span>)</span><br />
-      Every graphics function that has to do with the act of drawing is 
-      decorated with command_wrapper.</td>
+          <td><span class="summary-sig"><a name="command_wrapper"></a><span class="summary-sig-name">command_wrapper</span>(<span class="summary-sig-arg">func</span>)</span><br />
+      Decorator to wrap all drawing functions in to make them get called 
+      twice</td>
           <td align="right" valign="top">
             
             
@@ -212,7 +212,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="disable_line_stipple"></a><span class="summary-sig-name">disable_line_stipple</span>()</span></td>
+          <td><span class="summary-sig"><a name="disable_line_stipple"></a><span class="summary-sig-name">disable_line_stipple</span>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -245,10 +246,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="draw_ellipse"></a><span class="summary-sig-name">draw_ellipse</span>(<span class="summary-sig-arg">x1</span>,
-        <span class="summary-sig-arg">y1</span>,
-        <span class="summary-sig-arg">x2</span>,
-        <span class="summary-sig-arg">y2</span>)</span></td>
+          <td><span class="summary-sig"><a name="draw_ellipse"></a><span class="summary-sig-name">draw_ellipse</span>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -264,12 +263,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="draw_ellipse_outline"></a><span class="summary-sig-name">draw_ellipse_outline</span>(<span class="summary-sig-arg">x1</span>,
-        <span class="summary-sig-arg">y1</span>,
-        <span class="summary-sig-arg">x2</span>,
-        <span class="summary-sig-arg">y2</span>,
-        <span class="summary-sig-arg">dashed</span>=<span class="summary-sig-default">False</span>)</span><br />
-      Set dashed=True if you want a dashed ellipse outline.</td>
+          <td><span class="summary-sig"><a name="draw_ellipse_outline"></a><span class="summary-sig-name">draw_ellipse_outline</span>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -285,9 +280,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="draw_image"></a><span class="summary-sig-name">draw_image</span>(<span class="summary-sig-arg">img</span>,
-        <span class="summary-sig-arg">x</span>,
-        <span class="summary-sig-arg">y</span>)</span></td>
+          <td><span class="summary-sig"><a name="draw_image"></a><span class="summary-sig-name">draw_image</span>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -320,8 +314,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="draw_label"></a><span class="summary-sig-name">draw_label</span>(<span class="summary-sig-arg">label</span>)</span><br />
-      Draws a Pyglet label.</td>
+          <td><span class="summary-sig"><a name="draw_label"></a><span class="summary-sig-name">draw_label</span>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -337,10 +331,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="draw_line"></a><span class="summary-sig-name">draw_line</span>(<span class="summary-sig-arg">x1</span>,
-        <span class="summary-sig-arg">y1</span>,
-        <span class="summary-sig-arg">x2</span>,
-        <span class="summary-sig-arg">y2</span>)</span></td>
+          <td><span class="summary-sig"><a name="draw_line"></a><span class="summary-sig-name">draw_line</span>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -356,8 +348,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="graphics-module.html#draw_points" class="summary-sig-name">draw_points</a>(<span class="summary-sig-arg">points</span>,
-        <span class="summary-sig-arg">colors</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td><span class="summary-sig"><a name="draw_points"></a><span class="summary-sig-name">draw_points</span>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -373,8 +365,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="graphics-module.html#draw_polygon" class="summary-sig-name">draw_polygon</a>(<span class="summary-sig-arg">points</span>,
-        <span class="summary-sig-arg">colors</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td><span class="summary-sig"><a name="draw_polygon"></a><span class="summary-sig-name">draw_polygon</span>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -390,8 +382,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="graphics-module.html#draw_polygon_outline" class="summary-sig-name">draw_polygon_outline</a>(<span class="summary-sig-arg">points</span>,
-        <span class="summary-sig-arg">colors</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td><span class="summary-sig"><a name="draw_polygon_outline"></a><span class="summary-sig-name">draw_polygon_outline</span>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -407,7 +399,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="draw_quad"></a><span class="summary-sig-name">draw_quad</span>(<span class="summary-sig-arg">*args</span>)</span></td>
+          <td><span class="summary-sig"><a name="draw_quad"></a><span class="summary-sig-name">draw_quad</span>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -423,10 +416,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="draw_rect"></a><span class="summary-sig-name">draw_rect</span>(<span class="summary-sig-arg">x1</span>,
-        <span class="summary-sig-arg">y1</span>,
-        <span class="summary-sig-arg">x2</span>,
-        <span class="summary-sig-arg">y2</span>)</span></td>
+          <td><span class="summary-sig"><a name="draw_rect"></a><span class="summary-sig-name">draw_rect</span>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -442,10 +433,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="draw_rect_outline"></a><span class="summary-sig-name">draw_rect_outline</span>(<span class="summary-sig-arg">x1</span>,
-        <span class="summary-sig-arg">y1</span>,
-        <span class="summary-sig-arg">x2</span>,
-        <span class="summary-sig-arg">y2</span>)</span></td>
+          <td><span class="summary-sig"><a name="draw_rect_outline"></a><span class="summary-sig-name">draw_rect_outline</span>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -461,8 +450,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="enable_line_stipple"></a><span class="summary-sig-name">enable_line_stipple</span>()</span><br />
-      Makes lines dashed.</td>
+          <td><span class="summary-sig"><a name="enable_line_stipple"></a><span class="summary-sig-name">enable_line_stipple</span>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -566,8 +555,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="graphics-module.html#init_stencil_mode" class="summary-sig-name">init_stencil_mode</a>()</span><br />
-      Stencil mode.</td>
+          <td><span class="summary-sig"><a name="init_stencil_mode"></a><span class="summary-sig-name">init_stencil_mode</span>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -583,7 +572,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="reset_stencil_mode"></a><span class="summary-sig-name">reset_stencil_mode</span>()</span></td>
+          <td><span class="summary-sig"><a name="reset_stencil_mode"></a><span class="summary-sig-name">reset_stencil_mode</span>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -599,11 +589,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="set_color"></a><span class="summary-sig-name">set_color</span>(<span class="summary-sig-arg">r</span>=<span class="summary-sig-default">0.0</span>,
-        <span class="summary-sig-arg">g</span>=<span class="summary-sig-default">0.0</span>,
-        <span class="summary-sig-arg">b</span>=<span class="summary-sig-default">0.0</span>,
-        <span class="summary-sig-arg">a</span>=<span class="summary-sig-default">1.0</span>,
-        <span class="summary-sig-arg">color</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td><span class="summary-sig"><a name="set_color"></a><span class="summary-sig-name">set_color</span>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -653,8 +640,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="set_line_width"></a><span class="summary-sig-name">set_line_width</span>(<span class="summary-sig-arg">width</span>)</span><br />
-      Calls glLineWidth() and glPointSize().</td>
+          <td><span class="summary-sig"><a name="set_line_width"></a><span class="summary-sig-name">set_line_width</span>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -688,7 +675,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="stop_drawing_stencil"></a><span class="summary-sig-name">stop_drawing_stencil</span>()</span></td>
+          <td><span class="summary-sig"><a name="stop_drawing_stencil"></a><span class="summary-sig-name">stop_drawing_stencil</span>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
           <td align="right" valign="top">
             
             
@@ -767,6 +755,13 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a name="fill_shapes"></a><span class="summary-name">fill_shapes</span> = <code title="True">True</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="height"></a><span class="summary-name">height</span> = <code title="0">0</code>
     </td>
   </tr>
@@ -789,6 +784,13 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="main_window"></a><span class="summary-name">main_window</span> = <code title="None">None</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="outline_shapes"></a><span class="summary-name">outline_shapes</span> = <code title="True">True</code>
     </td>
   </tr>
 <tr>
@@ -863,28 +865,6 @@
   </dl>
 </td></tr></table>
 </div>
-<a name="command_wrapper"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">command_wrapper</span>(<span class="sig-arg">func</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Every graphics function that has to do with the act of drawing is 
-  decorated with command_wrapper. The command_wrapper functions itself can 
-  actually be one of two things depending on the user's operating system 
-  and fullscreen settings.</p>
-  <dl class="fields">
-  </dl>
-</td></tr></table>
-</div>
 <a name="draw_all_again"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -902,81 +882,6 @@
   <p>Call all functions in the queue. Used internally, do not call 
   this.</p>
   <dl class="fields">
-  </dl>
-</td></tr></table>
-</div>
-<a name="draw_points"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">draw_points</span>(<span class="sig-arg">points</span>,
-        <span class="sig-arg">colors</span>=<span class="sig-default">None</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  
-  <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>points</code></strong> - A list formatted like [x1, y1, x2, y2...]</li>
-        <li><strong class="pname"><code>colors</code></strong> - A list formatted like [r1, g1, b1, a1, r2, g2, b2 a2...]</li>
-    </ul></dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="draw_polygon"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">draw_polygon</span>(<span class="sig-arg">points</span>,
-        <span class="sig-arg">colors</span>=<span class="sig-default">None</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  
-  <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>points</code></strong> - A list formatted like [x1, y1, x2, y2...]</li>
-        <li><strong class="pname"><code>colors</code></strong> - A list formatted like [r1, g1, b1, a1, r2, g2, b2 a2...]</li>
-    </ul></dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="draw_polygon_outline"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">draw_polygon_outline</span>(<span class="sig-arg">points</span>,
-        <span class="sig-arg">colors</span>=<span class="sig-default">None</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  
-  <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>points</code></strong> - A list formatted like [x1, y1, x2, y2...]</li>
-        <li><strong class="pname"><code>colors</code></strong> - A list formatted like [r1, g1, b1, a1, r2, g2, b2 a2...]</li>
-    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -1017,25 +922,6 @@
   
   <p>Returns the entire screen as an image_data() view. (Treat it like a 
   regular image.)</p>
-  <dl class="fields">
-  </dl>
-</td></tr></table>
-</div>
-<a name="init_stencil_mode"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">init_stencil_mode</span>()</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Stencil mode. Umm, I will explain this later.</p>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -1117,7 +1003,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Nov 22 22:43:52 2008
+    Generated by Epydoc 3.0.1 on Mon Nov 24 13:15:09 2008
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

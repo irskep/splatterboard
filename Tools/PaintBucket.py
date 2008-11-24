@@ -24,7 +24,6 @@ class NormalPainter:
         self.smooth_points = False
     
     def init(self):
-        print "init"
         if not self.should_init: return
         self.should_init = False
         graphics.set_cursor(graphics.cursor['CURSOR_WAIT'])

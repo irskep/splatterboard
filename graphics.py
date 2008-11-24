@@ -329,10 +329,11 @@ def draw_ellipse(x1, y1, x2, y2):
     pyglet.graphics.draw(len(points)/2, pyglet.gl.GL_TRIANGLE_FAN, ('v2f', points))
 
 @command_wrapper
-def draw_ellipse_outline(x1, y1, x2, y2, dashed=False):
+def draw_ellipse_outline(x1, y1, x2, y2, dashed=False, linesize=-1):
     """Set dashed=True if you want a dashed ellipse outline."""
+    if linesize == -1: linesize = line_size #set to global line size
     if abs(x2-x1) < 1.0 or abs(y2-y1) < 1.0: return
-    w2 = line_size / 2.0
+    w2 = linesize / 2.0
     x_dir = 1 if x2 > x1 else -1
     y_dir = 1 if y2 > y1 else -1
 
@@ -355,7 +356,7 @@ def draw_ellipse_outline(x1, y1, x2, y2, dashed=False):
     points_outer = concat(points_outer)
 
     pyglet.gl.glLineWidth(1)
-    if line_size > 1:
+    if linesize > 1:
         pyglet.graphics.draw(len(points_stroke)/2,
                 pyglet.gl.GL_TRIANGLE_STRIP, ('v2f', points_stroke))
         pyglet.graphics.draw(len(points_inner)/2,

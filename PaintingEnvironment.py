@@ -33,7 +33,6 @@ class PaintingEnvironment:
         
         
         self.fill_outline_button_group = gui.ButtonGroup()
-        
         self.outline_button = gui.PolygonButton(resources.FillOutlineButton_background, self.set_outline,
                                         graphics.width-480, 2, fill=False,
                                         parent_group=self.fill_outline_button_group)
@@ -43,11 +42,17 @@ class PaintingEnvironment:
         self.fill_outline_button = gui.PolygonButton(resources.FillOutlineButton_background, self.set_fill_outline,
                                         graphics.width-480, 72, parent_group=self.fill_outline_button_group)
         self.fill_outline_button.select()
-                                        
-                                        
-                                        
+        
+        self.color_button_group = gui.ButtonGroup()
+        self.color_fill_button = gui.ColorButton(graphics.width-410, 10, 35, 35, 
+                                                    parent_group = self.color_button_group, which_color=1)
+        self.color_line_button = gui.ColorButton(graphics.width-410, 65, 35, 35, 
+                                                    parent_group = self.color_button_group, which_color=0)
+        self.color_fill_button.select()
+        
         self.buttons = [self.save_button, self.open_button, self.swap_button, self.undo_button, 
-                        self.outline_button, self.fill_button, self.fill_outline_button]
+                        self.outline_button, self.fill_button, self.fill_outline_button,
+                        self.color_fill_button, self.color_line_button]
         
         for button in self.buttons: graphics.main_window.push_handlers(button)
         
@@ -66,8 +71,8 @@ class PaintingEnvironment:
         
         #color picker stuff
         self.colorpicker = colorpicker.ColorPicker(graphics.width-370,10,15*12,15*6,step_x=15,step_y=15)
-        self.colordisplay = gui.ColorDisplay(graphics.width-410, 10, 25, 90)
-        graphics.main_window.push_handlers(self.colorpicker, self.colordisplay)
+        #self.colordisplay = gui.ColorDisplay(graphics.width-410, 10, 25, 90)
+        graphics.main_window.push_handlers(self.colorpicker)#, self.colordisplay)
         
         #white background
         graphics.clear(1,1,1,1);
@@ -91,7 +96,7 @@ class PaintingEnvironment:
             for button in self.buttons: button.draw()   #bottom buttons
             for label in self.labels: graphics.draw_label(label) #text labels
             self.colorpicker.draw()                     #color picker
-            self.colordisplay.draw()                    #line/fill color selector
+            #self.colordisplay.draw()                    #line/fill color selector
             tool.controlspace.draw()
             #divider lines
             graphics.set_color(0,0,0,1)
