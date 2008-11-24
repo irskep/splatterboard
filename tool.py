@@ -206,7 +206,7 @@ def generate_line_selector(start_x=5, start_y=5, max_x=-1, max_y=-1):
     
     def get_line_setter(size):
         def set_line_size():
-            graphics.line_size = size
+            graphics.user_line_size = size
         return set_line_size
     
     line_group = gui.ButtonGroup()
@@ -225,7 +225,7 @@ def generate_line_selector(start_x=5, start_y=5, max_x=-1, max_y=-1):
                                         more_draw=get_line_drawer(x, start_y, w, h, current_width),
                                         parent_group=line_group)
         controlspace.add(newbutton)
-        if graphics.line_size <= current_width and not size_set:
+        if graphics.user_line_size <= current_width and not size_set:
             newbutton.action()
             newbutton.select()
             size_set = True

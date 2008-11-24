@@ -14,8 +14,6 @@ import resources
 
 class SplatterboardWindow(pyglet.window.Window):
     
-    drawn_this_frame = False
-    
     def __init__(self):
         
         opt = settings.settings #ugly shortcut
@@ -46,15 +44,7 @@ class SplatterboardWindow(pyglet.window.Window):
         
         self.set_caption('Splatterboard')
         self.init_cursors()
-        
-        #enable alpha blending, line smoothing, init glScissor
-        pyglet.gl.glEnable(pyglet.gl.GL_BLEND)
-        pyglet.gl.glBlendFunc(pyglet.gl.GL_SRC_ALPHA, pyglet.gl.GL_ONE_MINUS_SRC_ALPHA)
-        pyglet.gl.glEnable(pyglet.gl.GL_LINE_SMOOTH)
-        pyglet.gl.glEnable(pyglet.gl.GL_POINT_SMOOTH)
-        #pyglet.gl.glHint(pyglet.gl.GL_LINE_SMOOTH_HINT,pyglet.gl.GL_NICEST)
-        pyglet.gl.glScissor(graphics.canvas_x,graphics.canvas_y,
-                            self.width-graphics.canvas_x,self.height-graphics.canvas_y)
+        self.init_gl()
         
         self.painting_environment = PaintingEnvironment.PaintingEnvironment()
         self.push_handlers(self.painting_environment)
@@ -64,6 +54,16 @@ class SplatterboardWindow(pyglet.window.Window):
         graphics.height = self.height
         graphics.canvas_x = settings.settings['toolbar_width']
         graphics.canvas_y = settings.settings['buttonbar_height']
+    
+    def init_gl(self):    
+        #enable alpha blending, line smoothing, init glScissor
+        pyglet.gl.glEnable(pyglet.gl.GL_BLEND)
+        pyglet.gl.glBlendFunc(pyglet.gl.GL_SRC_ALPHA, pyglet.gl.GL_ONE_MINUS_SRC_ALPHA)
+        pyglet.gl.glEnable(pyglet.gl.GL_LINE_SMOOTH)
+        pyglet.gl.glEnable(pyglet.gl.GL_POINT_SMOOTH)
+        #pyglet.gl.glHint(pyglet.gl.GL_LINE_SMOOTH_HINT,pyglet.gl.GL_NICEST)
+        pyglet.gl.glScissor(graphics.canvas_x,graphics.canvas_y,
+                            self.width-graphics.canvas_x,self.height-graphics.canvas_y)
     
     def init_cursors(self):
         graphics.cursor['CURSOR_CROSSHAIR'] = self.get_system_mouse_cursor(self.CURSOR_CROSSHAIR)

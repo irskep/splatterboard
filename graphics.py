@@ -30,11 +30,13 @@ fill_shapes = True
 #: 0 for line_color, 1 for fill_color
 selected_color = 1
 brush_size = 10.0
-line_size = 10.0
+user_line_size = 10.0
 #: Ignore this, used somewhat internally
 drawing = False
 #: Set by the main window
 width, height = 0, 0
+
+line_size = 1.0
 
 def _empty_wrapper(func):
     #Ignore this docstring. It is included because of an epydoc oddity.
@@ -195,8 +197,11 @@ def exit_canvas_mode():
 @command_wrapper
 def set_line_width(width):
     """Calls glLineWidth() and glPointSize()."""
+    global line_size
+    line_size = width
     pyglet.gl.glPointSize(width)
     pyglet.gl.glLineWidth(width)
+    
 
 @command_wrapper
 def enable_line_stipple():
@@ -245,6 +250,21 @@ def draw_label(label):
 
 @command_wrapper
 def draw_line(x1, y1, x2, y2):
+    #if line_size < 2.0: pyglet.graphics.draw(2, pyglet.gl.GL_LINES, ('v2f', (x1, y1, x2, y2)))
+    #else:
+    #pyglet.gl.glDisable(pyglet.gl.GL_LINE_SMOOTH)
+    angle = math.atan2(y2-y1, x2-x1)
+    x_add = math.cos(angle+math.pi/2)*line_size/2
+    y_add = math.sin(angle+math.pi/2)*line_size/2
+    rx1, ry1 = x1 + x_add, y1 + y_add
+    rx2, ry2 = x2 + x_add, y2 + y_add
+    rx3, ry3 = x2 - x_add, y2 - y_add
+    rx4, ry4 = x1 - x_add, y1 - y_add
+    draw_polygon((rx1,ry1,rx2,ry2,rx3,ry3,rx4,ry4))
+    #pyglet.gl.glEnable(pyglet.gl.GL_LINE_SMOOTH)
+
+@command_wrapper
+def draw_line_nice(x1, y1, x2, y2):
     pyglet.graphics.draw(2, pyglet.gl.GL_LINES, ('v2f', (x1, y1, x2, y2)))
 
 @command_wrapper
@@ -281,7 +301,7 @@ def draw_polygon(points, colors=None):
         pyglet.graphics.draw(len(points)/2, pyglet.gl.GL_POLYGON,('v2f', points),('c4f', colors))
 
 @command_wrapper
-def draw_polygon_outline(points, colors=None):
+def draw_line_loop(points, colors=None):
     """
     @param points: A list formatted like [x1, y1, x2, y2...]
     @param colors: A list formatted like [r1, g1, b1, a1, r2, g2, b2 a2...]
@@ -331,7 +351,7 @@ def draw_ellipse(x1, y1, x2, y2):
 @command_wrapper
 def draw_ellipse_outline(x1, y1, x2, y2, dashed=False, linesize=-1):
     """Set dashed=True if you want a dashed ellipse outline."""
-    if linesize == -1: linesize = line_size #set to global line size
+    if linesize == -1: linesize = user_line_size #set to global line size
     if abs(x2-x1) < 1.0 or abs(y2-y1) < 1.0: return
     w2 = linesize / 2.0
     x_dir = 1 if x2 > x1 else -1
@@ -371,7 +391,6 @@ def draw_quad(*args):
 @command_wrapper
 def init_stencil_mode():
     """Stencil mode. Umm, I will explain this later."""
-    #pyglet.gl.glClearColor(0,0,0,1)
     pyglet.gl.glClearStencil(0)
     pyglet.gl.glEnable(pyglet.gl.GL_STENCIL_TEST)
     pyglet.gl.glClear(pyglet.gl.GL_STENCIL_BUFFER_BIT)
@@ -385,8 +404,4 @@ def stop_drawing_stencil():
 
 @command_wrapper
 def reset_stencil_mode():
-    # init_stencil_mode()
-    # pyglet.gl.glColor3f(1,1,1)
-    # draw_rect(0,0,width,height)
-    # stop_drawing_stencil()
     pyglet.gl.glDisable(pyglet.gl.GL_STENCIL_TEST)

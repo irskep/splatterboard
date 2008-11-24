@@ -30,7 +30,7 @@ class Polygon(tool.Tool):
                 graphics.draw_polygon(poly)
                 graphics.set_color(0,0,0,1)
                 graphics.set_line_width(1)
-                graphics.draw_polygon_outline(poly)
+                graphics.draw_line_loop(poly)
             return poly_func
         
         w, h = resources.SquareButton.width, resources.SquareButton.height
@@ -55,9 +55,9 @@ class Polygon(tool.Tool):
             graphics.set_color(color=graphics.fill_color)
             graphics.draw_polygon(poly);
         if graphics.outline_shapes:
-            graphics.set_line_width(graphics.line_size)
+            graphics.set_line_width(graphics.user_line_size)
             graphics.set_color(color=graphics.line_color)
-            graphics.draw_polygon_outline(poly);
+            graphics.draw_line_loop(poly);
             graphics.draw_points(poly);
     
     def stop_drawing(self, x, y):

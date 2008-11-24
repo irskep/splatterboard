@@ -1,3 +1,0 @@
-Steve:
--GUI sliders
--Abstract ghetto shit out of Selection.py

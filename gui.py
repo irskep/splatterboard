@@ -127,7 +127,7 @@ class PolygonButton(Button):
         if self.outline:
             graphics.set_line_width(2)
             graphics.set_color(color=graphics.line_color)
-            graphics.draw_polygon_outline(poly)
+            graphics.draw_line_loop(poly)
             graphics.draw_points(poly)
     
     def generate_polygon(self, x, y, rx, ry, n):

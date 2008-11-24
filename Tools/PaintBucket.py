@@ -75,7 +75,7 @@ class NormalPainter:
         start_time = time.clock()
         while len(self.to_check) > 0 and time.clock()-start_time < 1.0/40.0:
             for x, y, ox, oy in self.to_check:
-                if x >= 0 and y >= 0 and x < self.canvas_pre.width and y < self.canvas_pre.height:
+                if x > 0 and y > 0 and x < self.canvas_pre.width and y < self.canvas_pre.height:
                     if self.checked_pixels[x][y] == 0:
                         #color = self.get_pixel(x,y)
                         pos = self.get_pixel_array_pos(x,y)

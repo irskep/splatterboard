@@ -146,11 +146,11 @@ class Selection(tool.Tool):
         graphics.enable_line_stipple()
         graphics.set_line_width(1.0)
         graphics.set_color(0,0,0,1)
-        old_line_size = graphics.line_size
+        old_line_size = graphics.user_line_size
         def temp1():
-            graphics.line_size = 1.0
+            graphics.user_line_size = 1.0
         def temp2():
-            graphics.line_size = old_line_size
+            graphics.user_line_size = old_line_size
         graphics.call_twice(temp1)
         #graphics.draw_rect_outline(self.img_x+1, self.img_y+1, self.img_x+abs(self.w)-1, self.img_y+abs(self.h)-1)
         graphics.draw_ellipse_outline(self.img_x+1, self.img_y+1, self.img_x+abs(self.w)-1, self.img_y+abs(self.h)-1)
