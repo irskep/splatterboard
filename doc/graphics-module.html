@@ -66,8 +66,11 @@
   instead of the usual one or two. You will probably never need them, as 
   they are only used for special cases in which the buffers are not swapped
   predictably.</p>
+  <p>The documentation page for this module is ridiculously mangled due to 
+  my use of decorators. You're better off just looking at the code. The 
+  docstrings should explain sufficiently.</p>
   <p>*Functions are only called once if the program is running on OS X in 
-  windowed mode due to platform-specific oddities. This is handled 
+  windowed mode due to platform-specific oddities. This behavior is handled
   transparently.</p>
 
 <!-- ==================== FUNCTIONS ==================== -->
@@ -348,6 +351,74 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a name="draw_line_loop"></a><span class="summary-sig-name">draw_line_loop</span>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="draw_line_nice"></a><span class="summary-sig-name">draw_line_nice</span>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="draw_ngon"></a><span class="summary-sig-name">draw_ngon</span>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="draw_ngon_outline"></a><span class="summary-sig-name">draw_ngon_outline</span>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a name="draw_points"></a><span class="summary-sig-name">draw_points</span>(<span class="summary-sig-arg">*args</span>,
         <span class="summary-sig-arg">**kwargs</span>)</span></td>
           <td align="right" valign="top">
@@ -366,23 +437,6 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="draw_polygon"></a><span class="summary-sig-name">draw_polygon</span>(<span class="summary-sig-arg">*args</span>,
-        <span class="summary-sig-arg">**kwargs</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="draw_polygon_outline"></a><span class="summary-sig-name">draw_polygon_outline</span>(<span class="summary-sig-arg">*args</span>,
         <span class="summary-sig-arg">**kwargs</span>)</span></td>
           <td align="right" valign="top">
             
@@ -776,7 +830,7 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="line_size"></a><span class="summary-name">line_size</span> = <code title="10.0">10.0</code>
+        <a name="line_size"></a><span class="summary-name">line_size</span> = <code title="1.0">1.0</code>
     </td>
   </tr>
 <tr>
@@ -798,6 +852,13 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="selected_color"></a><span class="summary-name">selected_color</span> = <code title="1">1</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="user_line_size"></a><span class="summary-name">user_line_size</span> = <code title="10.0">10.0</code>
     </td>
   </tr>
 <tr>
@@ -1003,7 +1064,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Nov 24 13:15:09 2008
+    Generated by Epydoc 3.0.1 on Mon Nov 24 17:06:24 2008
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

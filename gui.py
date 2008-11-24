@@ -94,9 +94,10 @@ class ColorButton(Button):
         
         if self.selected:
             graphics.set_color(1,1,1,1)
-            graphics.draw_ellipse_outline(self.x+5, self.y+5, self.x+self.width-5, self.y+self.height-5, linesize=1)
+            graphics.set_line_width(1)
+            graphics.draw_ellipse_outline(self.x+5, self.y+5, self.x+self.width-5, self.y+self.height-5)
             graphics.set_color(0,0,0,1)
-            graphics.draw_ellipse_outline(self.x+7, self.y+7, self.x+self.width-7, self.y+self.height-7, linesize=1)
+            graphics.draw_ellipse_outline(self.x+7, self.y+7, self.x+self.width-7, self.y+self.height-7)
         graphics.set_line_width(1.0)    
         graphics.set_color(0,0,0,1)
         graphics.draw_rect_outline(self.x, self.y, self.x+self.width, self.y+self.height)

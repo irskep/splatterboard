@@ -23,9 +23,11 @@ class Polygon(tool.Tool):
         
         def generate_poly_button(x, y, w, h, n):
             def poly_func():
-                offset_y = 0
-                if n == 3: offset_y = -5
-                poly = self.generate_polygon(x+w/2,y+h/2+offset_y,x+w/2,y+h-5+offset_y,n)
+                theta = 0
+                y_offset = 0
+                if n == 3: y_offset = -5
+                if n % 2 == 1: theta = -math.pi/n/2
+                poly = graphics.concat(graphics._iter_ngon(x+w/2,y+h/2+y_offset,(w-10)/2,n,theta))
                 graphics.set_color(1,1,1,1)
                 graphics.draw_polygon(poly)
                 graphics.set_color(0,0,0,1)
@@ -48,30 +50,21 @@ class Polygon(tool.Tool):
     
     def keep_drawing(self, x, y, dx, dy):
         self.rx, self.ry = x, y
-        poly = self.generate_polygon(self.x,self.y,self.rx,self.ry,self.sides)
+        radius = math.sqrt((self.rx - self.x)*(self.rx - self.x)+(self.ry - self.y)*(self.ry - self.y))
+        theta = math.atan2(self.ry-self.y, self.rx-self.x)
         graphics.set_color(1,1,1,1)
         graphics.draw_image(self.canvas_pre,graphics.canvas_x,graphics.canvas_y)
         if graphics.fill_shapes:
-            graphics.set_color(color=graphics.fill_color)
-            graphics.draw_polygon(poly);
+                graphics.set_color(color=graphics.fill_color)
+                graphics.draw_ngon(self.x,self.y,radius,self.sides,theta)
         if graphics.outline_shapes:
             graphics.set_line_width(graphics.user_line_size)
             graphics.set_color(color=graphics.line_color)
-            graphics.draw_line_loop(poly);
-            graphics.draw_points(poly);
-    
+            graphics.draw_ngon_outline(self.x, self.y, radius, self.sides, theta)
+        
     def stop_drawing(self, x, y):
         self.keep_drawing(x, y, 0, 0)
         self.canvas_pre = graphics.get_canvas()
-    
-    def generate_polygon(self, x, y, rx, ry, n):
-        radius = math.sqrt((rx - x)*(rx - x)+(ry - y)*(ry - y))
-        theta = math.atan2(ry - y, rx - x)
-        li = []
-        for i in xrange(n):
-            theta += 2 * math.pi / n
-            li.extend([radius * math.cos(theta) + x, radius * math.sin(theta) + y])
-        return li
 
 default = Polygon()
 priority = 90

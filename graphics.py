@@ -5,7 +5,9 @@ The graphics module exists primarily to solve the problems presented by a double
 
 Functions with an "_extra" suffix are called three times instead of the usual one or two. You will probably never need them, as they are only used for special cases in which the buffers are not swapped predictably.
 
-*Functions are only called once if the program is running on OS X in windowed mode due to platform-specific oddities. This is handled transparently.
+The documentation page for this module is ridiculously mangled due to my use of decorators. You're better off just looking at the code. The docstrings should explain sufficiently.
+
+*Functions are only called once if the program is running on OS X in windowed mode due to platform-specific oddities. This behavior is handled transparently.
 """
 
 import math, sys
@@ -273,10 +275,19 @@ def draw_rect(x1, y1, x2, y2):
 
 @command_wrapper
 def draw_rect_outline(x1, y1, x2, y2):
-    pyglet.graphics.draw(4, pyglet.gl.GL_LINE_LOOP,
-        ('v2f', (x1, y1, x1, y2, x2, y2, x2, y1)))
-    pyglet.graphics.draw(4, pyglet.gl.GL_POINTS,
-        ('v2f', (x1, y1, x1, y2, x2, y2, x2, y1)))
+    if line_size >= 2:
+        if x1 > x2: x1, x2 = x2, x1
+        if y1 > y2: y1, y2 = y2, y1
+        ls = line_size/2 #shortcut
+        draw_rect(x1-ls, y1-ls, x2+ls,y1+ls)
+        draw_rect(x2+ls,y1+ls, x2-ls,y2+ls)
+        draw_rect(x2-ls,y2+ls, x1-ls, y2-ls)
+        draw_rect(x1-ls, y2-ls, x1+ls, y1+ls)
+    else:
+        pyglet.graphics.draw(4, pyglet.gl.GL_LINE_LOOP,
+            ('v2f', (x1, y1, x1, y2, x2, y2, x2, y1)))
+        pyglet.graphics.draw(4, pyglet.gl.GL_POINTS,
+            ('v2f', (x1, y1, x1, y2, x2, y2, x2, y1)))
 
 @command_wrapper
 def draw_points(points, colors=None):
@@ -349,11 +360,14 @@ def draw_ellipse(x1, y1, x2, y2):
     pyglet.graphics.draw(len(points)/2, pyglet.gl.GL_TRIANGLE_FAN, ('v2f', points))
 
 @command_wrapper
-def draw_ellipse_outline(x1, y1, x2, y2, dashed=False, linesize=-1):
-    """Set dashed=True if you want a dashed ellipse outline."""
-    if linesize == -1: linesize = user_line_size #set to global line size
+def draw_ellipse_outline(x1, y1, x2, y2, dashed=False):
+    """
+    @param x1, y1, x2, y2:  bounding box corners
+    @param dashed:          draws only every other segment if enabled
+    """
+    
     if abs(x2-x1) < 1.0 or abs(y2-y1) < 1.0: return
-    w2 = linesize / 2.0
+    w2 = line_size / 2.0
     x_dir = 1 if x2 > x1 else -1
     y_dir = 1 if y2 > y1 else -1
 
@@ -375,14 +389,69 @@ def draw_ellipse_outline(x1, y1, x2, y2, dashed=False, linesize=-1):
     points_inner = concat(points_inner)
     points_outer = concat(points_outer)
 
-    pyglet.gl.glLineWidth(1)
-    if linesize > 1:
+    if line_size > 1:
         pyglet.graphics.draw(len(points_stroke)/2,
                 pyglet.gl.GL_TRIANGLE_STRIP, ('v2f', points_stroke))
-        pyglet.graphics.draw(len(points_inner)/2,
-                pyglet.gl.GL_LINE_LOOP, ('v2f', points_inner))
-    pyglet.graphics.draw(len(points_outer)/2,
-            pyglet.gl.GL_LINE_LOOP, ('v2f', points_outer))
+        # pyglet.graphics.draw(len(points_inner)/2,
+        #         pyglet.gl.GL_LINE_LOOP, ('v2f', points_inner))
+    else:
+        pyglet.graphics.draw(len(points_outer)/2,
+                pyglet.gl.GL_LINE_LOOP, ('v2f', points_outer))
+
+def _iter_ngon(x, y, r, sides, start_angle = 0.0):
+    rad = max(r, 0.01)
+    rad_ = max(min(sides / rad / 2.0, 1), -1)
+    da = math.pi * 2 / sides
+    a = start_angle
+    while a <= math.pi * 2 + start_angle:
+        yield (x + math.cos(a) * r, y + math.sin(a) * r)
+        a += da
+
+@command_wrapper
+def draw_ngon(x, y, r, sides, start_angle = 0.0):
+    """
+    Draw a polygon of n sides of equal length.
+    
+    @param x, y: center position
+    @param r: radius
+    @param sides: number of sides in the polygon
+    @param start_angle: rotation of the entire polygon
+    """
+    points = concat(_iter_ngon(x, y, r, sides, start_angle))
+    pyglet.graphics.draw(len(points)/2, pyglet.gl.GL_TRIANGLE_FAN, ('v2f', points))
+
+@command_wrapper
+def draw_ngon_outline(x, y, r, sides, start_angle = 0.0):
+    """
+    Draw the outline of a polygon of n sides of equal length.
+
+    @param x, y: center position
+    @param r: radius
+    @param sides: number of sides in the polygon
+    @param start_angle: rotation of the entire polygon
+    """
+    if r < 1.0: return
+    
+    #This is necessary if you think about it.
+    line_spacing = line_size/2/math.cos(math.pi/sides)
+    
+    points_inner = list(_iter_ngon(x, y, r-line_spacing, sides, start_angle))
+    points_outer = list(_iter_ngon(x, y, r+line_spacing, sides, start_angle))
+
+    points_stroke = concat(concat(zip(points_inner, points_outer)))
+    points_stroke.extend(points_stroke[:4]) # draw the first *two* points again
+    points_inner = concat(points_inner)
+    points_outer = concat(points_outer)
+
+    pyglet.gl.glLineWidth(1)
+    if line_size > 1:
+        pyglet.graphics.draw(len(points_stroke)/2,
+                pyglet.gl.GL_TRIANGLE_STRIP, ('v2f', points_stroke))
+        # pyglet.graphics.draw(len(points_inner)/2,
+        #         pyglet.gl.GL_LINE_LOOP, ('v2f', points_inner))
+    else:
+        pyglet.graphics.draw(len(points_outer)/2,
+                pyglet.gl.GL_LINE_LOOP, ('v2f', points_outer))
 
 @command_wrapper
 def draw_quad(*args):
