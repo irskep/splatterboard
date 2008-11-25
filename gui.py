@@ -87,10 +87,18 @@ class ColorButton(Button):
         if self.parent_group != None: self.parent_group.add(self)
     
     def draw(self):
-        if self.which_color == 0: graphics.set_color(color=graphics.line_color)
-        else: graphics.set_color(color=graphics.fill_color)
-        
-        graphics.draw_rect(self.x, self.y, self.x+self.width, self.y+self.height)
+        if self.which_color == 0:
+            if graphics.line_color[0] == -1:
+                graphics.draw_rainbow(self.x,self.y,self.x+self.width,self.y+self.height)
+            else:
+                graphics.set_color(color=graphics.line_color)
+                graphics.draw_rect(self.x, self.y, self.x+self.width, self.y+self.height)
+        else:
+            if graphics.fill_color[0] == -1:
+                graphics.draw_rainbow(self.x,self.y,self.x+self.width,self.y+self.height)
+            else:
+                graphics.set_color(color=graphics.fill_color)
+                graphics.draw_rect(self.x, self.y, self.x+self.width, self.y+self.height)
         
         if self.selected:
             graphics.set_color(1,1,1,1)
@@ -123,11 +131,17 @@ class PolygonButton(Button):
         x, y = self.x+self.width/2, self.y+self.height/2
         poly = self.generate_polygon(x,y,x,self.y+self.height*0.9,self.sides)
         if self.fill:
-            graphics.set_color(color=graphics.fill_color)
+            if graphics.fill_color[0] == -1:
+                graphics.set_color(1,1,1,1)
+            else:
+                graphics.set_color(color=graphics.fill_color)
             graphics.draw_polygon(poly)
         if self.outline:
             graphics.set_line_width(2)
-            graphics.set_color(color=graphics.line_color)
+            if graphics.line_color[0] == -1:
+                graphics.set_color(1,1,1,1)
+            else:
+                graphics.set_color(color=graphics.line_color)
             graphics.draw_line_loop(poly)
             graphics.draw_points(poly)
     

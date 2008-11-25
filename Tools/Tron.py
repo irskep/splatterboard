@@ -6,6 +6,7 @@ class Tron(tool.Tool):
     
     x, y, d = 0, 0, 1
     color = (0, 0, 0, 0)
+    tron_color = (0,0,0,1)
     running = False
     visited = []
     ai_enabled = True
@@ -22,6 +23,7 @@ class Tron(tool.Tool):
             self.x, self.y = x, y
             self.color = graphics.get_pixel_from_image(self.canvas_pre, x, y)
             self.d = random.randint(0, 3)
+            self.tron_color = graphics.get_line_color()
             pyglet.clock.schedule(self.do_tron)
             
     def fxn(self):
@@ -47,7 +49,7 @@ class Tron(tool.Tool):
             self.x, self.y = xn, yn
             graphics.call_thrice(graphics.enter_canvas_mode)
             graphics.call_thrice(pyglet.gl.glDisable, pyglet.gl.GL_POINT_SMOOTH)
-            graphics.set_color_extra(color=graphics.line_color)
+            graphics.set_color_extra(color=self.tron_color)
             graphics.call_thrice(graphics.draw_points, [self.x, self.y])
             graphics.call_thrice(pyglet.gl.glEnable, pyglet.gl.GL_POINT_SMOOTH)
             graphics.call_thrice(graphics.exit_canvas_mode)

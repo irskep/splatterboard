@@ -54,11 +54,12 @@ class Spray(tool.Tool):
             for i in xrange(10):
                 which_color = random.randint(0,1)
                 if which_color:
-                    colors.extend(graphics.line_color)
+                    colors.extend(graphics.get_line_color())
                 else:
-                    colors.extend(graphics.fill_color)
+                    colors.extend(graphics.get_fill_color())
         else:
-            colors = graphics.line_color * 10
+            colors = []
+            [colors.extend(graphics.get_line_color()) for i in xrange(10)]
         graphics.draw_points(sum([self.make_point() for i in xrange(10)],[]),colors)
 
     def make_point(self):

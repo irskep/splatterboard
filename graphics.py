@@ -10,7 +10,7 @@ The documentation page for this module is ridiculously mangled due to my use of 
 *Functions are only called once if the program is running on OS X in windowed mode due to platform-specific oddities. This behavior is handled transparently.
 """
 
-import math, sys
+import math, sys, random
 import pyglet.graphics, pyglet.image, pyglet.gl
 import settings
 
@@ -39,6 +39,12 @@ drawing = False
 width, height = 0, 0
 
 line_size = 1.0
+rainbow_colors = [
+                    (1.0, 0.0, 0.0, 1.0), (1.0, 0.5, 0.0, 1.0), (1.0, 1.0, 0.0, 1.0), 
+                    (0.5, 1.0, 0.0, 1.0), (0.0, 1.0, 0.0, 1.0), (0.0, 1.0, 0.5, 1.0), 
+                    (0.0, 1.0, 1.0, 1.0), (0.0, 0.5, 1.0, 1.0), (0.0, 0.0, 1.0, 1.0), 
+                    (0.5, 0.0, 1.0, 1.0), (1.0, 0.0, 1.0, 1.0), (1.0, 0.0, 0.5, 1.0)
+                 ]
 
 def _empty_wrapper(func):
     #Ignore this docstring. It is included because of an epydoc oddity.
@@ -120,6 +126,12 @@ def call_much_later(func, *args, **kwargs):
         canvas_queue_2.append((func,args,kwargs,drawing))
     else:
         func(*args, **kwargs)
+
+def get_line_color():
+    return random.choice(rainbow_colors) if line_color[0] == -1 else line_color
+
+def get_fill_color():
+    return random.choice(rainbow_colors) if fill_color[0] == -1 else fill_color
 
 def set_selected_color(new_color):
     """Set the line or fill color, depending on the user's current selection. See the Eyedropper tool for an example."""
@@ -230,8 +242,6 @@ def clear(r=1.0, g=1.0, b=1.0, a=1.0, color=None):
     """Clears the screen. Always called three times instead of the usual one or two."""
     if color is not None: pyglet.gl.glClearColor(*color)
     else: pyglet.gl.glClearColor(r,g,b,a);
-    #for window in pyglet.app.windows.__iter__():
-    #    window.clear()
     main_window.clear()
 
 @command_wrapper
@@ -252,9 +262,8 @@ def draw_label(label):
 
 @command_wrapper
 def draw_line(x1, y1, x2, y2):
-    #if line_size < 2.0: pyglet.graphics.draw(2, pyglet.gl.GL_LINES, ('v2f', (x1, y1, x2, y2)))
-    #else:
-    #pyglet.gl.glDisable(pyglet.gl.GL_LINE_SMOOTH)
+    pyglet.graphics.draw(2, pyglet.gl.GL_LINES, ('v2f', (x1, y1, x2, y2)))
+    #return
     angle = math.atan2(y2-y1, x2-x1)
     x_add = math.cos(angle+math.pi/2)*line_size/2
     y_add = math.sin(angle+math.pi/2)*line_size/2
@@ -262,8 +271,7 @@ def draw_line(x1, y1, x2, y2):
     rx2, ry2 = x2 + x_add, y2 + y_add
     rx3, ry3 = x2 - x_add, y2 - y_add
     rx4, ry4 = x1 - x_add, y1 - y_add
-    draw_polygon((rx1,ry1,rx2,ry2,rx3,ry3,rx4,ry4))
-    #pyglet.gl.glEnable(pyglet.gl.GL_LINE_SMOOTH)
+    draw_quad(rx1,ry1,rx2,ry2,rx3,ry3,rx4,ry4)
 
 @command_wrapper
 def draw_line_nice(x1, y1, x2, y2):
@@ -460,6 +468,16 @@ def draw_ngon_outline(x, y, r, sides, start_angle = 0.0):
 @command_wrapper
 def draw_quad(*args):
     pyglet.graphics.draw(4, pyglet.gl.GL_QUADS, ('v2f', args))
+
+def draw_rainbow(x1,y1,x2,y2):
+    """Draws a rainbow in a rectangle. Used for drawing color wells when in rainbow mode."""    
+    x1, x2 = int(x1), int(x2)
+    x_step = int((x2-x1)/(len(rainbow_colors)-1))
+    col = 0
+    for x in xrange(x1,x2,x_step):
+        set_color(color=rainbow_colors[col])
+        draw_rect(x,y1,x+x_step,y2)
+        col += 1
 
 @command_wrapper
 def init_stencil_mode():

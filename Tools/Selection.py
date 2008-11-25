@@ -145,7 +145,8 @@ class Selection(tool.Tool):
     def draw_shape_ellipse(self):
         graphics.enable_line_stipple()
         graphics.set_line_width(1.0)
-        graphics.set_color(0,0,0,1)
+        #graphics.set_color(0,0,0,1)
+        graphics.set_color(color=graphics.get_line_color())
         old_line_size = graphics.user_line_size
         def temp1():
             graphics.user_line_size = 1.0
@@ -163,7 +164,7 @@ class Selection(tool.Tool):
     def draw_shape_rect(self):
         graphics.enable_line_stipple()
         graphics.set_line_width(1.0)
-        graphics.set_color(color=graphics.line_color)
+        graphics.set_color(color=graphics.get_line_color())
         graphics.draw_rect_outline(self.img_x+1, self.img_y+1, self.img_x+abs(self.w)-1, self.img_y+abs(self.h)-1)
         graphics.disable_line_stipple()
     

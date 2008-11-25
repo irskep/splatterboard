@@ -5,6 +5,8 @@ class Polygon(tool.Tool):
     """Simple polygon tool"""
     
     canvas_pre = None
+    fill_color = (0,0,0,1)
+    line_color = (0,0,0,1)
     x, y, rx, ry = 0.0, 0.0, 0.0, 0.0
     sides = 3
     num_buttons = 6
@@ -47,6 +49,8 @@ class Polygon(tool.Tool):
     
     def start_drawing(self, x, y):
         self.x, self.y = x, y
+        self.fill_color = graphics.get_fill_color()
+        self.line_color = graphics.get_line_color()
     
     def keep_drawing(self, x, y, dx, dy):
         self.rx, self.ry = x, y
@@ -55,11 +59,11 @@ class Polygon(tool.Tool):
         graphics.set_color(1,1,1,1)
         graphics.draw_image(self.canvas_pre,graphics.canvas_x,graphics.canvas_y)
         if graphics.fill_shapes:
-                graphics.set_color(color=graphics.fill_color)
+                graphics.set_color(color=self.fill_color)
                 graphics.draw_ngon(self.x,self.y,radius,self.sides,theta)
         if graphics.outline_shapes:
             graphics.set_line_width(graphics.user_line_size)
-            graphics.set_color(color=graphics.line_color)
+            graphics.set_color(color=self.line_color)
             graphics.draw_ngon_outline(self.x, self.y, radius, self.sides, theta)
         
     def stop_drawing(self, x, y):
