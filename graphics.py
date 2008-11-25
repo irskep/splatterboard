@@ -390,7 +390,11 @@ def draw_ellipse_outline(x1, y1, x2, y2, dashed=False):
     points_outer = concat(points_outer)
 
     if line_size > 1:
-        pyglet.graphics.draw(len(points_stroke)/2,
+        if abs(x2_out-x1_out) < line_size*2 or abs(y2_out-y1_out) < line_size*2:
+            pyglet.graphics.draw(len(points_outer)/2, 
+                pyglet.gl.GL_TRIANGLE_FAN, ('v2f', points_outer))
+        else:
+            pyglet.graphics.draw(len(points_stroke)/2,
                 pyglet.gl.GL_TRIANGLE_STRIP, ('v2f', points_stroke))
         # pyglet.graphics.draw(len(points_inner)/2,
         #         pyglet.gl.GL_LINE_LOOP, ('v2f', points_inner))

@@ -18,7 +18,8 @@ class Ellipse(tool.Tool):
         graphics.set_color(1,1,1,1)
         graphics.draw_image(self.canvas_pre,graphics.canvas_x,graphics.canvas_y)
         
-        if graphics.fill_shapes:
+        if graphics.fill_shapes and abs(self.x2-self.x1) >= graphics.user_line_size \
+                and abs(self.y2-self.y1) >= graphics.user_line_size:
             graphics.set_color(color=graphics.fill_color)
             graphics.draw_ellipse(self.x1, self.y1, self.x2, self.y2)
         if graphics.outline_shapes:
