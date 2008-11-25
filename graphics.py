@@ -262,8 +262,6 @@ def draw_label(label):
 
 @command_wrapper
 def draw_line(x1, y1, x2, y2):
-    pyglet.graphics.draw(2, pyglet.gl.GL_LINES, ('v2f', (x1, y1, x2, y2)))
-    #return
     angle = math.atan2(y2-y1, x2-x1)
     x_add = math.cos(angle+math.pi/2)*line_size/2
     y_add = math.sin(angle+math.pi/2)*line_size/2
@@ -271,7 +269,7 @@ def draw_line(x1, y1, x2, y2):
     rx2, ry2 = x2 + x_add, y2 + y_add
     rx3, ry3 = x2 - x_add, y2 - y_add
     rx4, ry4 = x1 - x_add, y1 - y_add
-    draw_quad(rx1,ry1,rx2,ry2,rx3,ry3,rx4,ry4)
+    pyglet.graphics.draw(4, pyglet.gl.GL_QUADS, ('v2f', (rx1,ry1,rx2,ry2,rx3,ry3,rx4,ry4)))
 
 @command_wrapper
 def draw_line_nice(x1, y1, x2, y2):
