@@ -10,6 +10,9 @@ class Text(tool.Tool):
 	def select(self):
 		self.writing = False
 		self.canvas_pre = graphics.get_canvas()
+	
+	def canvas_changed(self):
+	    self.select()
 
 	def start_drawing(self, x, y):
 		self.label = pyglet.text.Label(color=(0,0,0,255), x=x, y=y)

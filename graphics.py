@@ -133,6 +133,12 @@ def get_line_color():
 def get_fill_color():
     return random.choice(rainbow_colors) if fill_color[0] == -1 else fill_color
 
+def line_rainbow():
+    return line_color[0] == -1
+
+def fill_rainbow():
+    return fill_color[0] == -1
+
 def set_selected_color(new_color):
     """Set the line or fill color, depending on the user's current selection. See the Eyedropper tool for an example."""
     
@@ -279,15 +285,12 @@ def draw_line_nice(x1, y1, x2, y2):
 def draw_rect(x1, y1, x2, y2):
     pyglet.graphics.draw(4, pyglet.gl.GL_QUADS, ('v2f', (x1, y1, x1, y2, x2, y2, x2, y1)))
 
+#DO NOT PUT A COMMAND_WRAPPER HERE.
 def draw_rect_outline(x1, y1, x2, y2):
     if line_size >= 2:
         if x1 > x2: x1, x2 = x2, x1
         if y1 > y2: y1, y2 = y2, y1
         ls = line_size/2 #shortcut
-        # pyglet.graphics.draw(4, pyglet.gl.GL_QUADS, ('v2f', (x1-ls, y1-ls, x2+ls,y1+ls)))
-        # pyglet.graphics.draw(4, pyglet.gl.GL_QUADS, ('v2f', (x2+ls,y1+ls, x2-ls,y2+ls)))
-        # pyglet.graphics.draw(4, pyglet.gl.GL_QUADS, ('v2f', (x2-ls,y2+ls, x1-ls, y2-ls)))
-        # pyglet.graphics.draw(4, pyglet.gl.GL_QUADS, ('v2f', (x1-ls, y2-ls, x1+ls, y1+ls)))
         draw_rect(x1-ls, y1-ls, x2+ls,y1+ls)
         draw_rect(x2+ls,y1+ls, x2-ls,y2+ls)
         draw_rect(x2-ls,y2+ls, x1-ls, y2-ls)

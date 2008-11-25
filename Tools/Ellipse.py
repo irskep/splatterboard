@@ -12,6 +12,9 @@ class Ellipse(tool.Tool):
         self.canvas_pre = graphics.get_canvas()
         tool.generate_line_selector()
     
+    def canvas_changed(self):
+        self.canvas_pre = graphics.get_canvas()
+    
     def start_drawing(self, x, y):
         self.x1, self.y1 = x, y
         self.fill_color = graphics.get_fill_color()

@@ -47,6 +47,9 @@ class Tool:
         """User selects a different tool. Perform clean-up here if necessary."""
         pass
     
+    def canvas_changed(self):
+        """Canvas has been changed by something else."""
+    
     def start_drawing(self, x, y):
         """Mouse has been pressed in the canvas area."""
         pass

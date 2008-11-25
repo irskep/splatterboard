@@ -252,13 +252,14 @@ class PaintingEnvironment:
     #------------BUTTON THINGS------------#        
     def undo(self):
         if len(self.undo_queue) > 0 and self.current_tool.undo():
-            self.current_tool.unselect()    #exit current tool, just in case
+            #self.current_tool.unselect()    #exit current tool, just in case
             graphics.set_color_extra(1,1,1,1)
             graphics.call_thrice(graphics.enter_canvas_mode)
             img = self.undo_queue.pop()
             graphics.draw_image_extra(img,graphics.canvas_x,graphics.canvas_y)
             graphics.call_thrice(graphics.exit_canvas_mode)
-            self.current_tool.select()      #go back into tool
+            self.current_tool.canvas_changed()
+            #self.current_tool.select()      #go back into tool
     
     def swap_colors(self):
         graphics.fill_color, graphics.line_color = graphics.line_color, graphics.fill_color
@@ -293,13 +294,14 @@ class PaintingEnvironment:
         
     def open_3(self, dt=0, path=None):
         if path != None:
-            self.current_tool.unselect()
+            #self.current_tool.unselect()
             graphics.clear(1,1,1,1)
             graphics.set_color_extra(1,1,1,1)
             graphics.call_thrice(graphics.enter_canvas_mode)
             graphics.draw_image_extra(pyglet.image.load(path),graphics.canvas_x+1,graphics.canvas_y+1)
             graphics.call_thrice(graphics.exit_canvas_mode)
-            graphics.call_much_later(self.current_tool.select())
+            #graphics.call_much_later(self.current_tool.select())
+            graphics.call_much_later(self.current_tool.canvas_changed())
     
     def save(self):
         img = graphics.get_canvas()
@@ -328,4 +330,5 @@ class PaintingEnvironment:
             graphics.call_thrice(graphics.enter_canvas_mode)
             graphics.draw_image_extra(img,graphics.canvas_x+1,graphics.canvas_y+1)
             graphics.call_thrice(graphics.exit_canvas_mode)
-            graphics.call_much_later(self.current_tool.select())
+            #graphics.call_much_later(self.current_tool.select())
+            graphics.call_much_later(self.current_tool.canvas_changed())

@@ -47,6 +47,9 @@ class Polygon(tool.Tool):
             buttons[0].select()
             buttons[0].action()
     
+    def canvas_changed(self):
+        self.canvas_pre = graphics.get_canvas()
+    
     def start_drawing(self, x, y):
         self.x, self.y = x, y
         self.fill_color = graphics.get_fill_color()

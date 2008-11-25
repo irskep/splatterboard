@@ -3,6 +3,7 @@ from settings import *
 import time, random, math
 
 class NormalPainter:
+    
     def __init__(self):
         self.original_color = (1.0, 1.0, 1.0, 1.0)
         self.threshold = 0.1
@@ -22,8 +23,7 @@ class NormalPainter:
         self.fill_same_color = False
         self.point_size = 1.0
         self.smooth_points = False
-        
-        self.max_point_count = 0
+        self.spread = 25
     
     def init(self):
         if not self.should_init: return
@@ -55,6 +55,7 @@ class NormalPainter:
             y -= graphics.canvas_y
             self.start_x, self.start_y = x, y
             self.original_color = self.get_pixel(x,y)
+            #The use of graphics.fill_color is okay here. I promise.
             difference =  abs(graphics.fill_color[0]-self.original_color[0])
             difference += abs(graphics.fill_color[1]-self.original_color[1])
             difference += abs(graphics.fill_color[2]-self.original_color[2])
@@ -203,11 +204,12 @@ class NoisyPainter(NormalPainter):
     
     def color_function(self, x, y):
         lightness = random.random()*0.4-0.2
+        fill_color = graphics.get_fill_color()
         return [
-            graphics.fill_color[0]+lightness,
-            graphics.fill_color[1]+lightness,
-            graphics.fill_color[2]+lightness,
-            graphics.fill_color[3]
+            fill_color[0]+lightness,
+            fill_color[1]+lightness,
+            fill_color[2]+lightness,
+            fill_color[3]
         ]
 
 class CheckerPainter(NormalPainter):
@@ -216,32 +218,43 @@ class CheckerPainter(NormalPainter):
         self.fill_same_color = True
     
     def color_function(self, x, y):
-        if (x/10 + y/10) % 2 == 0: return graphics.get_fill_color()
+        if (x/10 + y/10) % 2 == 0:
+            if graphics.fill_rainbow():
+                return graphics.rainbow_colors[(int(x/10)+int(y/10)) % len(graphics.rainbow_colors)]
+            return graphics.get_fill_color()
+        if graphics.line_rainbow():
+            return graphics.rainbow_colors[(int(x/10)+int(y/10)) % len(graphics.rainbow_colors)]
         return graphics.get_line_color()
 
 class TargetPainter(NormalPainter):
+    
     def __init__(self):
         NormalPainter.__init__(self)
         self.fill_same_color = True
     
     def color_function(self, x, y):
-        if math.sqrt((self.start_x-x)*(self.start_x-x)+(self.start_y-y)*(self.start_y-y)) % 100 < 50:
-            return graphics.get_fill_color()
+        distance = math.sqrt((self.start_x-x)*(self.start_x-x)+(self.start_y-y)*(self.start_y-y))
+        if graphics.fill_rainbow():
+            return graphics.rainbow_colors[int(distance*2 / self.spread % len(graphics.rainbow_colors))]
+        if distance % (self.spread*2) < self.spread: return graphics.get_fill_color()
+        if graphics.line_rainbow():
+            return graphics.rainbow_colors[(int((x+y)/10)) % len(graphics.rainbow_colors)]
         return graphics.get_line_color()
 
 class DotPainter(NormalPainter):
     def __init__(self):
         NormalPainter.__init__(self)
         self.point_size = 5
-        self.point_spread = 25
         self.fill_same_color = True
         self.smooth_points = True
     
     def point_test(self, x, y):
-        return random.randint(0,self.point_size * self.point_spread) == 0
+        return random.randint(0,self.point_size * self.spread) == 0
 
 class PaintBucket(tool.Tool):
     """Simple paint bucket tool"""
+    
+    painter = None
     
     def select(self):
         self.painter_normal = NormalPainter()
@@ -270,7 +283,11 @@ class PaintBucket(tool.Tool):
                                 5+i*50, 55, image_2 = images[i], parent_group = self.button_group)
             buttons.append(temp_button)
             tool.controlspace.add(temp_button)
-        buttons[0].select()
+            if painters[i] == self.painter: buttons[i].select()
+        self.painter.init()
+    
+    def canvas_changed(self):
+        self.painter.should_init = True
         self.painter.init()
     
     def start_drawing(self, x, y):

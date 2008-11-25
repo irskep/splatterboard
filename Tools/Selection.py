@@ -41,6 +41,9 @@ class Selection(tool.Tool):
         self.button_rect.select()
         self.button_rect.action()
     
+    def canvas_changed(self):
+        self.select()
+    
     def select_rect(self):
         self.draw_selection_shape = self.draw_shape_rect
         self.draw_selection_mask = graphics.draw_rect
