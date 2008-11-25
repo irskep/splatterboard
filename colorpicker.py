@@ -94,9 +94,10 @@ class ColorPicker():
     
     def get_color(self, x, y):
         """Get the color at position (x,y), where x and y are absolute coordinates, not relative to the picker's position."""
-        color = graphics.get_pixel_from_image(self.image, x-self.x, y-self.y)
+        #color = graphics.get_pixel_from_image(self.image, x-self.x, y-self.y)
         #return (color[0],color[1],color[2],1.0)
-        print color
+        #print color
+        color = self.array[int((x-self.x)/self.step_x)][int((y-self.y)/self.step_y)]
         return color
     
     def coords_inside(self, x, y):
