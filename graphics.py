@@ -279,20 +279,23 @@ def draw_line_nice(x1, y1, x2, y2):
 def draw_rect(x1, y1, x2, y2):
     pyglet.graphics.draw(4, pyglet.gl.GL_QUADS, ('v2f', (x1, y1, x1, y2, x2, y2, x2, y1)))
 
-@command_wrapper
 def draw_rect_outline(x1, y1, x2, y2):
     if line_size >= 2:
         if x1 > x2: x1, x2 = x2, x1
         if y1 > y2: y1, y2 = y2, y1
         ls = line_size/2 #shortcut
+        # pyglet.graphics.draw(4, pyglet.gl.GL_QUADS, ('v2f', (x1-ls, y1-ls, x2+ls,y1+ls)))
+        # pyglet.graphics.draw(4, pyglet.gl.GL_QUADS, ('v2f', (x2+ls,y1+ls, x2-ls,y2+ls)))
+        # pyglet.graphics.draw(4, pyglet.gl.GL_QUADS, ('v2f', (x2-ls,y2+ls, x1-ls, y2-ls)))
+        # pyglet.graphics.draw(4, pyglet.gl.GL_QUADS, ('v2f', (x1-ls, y2-ls, x1+ls, y1+ls)))
         draw_rect(x1-ls, y1-ls, x2+ls,y1+ls)
         draw_rect(x2+ls,y1+ls, x2-ls,y2+ls)
         draw_rect(x2-ls,y2+ls, x1-ls, y2-ls)
         draw_rect(x1-ls, y2-ls, x1+ls, y1+ls)
     else:
-        pyglet.graphics.draw(4, pyglet.gl.GL_LINE_LOOP,
+        call_twice(pyglet.graphics.draw, 4, pyglet.gl.GL_LINE_LOOP,
             ('v2f', (x1, y1, x1, y2, x2, y2, x2, y1)))
-        pyglet.graphics.draw(4, pyglet.gl.GL_POINTS,
+        call_twice(pyglet.graphics.draw, 4, pyglet.gl.GL_POINTS,
             ('v2f', (x1, y1, x1, y2, x2, y2, x2, y1)))
 
 @command_wrapper
