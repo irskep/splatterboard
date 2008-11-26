@@ -21,6 +21,7 @@ class Button():
         self.x, self.y = x, y
         self.selected = False
         self.pressed = False
+        self.clicked_here = False
         self.image = image
         self.label = pyglet.text.Label(text, font_size=20, color=(0,0,0,255),
                                         x=self.x+self.image.width/2, y=self.y+self.image.height/2,
@@ -44,21 +45,28 @@ class Button():
     
     def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
         """Internal use only."""
-        self.on_mouse_press(x,y,None,None)
+        if self.clicked_here and self.coords_inside(x,y):
+            self.pressed = True
+            self.clicked_here = True
+        else:
+            self.pressed = False
+        #self.on_mouse_press(x,y,None,None)
     
     def on_mouse_press(self, x, y, button, modifiers):
         """Internal use only."""
         if self.coords_inside(x,y):
             self.pressed = True
+            self.clicked_here = True
         else:
             self.pressed = False
     
     def on_mouse_release(self, x, y, button, modifiers):
         """Internal use only."""
-        if self.pressed:
+        if self.pressed and self.clicked_here:
             if self.parent_group != None: self.parent_group.select(self)
             self.action()
             self.pressed = False
+        self.clicked_here = False
     
     def select(self):
         """

@@ -172,7 +172,7 @@ def generate_brush_selector(start_x=5,start_y=5,max_x=-1,max_y=-1):
     if max_y < 0: max_y = min(resources.SquareButton.height,controlspace.max_y)
     steps = int(max_x/w)
     current_width = 1.0
-    max_width = 40.0
+    max_width = 48.0
     width_inc = (max_width-current_width)/steps
     size_set = False
     newbutton = None

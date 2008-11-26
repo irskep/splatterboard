@@ -65,7 +65,7 @@ class Spray(tool.Tool):
     def make_point(self):
         # Pick somewhere random to draw
         # based on (x,y), radius, and brush_size.
-        radius = max(self.radius * graphics.brush_size, 8)
+        radius = max(self.radius * graphics.brush_size, 15)
         where = random.random() * radius
         angle = random.random() * math.pi * 2
         x = self.x + math.cos(angle) * where
