@@ -91,6 +91,7 @@ class ColorButton(Button):
         self.action = self.get_color
         self.selected = False
         self.pressed = False
+        self.clicked_here = False
         self.parent_group = parent_group
         if self.parent_group != None: self.parent_group.add(self)
     

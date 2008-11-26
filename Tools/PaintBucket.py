@@ -71,7 +71,7 @@ class NormalPainter:
             self.checked_pixels = [[0 for col in range(self.canvas_pre.height)] 
                                             for row in range(self.canvas_pre.width)]
             pyglet.clock.schedule(self.paint)
-    
+
     def paint(self, dt=0):
         if not self.drawing or len(self.to_check) < 1:
             self.stop()
