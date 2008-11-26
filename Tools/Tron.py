@@ -50,6 +50,7 @@ class Tron(tool.Tool):
             graphics.call_thrice(graphics.enter_canvas_mode)
             graphics.call_thrice(pyglet.gl.glDisable, pyglet.gl.GL_POINT_SMOOTH)
             graphics.set_color_extra(color=self.tron_color)
+            graphics.set_line_width(1)
             graphics.call_thrice(graphics.draw_points, [self.x, self.y])
             graphics.call_thrice(pyglet.gl.glEnable, pyglet.gl.GL_POINT_SMOOTH)
             graphics.call_thrice(graphics.exit_canvas_mode)
