@@ -23,6 +23,7 @@ class Spray(tool.Tool):
         tool.controlspace.add(self.button_single)
         tool.controlspace.add(self.button_double)
         self.button_single.select()
+        self.button_single.action()
     
     def select_single(self):
         self.dual_color = False

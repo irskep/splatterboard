@@ -14,6 +14,7 @@ import collections
 class PaintingEnvironment:
     
     drawn_this_frame = False
+    canvas_image = None
     
     def __init__(self):
         tool.painting_env = self
@@ -277,7 +278,18 @@ class PaintingEnvironment:
         graphics.outline_shapes = True
         graphics.fill_shapes = True
     
+    def dialog_fail(self):
+        graphics.main_window.set_fullscreen(settings.settings['fullscreen'])
+        pyglet.clock.schedule_once(self.dialog_fail_2,0.5)
+    
+    def dialog_fail_2(self,dt=0):
+        graphics.set_color_extra(1,1,1,1)
+        graphics.draw_image_extra(self.canvas_image,0,0)
+        #graphics.call_much_later(self.current_tool.select())
+        graphics.call_much_later(self.current_tool.canvas_changed())
+    
     def open(self):
+        self.canvas_image = graphics.get_snapshot()
         if not settings.settings['fullscreen']:
             self.open_2()
             return
@@ -286,7 +298,7 @@ class PaintingEnvironment:
         
     def open_2(self, dt=0):    
         path = gui.open_file(type_list = resources.supported_image_formats)
-        if path == None: return
+        if path == None: self.dialog_fail()
         if not settings.settings['fullscreen']:
             self.open_3(0,path)
             return
@@ -299,12 +311,14 @@ class PaintingEnvironment:
             graphics.clear(1,1,1,1)
             graphics.set_color_extra(1,1,1,1)
             graphics.call_thrice(graphics.enter_canvas_mode)
-            graphics.draw_image_extra(pyglet.image.load(path),graphics.canvas_x+1,graphics.canvas_y+1)
+            self.canvas_image = pyglet.image.load(path)
+            graphics.draw_image_extra(self.canvas_image,graphics.canvas_x+1,graphics.canvas_y+1)
             graphics.call_thrice(graphics.exit_canvas_mode)
             #graphics.call_much_later(self.current_tool.select())
-            graphics.call_much_later(self.current_tool.canvas_changed())
+            graphics.call_much_later(self.current_tool.canvas_changed)
     
     def save(self):
+        self.canvas_image = graphics.get_snapshot()
         img = graphics.get_canvas()
         img = img.get_region(1,1,img.width-1,img.height-1)
         if not settings.settings['fullscreen']:
@@ -315,7 +329,7 @@ class PaintingEnvironment:
     
     def save_2(self, dt=0, img=None):
         path = gui.save_file(default_name="My Picture.png")
-        if path == None: return
+        if path == None: self.dialog_fail()
         img.save(path)
         if not settings.settings['fullscreen']:
             self.save_3(0,img,path)
