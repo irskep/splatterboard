@@ -11,7 +11,7 @@ class Eraser(tool.Tool):
     def select(self):
         tool.generate_brush_selector()
         self.button_explode_1 = gui.ImageButton(resources.SquareButton, self.start_explode_1,
-                                            5, 55, image_2 = resources.Eraser)
+                                            5, 55, image_2 = resources.Firecracker)
         tool.controlspace.add(self.button_explode_1)
     
     def start_drawing(self, x, y):
@@ -58,7 +58,7 @@ class Eraser(tool.Tool):
             px = x + math.cos(angle) * radius
             py = y + math.sin(angle) * radius
             point_radius = 5 + random.randint(0,10)
-            graphics.set_color(color=random.choice(graphics.rainbow_colors))
+            graphics.set_color(color=random.choice(graphics.rainbow_colors[0:3]))
             graphics.draw_ellipse(px-point_radius,py-point_radius,px+point_radius,py+point_radius)
         
         max_radius = math.sqrt((graphics.width-graphics.canvas_x)*(graphics.width-graphics.canvas_x)/4 + \

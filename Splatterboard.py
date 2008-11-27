@@ -30,7 +30,6 @@ class SplatterboardWindow(pyglet.window.Window):
         if opt['fit_window_to_screen']:
             opt['window_width'] = screen.width-100
             opt['window_height'] = screen.height-100
-            
         if not opt['fullscreen']:
             super(SplatterboardWindow, self).__init__(width=opt['window_width'], height=opt['window_height'],
                                                 resizable=False, vsync=True, config=config)

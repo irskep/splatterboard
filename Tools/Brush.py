@@ -16,13 +16,13 @@ class Brush(tool.Tool):
         self.button_group = gui.ButtonGroup()
         
         self.button_normal = gui.ImageButton(resources.SquareButton, self.select_normal,
-                                            5, 55, image_2 = resources.Brush, 
+                                            5, 55, image_2 = resources.Brush_normal, 
                                             parent_group=self.button_group)
         self.button_spiral = gui.ImageButton(resources.SquareButton, self.select_spiral, 
                                             55, 55, image_2 = resources.Brush_spiral, 
                                             parent_group=self.button_group)
         self.button_weave = gui.ImageButton(resources.SquareButton, self.select_weave, 
-                                            105, 55, image_2 = resources.Spray2, 
+                                            105, 55, image_2 = resources.Brush_weave, 
                                             parent_group=self.button_group)
         tool.controlspace.add(self.button_normal)
         tool.controlspace.add(self.button_spiral)
