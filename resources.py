@@ -19,7 +19,7 @@ supported_image_formats = [	'bmp','dds','exif','gif','jpg','jpeg','jp2','jpx',
 							'pcx','png','pnm','ras','tga','tif','tiff', 'xbm', 'xpm']
 
 #Change this to fit your folder structure
-resource_paths = ['Tools','Resources']
+resource_paths = ['Tools','Resources','Tool Resources']
 
 exclude = []
 
