@@ -1,5 +1,5 @@
 import tool, resources, graphics, draw, gui
-import math
+import pyglet, math, random
 
 class Eraser(tool.Tool):
     """Simple brush tool"""
