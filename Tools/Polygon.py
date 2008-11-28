@@ -1,5 +1,5 @@
 import pyglet, math
-import tool, resources, graphics, gui
+import tool, resources, graphics, gui, draw
 
 class Polygon(tool.Tool):
     """Simple polygon tool"""
@@ -29,12 +29,12 @@ class Polygon(tool.Tool):
                 y_offset = 0
                 if n == 3: y_offset = -5
                 if n % 2 == 1: theta = -math.pi/n/2
-                poly = graphics.concat(graphics._iter_ngon(x+w/2,y+h/2+y_offset,(w-10)/2,n,theta))
+                poly = draw._concat(graphics._iter_ngon(x+w/2,y+h/2+y_offset,(w-10)/2,n,theta))
                 graphics.set_color(1,1,1,1)
-                graphics.draw_polygon(poly)
+                draw.polygon(poly)
                 graphics.set_color(0,0,0,1)
                 graphics.set_line_width(1)
-                graphics.draw_line_loop(poly)
+                draw.line_loop(poly)
             return poly_func
         
         w, h = resources.SquareButton.width, resources.SquareButton.height
@@ -60,14 +60,14 @@ class Polygon(tool.Tool):
         radius = math.sqrt((self.rx - self.x)*(self.rx - self.x)+(self.ry - self.y)*(self.ry - self.y))
         theta = math.atan2(self.ry-self.y, self.rx-self.x)
         graphics.set_color(1,1,1,1)
-        graphics.draw_image(self.canvas_pre,graphics.canvas_x,graphics.canvas_y)
+        draw.image(self.canvas_pre,graphics.canvas_x,graphics.canvas_y)
         if graphics.fill_shapes:
                 graphics.set_color(color=self.fill_color)
-                graphics.draw_ngon(self.x,self.y,radius,self.sides,theta)
+                draw.ngon(self.x,self.y,radius,self.sides,theta)
         if graphics.outline_shapes:
             graphics.set_line_width(graphics.user_line_size)
             graphics.set_color(color=self.line_color)
-            graphics.draw_ngon_outline(self.x, self.y, radius, self.sides, theta)
+            draw.ngon_outline(self.x, self.y, radius, self.sides, theta)
         
     def stop_drawing(self, x, y):
         self.keep_drawing(x, y, 0, 0)

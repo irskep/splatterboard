@@ -1,5 +1,5 @@
-import tool, resources, graphics, math, gui
-import random
+import tool, resources, graphics, draw, gui
+import math, random
 from pyglet import clock
 
 class Spray(tool.Tool):
@@ -58,9 +58,9 @@ class Spray(tool.Tool):
         colors = []
         points = [self.make_point() for i in xrange(self.dots_per_frame)]
         if not self.hollow and not self.variable_size:
-            graphics.draw_points(
+            draw.points(
                 sum(points,[]),
-                graphics.concat([self.get_color() for i in xrange(self.dots_per_frame)])
+                draw._concat([self.get_color() for i in xrange(self.dots_per_frame)])
             )
         else:
             for i in xrange(len(points)):
@@ -72,8 +72,8 @@ class Spray(tool.Tool):
                 if random.random() < self.chance:
                     if self.hollow:
                         graphics.set_line_width(graphics.brush_size*0.2)
-                        graphics.draw_ellipse_outline(x-rad,y-rad,x+rad,y+rad)
-                    else: graphics.draw_ellipse(x-rad,y-rad,x+rad,y+rad)
+                        draw.ellipse_outline(x-rad,y-rad,x+rad,y+rad)
+                    else: draw.ellipse(x-rad,y-rad,x+rad,y+rad)
     
     def make_point(self):
         # Pick somewhere random to draw

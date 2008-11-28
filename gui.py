@@ -2,7 +2,7 @@
 Buttons, etc.
 """
 
-import pyglet, resources, graphics, math
+import pyglet, resources, graphics, draw, math
 from settings import settings
 from dialogs import *
 
@@ -38,9 +38,9 @@ class Button():
         if self.parent_group != None and self.selected: color = (0.8, 0.8, 0.8, 1)
         if self.pressed: color = (0.7, 0.7, 0.7, 1)
         graphics.set_color(color=color)
-        graphics.draw_image(self.image,self.x,self.y)
+        draw.image(self.image,self.x,self.y)
         graphics.set_color(1,1,1,1)
-        graphics.draw_label(self.label)
+        draw.label(self.label)
         if self.more_draw != None: self.more_draw()
     
     def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
@@ -98,26 +98,26 @@ class ColorButton(Button):
     def draw(self):
         if self.which_color == 0:
             if graphics.line_rainbow():
-                graphics.draw_rainbow(self.x,self.y,self.x+self.width,self.y+self.height)
+                draw.rainbow(self.x,self.y,self.x+self.width,self.y+self.height)
             else:
                 graphics.set_color(color=graphics.line_color)
-                graphics.draw_rect(self.x, self.y, self.x+self.width, self.y+self.height)
+                draw.rect(self.x, self.y, self.x+self.width, self.y+self.height)
         else:
             if graphics.fill_rainbow():
-                graphics.draw_rainbow(self.x,self.y,self.x+self.width,self.y+self.height)
+                draw.rainbow(self.x,self.y,self.x+self.width,self.y+self.height)
             else:
                 graphics.set_color(color=graphics.fill_color)
-                graphics.draw_rect(self.x, self.y, self.x+self.width, self.y+self.height)
+                draw.rect(self.x, self.y, self.x+self.width, self.y+self.height)
         
         if self.selected:
             graphics.set_color(1,1,1,1)
             graphics.set_line_width(1)
-            graphics.draw_ellipse_outline(self.x+5, self.y+5, self.x+self.width-5, self.y+self.height-5)
+            draw.ellipse_outline(self.x+5, self.y+5, self.x+self.width-5, self.y+self.height-5)
             graphics.set_color(0,0,0,1)
-            graphics.draw_ellipse_outline(self.x+7, self.y+7, self.x+self.width-7, self.y+self.height-7)
+            draw.ellipse_outline(self.x+7, self.y+7, self.x+self.width-7, self.y+self.height-7)
         graphics.set_line_width(1.0)    
         graphics.set_color(0,0,0,1)
-        graphics.draw_rect_outline(self.x, self.y, self.x+self.width, self.y+self.height)
+        draw.rect_outline(self.x, self.y, self.x+self.width, self.y+self.height)
     
     def get_color(self):
         graphics.selected_color = self.which_color
@@ -135,7 +135,7 @@ class PolygonButton(Button):
         if self.parent_group != None and self.selected: color = (0.8, 0.8, 0.8, 1)
         if self.pressed: color = (0.7, 0.7, 0.7, 1)
         graphics.set_color(color=color)
-        graphics.draw_image(self.image,self.x,self.y)
+        draw.image(self.image,self.x,self.y)
         
         x, y = self.x+self.width/2, self.y+self.height/2
         poly = self.generate_polygon(x,y,x,self.y+self.height*0.9,self.sides)
@@ -144,15 +144,15 @@ class PolygonButton(Button):
                 graphics.set_color(1,1,1,1)
             else:
                 graphics.set_color(color=graphics.fill_color)
-            graphics.draw_polygon(poly)
+            draw.polygon(poly)
         if self.outline:
             graphics.set_line_width(2)
             if graphics.line_rainbow():
                 graphics.set_color(1,1,1,1)
             else:
                 graphics.set_color(color=graphics.line_color)
-            graphics.draw_line_loop(poly)
-            graphics.draw_points(poly)
+            draw.line_loop(poly)
+            draw.points(poly)
     
     def generate_polygon(self, x, y, rx, ry, n):
         radius = math.sqrt((rx - x)*(rx - x)+(ry - y)*(ry - y))
@@ -186,8 +186,8 @@ class ImageButton(Button):
         if self.parent_group != None and self.selected: color = (0.8, 0.8, 0.8, 1)
         if self.pressed: color = (0.7, 0.7, 0.7, 1)
         graphics.set_color(color=color)
-        graphics.draw_image(self.image,self.x,self.y)
-        if self.image_2 != None: graphics.draw_image(self.image_2, self.x, self.y)
+        draw.image(self.image,self.x,self.y)
+        if self.image_2 != None: draw.image(self.image_2, self.x, self.y)
 
 class ButtonGroup():
     """

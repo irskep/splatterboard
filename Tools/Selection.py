@@ -1,4 +1,4 @@
-import random, tool, resources, graphics, gui
+import random, tool, resources, graphics, draw, gui
 
 class Selection(tool.Tool):
     """
@@ -39,11 +39,11 @@ class Selection(tool.Tool):
     
     def select_rect(self):
         self.draw_selection_shape = self.draw_shape_rect
-        self.draw_selection_mask = graphics.draw_rect
+        self.draw_selection_mask = draw.rect
     
     def select_ellipse(self):
         self.draw_selection_shape = self.draw_shape_ellipse
-        self.draw_selection_mask = graphics.draw_ellipse
+        self.draw_selection_mask = draw.ellipse
 
     def ask_undo(self):
         return False
@@ -53,7 +53,7 @@ class Selection(tool.Tool):
         if not self.coords_in_selection(x,y):
             if self.selection != None:
                 graphics.set_color(1,1,1,1)
-                graphics.draw_image(self.canvas_pre,0,0)
+                draw.image(self.canvas_pre,0,0)
                 self.draw_selection_mask(self.original_x, self.original_y,
                                 self.original_x+abs(self.w), self.original_y+abs(self.h))
                 self.draw_selection_image()
@@ -79,7 +79,7 @@ class Selection(tool.Tool):
         x = min(max(x, graphics.canvas_x), graphics.width)
         y = min(max(y, graphics.canvas_y), graphics.height)
         graphics.set_color(1,1,1,1)
-        graphics.draw_image(self.canvas_pre,0,0)
+        draw.image(self.canvas_pre,0,0)
         if self.dragging:
             self.x1 = x - self.mouse_offset_x
             self.y1 = y - self.mouse_offset_y
@@ -87,10 +87,10 @@ class Selection(tool.Tool):
             self.img_x = min(self.x1, self.x2)
             self.img_y = min(self.y1, self.y2)
             graphics.set_color(1,1,1,1)
-            #graphics.draw_rect(self.original_x, self.original_y,self.original_x+abs(self.w), self.original_y+abs(self.h))
+            #draw.rect(self.original_x, self.original_y,self.original_x+abs(self.w), self.original_y+abs(self.h))
             self.draw_selection_mask(self.original_x, self.original_y,
                                         self.original_x+abs(self.w), self.original_y+abs(self.h))
-            #graphics.draw_image(self.selection, self.img_x, self.img_y)
+            #draw.image(self.selection, self.img_x, self.img_y)
             self.draw_selection_image()
         else:
             self.x2, self.y2 = x, y
@@ -103,7 +103,7 @@ class Selection(tool.Tool):
         #print "stop"
         if self.dragging and self.selection != None:
             graphics.set_color(1,1,1,1)
-            #graphics.draw_image(self.selection, self.img_x, self.img_y)
+            #draw.image(self.selection, self.img_x, self.img_y)
             self.draw_selection_image()
             self.draw_selection_shape()
         else:
@@ -120,21 +120,21 @@ class Selection(tool.Tool):
         if self.selection == None: return
         self.img_x, self.img_y = min(self.x1, self.x2), min(self.y1, self.y2)
         graphics.set_color(1,1,1,1)
-        #graphics.draw_rect(self.x1,self.y1,self.x2,self.y2)
+        #draw.rect(self.x1,self.y1,self.x2,self.y2)
         self.draw_selection_mask(self.x1,self.y1,self.x2,self.y2)
         
         graphics.init_stencil_mode()
 
         graphics.set_color(1,1,1,1)
-        graphics.draw_rect(self.x1,self.y1,self.x2,self.y2)
+        draw.rect(self.x1,self.y1,self.x2,self.y2)
         graphics.set_color(0,0,0,1)
         self.draw_selection_mask(self.x1,self.y1,self.x2,self.y2)
         
         graphics.stop_drawing_stencil()
         
         graphics.set_color(1,1,1,1)
-        #graphics.draw_rect(self.x1,self.y1,self.x2,self.y2)
-        graphics.draw_image(self.selection, self.img_x, self.img_y)
+        #draw.rect(self.x1,self.y1,self.x2,self.y2)
+        draw.image(self.selection, self.img_x, self.img_y)
         
         graphics.reset_stencil_mode()
     
@@ -149,19 +149,19 @@ class Selection(tool.Tool):
         def temp2():
             graphics.user_line_size = old_line_size
         graphics.call_twice(temp1)
-        #graphics.draw_rect_outline(self.img_x+1, self.img_y+1, self.img_x+abs(self.w)-1, self.img_y+abs(self.h)-1)
-        graphics.draw_ellipse_outline(self.img_x+1, self.img_y+1, self.img_x+abs(self.w)-1, self.img_y+abs(self.h)-1)
+        #draw.rect_outline(self.img_x+1, self.img_y+1, self.img_x+abs(self.w)-1, self.img_y+abs(self.h)-1)
+        draw.ellipse_outline(self.img_x+1, self.img_y+1, self.img_x+abs(self.w)-1, self.img_y+abs(self.h)-1)
         graphics.disable_line_stipple()
         graphics.call_twice(temp2)
 
     def draw_mask_ellipse(self, x1, y1, x2, y2):
-        graphics.draw_ellipse(x1,y1,x2,y2)
+        draw.ellipse(x1,y1,x2,y2)
     
     def draw_shape_rect(self):
         graphics.enable_line_stipple()
         graphics.set_line_width(1.0)
         graphics.set_color(color=graphics.get_line_color())
-        graphics.draw_rect_outline(self.img_x+1, self.img_y+1, self.img_x+abs(self.w)-1, self.img_y+abs(self.h)-1)
+        draw.rect_outline(self.img_x+1, self.img_y+1, self.img_x+abs(self.w)-1, self.img_y+abs(self.h)-1)
         graphics.disable_line_stipple()
     
     def unselect(self):

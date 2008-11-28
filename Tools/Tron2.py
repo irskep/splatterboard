@@ -1,4 +1,5 @@
-import tool, resources, graphics, pyglet, random
+import tool, resources, graphics, draw
+import pyglet, random
 from pyglet.window import key
 
 class Tron2(tool.Tool):
@@ -52,7 +53,7 @@ class Tron2(tool.Tool):
                 graphics.enter_canvas_mode()
                 graphics.call_twice(pyglet.gl.glDisable, pyglet.gl.GL_POINT_SMOOTH)
                 graphics.set_color(color=graphics.line_color)
-                graphics.draw_points([x, y])
+                draw.points([x, y])
                 graphics.call_twice(pyglet.gl.glEnable, pyglet.gl.GL_POINT_SMOOTH)
                 graphics.exit_canvas_mode()
         if len(self.deletion_queue) > 2:
@@ -84,7 +85,7 @@ class Tron2(tool.Tool):
         self.canvas_pre = graphics.get_snapshot()
         visited = []
         graphics.set_color(1, 0, 0, 1)
-        graphics.draw_ellipse(self.x[i] - self.esplode_radius, self.y[i] - self.esplode_radius, self.x[i] + self.esplode_radius, self.y[i] + self.esplode_radius)
+        draw.ellipse(self.x[i] - self.esplode_radius, self.y[i] - self.esplode_radius, self.x[i] + self.esplode_radius, self.y[i] + self.esplode_radius)
         self.deletion_queue.append(i)
         if len(self.x) < 1:
             pyglet.clock.unschedule(self.do_tron)
@@ -113,6 +114,6 @@ class Tron2(tool.Tool):
 
 default = Tron2()
 priority = 95
-group = 'WTF'
+group = 'What?'
 image = resources.Rectangle
 cursor = graphics.cursor['CURSOR_CROSSHAIR']

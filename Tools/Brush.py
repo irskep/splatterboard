@@ -1,4 +1,5 @@
-import tool, resources, graphics, math, gui, random
+import tool, resources, graphics, draw, gui
+import math, random
 
 class Brush(tool.Tool):
     """Simple brush tool"""
@@ -107,7 +108,7 @@ class Brush(tool.Tool):
             self.last_color_1 = graphics.get_line_color()
             graphics.set_color(color=self.last_color_1)
             graphics.set_line_width(graphics.brush_size)
-            if graphics.brush_size > 1: graphics.draw_points((x,y))
+            if graphics.brush_size > 1: draw.points((x,y))
     
     def keep_drawing(self, x, y, dx, dy):
         ds = math.sqrt(dx*dx+dy*dy) + self.ds_backlog
@@ -129,7 +130,7 @@ class Brush(tool.Tool):
             graphics.set_color(color=self.last_color_1)
             self.draw_point(x,y)
             graphics.set_line_width(graphics.brush_size)
-            graphics.draw_line(x, y, self.lastx1, self.lasty1)
+            draw.line(x, y, self.lastx1, self.lasty1)
             self.lastx1, self.lasty1 = x, y
         self.lastx, self.lasty = x, y
     
@@ -165,12 +166,12 @@ class Brush(tool.Tool):
         graphics.set_color(color=self.last_color_1)
         self.draw_point(x1,y1)
         graphics.set_line_width(graphics.brush_size)
-        graphics.draw_line(x1, y1, self.lastx1, self.lasty1)
+        draw.line(x1, y1, self.lastx1, self.lasty1)
         
         graphics.set_color(color=self.last_color_2)
         self.draw_point(x2,y2)
         graphics.set_line_width(graphics.brush_size)
-        graphics.draw_line(x2, y2, self.lastx2, self.lasty2)
+        draw.line(x2, y2, self.lastx2, self.lasty2)
         self.lastx1, self.lasty1 = x1, y1
         self.lastx2, self.lasty2 = x2, y2
     
@@ -191,11 +192,11 @@ class Brush(tool.Tool):
         graphics.set_color(color=self.last_color_1)
         self.draw_point(x1,y1,0.6)
         graphics.set_line_width(graphics.brush_size*0.6)
-        graphics.draw_line(x1, y1, self.lastx1, self.lasty1)
+        draw.line(x1, y1, self.lastx1, self.lasty1)
         graphics.set_color(color=self.last_color_2)
         self.draw_point(x2,y2,0.6)
         graphics.set_line_width(graphics.brush_size*0.6)
-        graphics.draw_line(x2, y2, self.lastx2, self.lasty2)
+        draw.line(x2, y2, self.lastx2, self.lasty2)
         self.railroad_dna_flip += ds
         if self.railroad:
             x_add *= 1.3
@@ -207,12 +208,12 @@ class Brush(tool.Tool):
             ry2 = y - y_add
             self.railroad_dna_flip = 0
             if self.railroad:
-                graphics.draw_line(rx1,ry1,rx2,ry2)
+                draw.line(rx1,ry1,rx2,ry2)
             else:
                 graphics.set_color(color=random.choice(graphics.rainbow_colors))
-                graphics.draw_line(x,y,rx1,ry1)
+                draw.line(x,y,rx1,ry1)
                 graphics.set_color(color=random.choice(graphics.rainbow_colors))
-                graphics.draw_line(x,y,rx2,ry2)
+                draw.line(x,y,rx2,ry2)
         self.lastx1, self.lasty1 = x1, y1
         self.lastx2, self.lasty2 = x2, y2
     
@@ -228,7 +229,7 @@ class Brush(tool.Tool):
         x2 = x - x_add
         y2 = y - y_add
         graphics.set_color(*graphics.get_line_color())
-        graphics.draw_quad((x1,y1,self.lastx1,self.lasty1,self.lastx2,self.lasty2,x2,y2))
+        draw.quad((x1,y1,self.lastx1,self.lasty1,self.lastx2,self.lasty2,x2,y2))
         self.lastx1, self.lasty1 = x1, y1
         self.lastx2, self.lasty2 = x2, y2
     
@@ -245,7 +246,7 @@ class Brush(tool.Tool):
         self.draw_point(x,y,brush_mult*2.0)
         graphics.set_line_width(1.0)
         #graphics.set_color(*random.choice(graphics.rainbow_colors))
-        graphics.draw_quad((x+x_add1,           y+y_add1,
+        draw.quad((x+x_add1,           y+y_add1,
                             self.lastx+x_add2,  self.lasty+y_add2,
                             self.lastx-x_add2,  self.lasty-y_add2,
                             x-x_add1,           y-y_add1))
@@ -256,9 +257,9 @@ class Brush(tool.Tool):
         point_size = graphics.brush_size*mult*0.95
         if point_size < 10:
             graphics.set_line_width(point_size)
-            graphics.draw_points((x,y))
+            draw.points((x,y))
         else:
-            graphics.draw_ellipse(x-point_size/2.0,y-point_size/2.0,x+point_size/2.0,y+point_size/2.0)
+            draw.ellipse(x-point_size/2.0,y-point_size/2.0,x+point_size/2.0,y+point_size/2.0)
     
 
 default = Brush()

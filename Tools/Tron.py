@@ -1,4 +1,5 @@
-import tool, resources, graphics, pyglet, random
+import tool, resources, graphics, draw
+import pyglet, random
 from pyglet.window import key
 
 class Tron(tool.Tool):
@@ -51,7 +52,7 @@ class Tron(tool.Tool):
             graphics.call_thrice(pyglet.gl.glDisable, pyglet.gl.GL_POINT_SMOOTH)
             graphics.set_color_extra(color=self.tron_color)
             graphics.set_line_width(1)
-            graphics.call_thrice(graphics.draw_points, [self.x, self.y])
+            graphics.call_thrice(draw.points, [self.x, self.y])
             graphics.call_thrice(pyglet.gl.glEnable, pyglet.gl.GL_POINT_SMOOTH)
             graphics.call_thrice(graphics.exit_canvas_mode)
             self.do_tron(iters=iters-1)
@@ -73,7 +74,7 @@ class Tron(tool.Tool):
             
     def explode(self):
         graphics.set_color(1,0,0,1)
-        graphics.draw_ellipse(  self.x-self.explode_radius,self.y-self.explode_radius,
+        draw.ellipse(  self.x-self.explode_radius,self.y-self.explode_radius,
                                 self.x+self.explode_radius,self.y+self.explode_radius)
         self.running = False
         

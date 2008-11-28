@@ -1,4 +1,4 @@
-import tool, resources, graphics
+import tool, resources, graphics, draw
 
 class Pencil(tool.Tool):
 	"""Simple pencil tool"""
@@ -9,7 +9,7 @@ class Pencil(tool.Tool):
 	
 	def keep_drawing(self, x, y, dx, dy):
 		graphics.set_color(color=graphics.get_line_color())
-		graphics.draw_line(self.x, self.y, x, y)
+		draw.line(self.x, self.y, x, y)
 		self.x, self.y = x, y
 
 default = Pencil()

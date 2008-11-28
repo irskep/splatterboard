@@ -1,4 +1,5 @@
-import random, tool, resources, graphics
+import tool, resources, graphics, draw
+import random
 
 class Ellipse(tool.Tool):
     """Simple ellipse tool"""
@@ -23,16 +24,16 @@ class Ellipse(tool.Tool):
     def keep_drawing(self, x, y, dx, dy):
         self.x2, self.y2 = x, y
         graphics.set_color(1,1,1,1)
-        graphics.draw_image(self.canvas_pre,graphics.canvas_x,graphics.canvas_y)
+        draw.image(self.canvas_pre,graphics.canvas_x,graphics.canvas_y)
         
         if graphics.fill_shapes and abs(self.x2-self.x1) >= graphics.user_line_size \
                 and abs(self.y2-self.y1) >= graphics.user_line_size:
             graphics.set_color(color=self.fill_color)
-            graphics.draw_ellipse(self.x1, self.y1, self.x2, self.y2)
+            draw.ellipse(self.x1, self.y1, self.x2, self.y2)
         if graphics.outline_shapes:
             graphics.set_line_width(graphics.user_line_size)
             graphics.set_color(color=self.line_color)
-            graphics.draw_ellipse_outline(self.x1, self.y1, self.x2, self.y2)
+            draw.ellipse_outline(self.x1, self.y1, self.x2, self.y2)
     
     def stop_drawing(self, x, y):
         self.keep_drawing(x, y, 0, 0)

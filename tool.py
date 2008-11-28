@@ -30,7 +30,7 @@ Adding Buttons
 """
 
 import pyglet
-import gui, resources, graphics
+import gui, resources, graphics, draw
 
 # =======================
 # = BEGIN TOOL TEMPLATE =
@@ -170,7 +170,7 @@ def generate_brush_selector(start_x=5,start_y=5,max_x=-1,max_y=-1):
         def draw_brush():
             graphics.set_color(0,0,0,1)
             graphics.set_line_width(size)
-            graphics.draw_points((x+w/2,y+h/2))
+            draw.points((x+w/2,y+h/2))
         return draw_brush
     
     def get_brush_setter(size):
@@ -216,7 +216,7 @@ def generate_line_selector(start_x=5, start_y=5, max_x=-1, max_y=-1):
         def draw_line():
             graphics.set_line_width(size)
             graphics.set_color(0,0,0,1)
-            graphics.draw_line(x+15,y+10, x+w-15, y+h-10)
+            draw.line(x+15,y+10, x+w-15, y+h-10)
         return draw_line
     
     def get_line_setter(size):

@@ -2,7 +2,7 @@
 Just a color picker object. This was in gui, but it was big and encapsulated, so now it has its own module. Essentially, it just draws a bunch of rectangles to an image, draws the image, and can return what color the image is at any given point.
 """
 
-import pyglet, graphics
+import pyglet, graphics, draw
 
 class ColorPicker():
     def __init__(self, x, y, width, height, step_x=15,step_y=15):
@@ -44,7 +44,7 @@ class ColorPicker():
                    a = (a-0.5)*2
                    array[x][y] = (r+(1-r)*a,g+(1-g)*a,b+(1-b)*a,1.0)
                 graphics.set_color(color=array[x][y])
-                graphics.draw_rect(self.x+x*self.step_x,self.y+y*self.step_y,self.x+(x+1)*self.step_x,self.y+(y+1)*self.step_y)
+                draw.rect(self.x+x*self.step_x,self.y+y*self.step_y,self.x+(x+1)*self.step_x,self.y+(y+1)*self.step_y)
             if x < array_w/2:
                 a = x*2/(array_w-2)
                 array[x][0] = (a,a,a,1)
@@ -58,16 +58,16 @@ class ColorPicker():
     def draw_initial(self):
         """Render the image"""
         graphics.set_color(1,1,1,1)
-        graphics.draw_rect(self.x,self.y+self.height/2,self.x+self.width,self.y+self.height)
+        draw.rect(self.x,self.y+self.height/2,self.x+self.width,self.y+self.height)
         graphics.set_color(0,0,0,1)
-        graphics.draw_rect(self.x,self.y,self.x+self.width,self.y+self.height/2)
+        draw.rect(self.x,self.y,self.x+self.width,self.y+self.height/2)
         for x in xrange(0,int(self.array_w)):
             for y in xrange(0,int(self.array_h)):
                 #if y == 0 and x > int(self.array_w/2): break
                 graphics.set_color(color=self.array[x][y])
-                graphics.draw_rect(self.x+x*self.step_x,self.y+y*self.step_y,self.x+(x+1)*self.step_x,self.y+(y+1)*self.step_y)
-        graphics.draw_rainbow(self.x+self.width*0.5,self.y,self.x+self.width*0.75,self.y+self.step_y)
-        graphics.draw_rainbow(self.x+self.width*0.75,self.y,self.x+self.width,self.y+self.step_y)
+                draw.rect(self.x+x*self.step_x,self.y+y*self.step_y,self.x+(x+1)*self.step_x,self.y+(y+1)*self.step_y)
+        draw.rainbow(self.x+self.width*0.5,self.y,self.x+self.width*0.75,self.y+self.step_y)
+        draw.rainbow(self.x+self.width*0.75,self.y,self.x+self.width,self.y+self.step_y)
         temp_image = pyglet.image.get_buffer_manager().get_color_buffer().get_image_data()
         self.image = temp_image.get_texture().get_region(self.x, self.y, int(self.width), int(self.height))
     
@@ -75,13 +75,13 @@ class ColorPicker():
         """Render the image if it has not been rendered yet. Just draw the image if it has."""
         if self.rendered:
             graphics.set_color(1,1,1,1)
-            graphics.draw_image(self.image,self.x,self.y)
+            draw.image(self.image,self.x,self.y)
         else:
             self.rendered = True
             self.draw_initial()
         graphics.set_color(0,0,0,1)
         graphics.set_line_width(1)
-        graphics.draw_rect_outline(self.x,self.y,self.x+self.width,self.y+self.height)
+        draw.rect_outline(self.x,self.y,self.x+self.width,self.y+self.height)
     
     def get_color(self, x, y):
         """Get the color at position (x,y), where x and y are absolute coordinates, not relative to the picker's position."""

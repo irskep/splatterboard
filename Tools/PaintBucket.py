@@ -1,5 +1,5 @@
-import tool, resources, graphics, pyglet, gui
-from settings import *
+import tool, resources, graphics, draw
+import pyglet, gui
 import time, random, math
 
 class NormalPainter:
@@ -115,8 +115,8 @@ class NormalPainter:
         graphics.enter_canvas_mode()
         graphics.set_line_width(self.point_size)
         if not self.smooth_points: graphics.call_twice(pyglet.gl.glDisable, pyglet.gl.GL_POINT_SMOOTH)
-        graphics.draw_points(self.pixels_old, self.pixel_colors_old)
-        graphics.draw_points(self.pixels, self.pixel_colors)
+        draw.points(self.pixels_old, self.pixel_colors_old)
+        draw.points(self.pixels, self.pixel_colors)
         if not self.smooth_points: graphics.call_twice(pyglet.gl.glEnable, pyglet.gl.GL_POINT_SMOOTH)
         self.pixels_old, self.pixel_colors_old = self.pixels, self.pixel_colors
         self.pixels, self.pixel_colors = [], []

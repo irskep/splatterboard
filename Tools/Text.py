@@ -1,4 +1,5 @@
-import tool, graphics, resources, pyglet
+import tool, graphics, resources, draw
+import pyglet
 from pyglet.window import key
 
 class Text(tool.Tool):
@@ -41,8 +42,8 @@ class Text(tool.Tool):
 	def draw(self):
 		# TODO show a caret, maybe use a real TextLayout
 		graphics.set_color(1,1,1,1)
-		graphics.draw_image(self.canvas_pre,graphics.canvas_x,graphics.canvas_y)
-		graphics.draw_label(self.label)
+		draw.image(self.canvas_pre,graphics.canvas_x,graphics.canvas_y)
+		draw.label(self.label)
 
 
 default = Text()

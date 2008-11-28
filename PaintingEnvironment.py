@@ -5,7 +5,7 @@ A big ball of superglue - stay clear.
 import pyglet
 import gui, colorpicker
 import random, time
-import resources, graphics, tool
+import resources, graphics, draw, tool
 import sys, os, time
 from pyglet.window import key
 import settings
@@ -77,7 +77,7 @@ class PaintingEnvironment:
         graphics.main_window.push_handlers(self.colorpicker)#, self.colordisplay)
         
         #white background
-        graphics.clear(1,1,1,1);
+        draw.clear(1,1,1,1);
     
     #------------EVENT HANDLING------------#    
     def try_redraw(self):
@@ -90,13 +90,13 @@ class PaintingEnvironment:
         if not graphics.drawing:
             #toolbar background
             graphics.set_color(0.8, 0.8, 0.8, 1)
-            graphics.draw_rect(0,graphics.canvas_y,graphics.canvas_x,graphics.height)
-            graphics.draw_rect(0,0,graphics.width,graphics.canvas_y)
+            draw.rect(0,graphics.canvas_y,graphics.canvas_x,graphics.height)
+            draw.rect(0,0,graphics.width,graphics.canvas_y)
             #buttons
             graphics.set_color(1,1,1,1)
             for button in self.toolbar: button.draw()   #toolbar buttons
             for button in self.buttons: button.draw()   #bottom buttons
-            for label in self.labels: graphics.draw_label(label) #text labels
+            for label in self.labels: draw.label(label) #text labels
             self.colorpicker.draw()                     #color picker
             #self.colordisplay.draw()                    #line/fill color selector
             tool.controlspace.draw()
@@ -104,8 +104,8 @@ class PaintingEnvironment:
             graphics.set_color(0,0,0,1)
             graphics.set_line_width(1.0)
             graphics.call_twice(pyglet.gl.glDisable,pyglet.gl.GL_BLEND)
-            graphics.draw_line(0, graphics.canvas_y, graphics.width, graphics.canvas_y)
-            graphics.draw_line(graphics.canvas_x, graphics.canvas_y, graphics.canvas_x, graphics.height)
+            draw.line(0, graphics.canvas_y, graphics.width, graphics.canvas_y)
+            draw.line(graphics.canvas_x, graphics.canvas_y, graphics.canvas_x, graphics.height)
             graphics.call_twice(pyglet.gl.glEnable,pyglet.gl.GL_BLEND)
         self.drawn_this_frame = False
     
@@ -259,7 +259,7 @@ class PaintingEnvironment:
             graphics.set_color_extra(1,1,1,1)
             graphics.call_thrice(graphics.enter_canvas_mode)
             img = self.undo_queue.pop()
-            graphics.draw_image_extra(img,graphics.canvas_x,graphics.canvas_y)
+            draw.image_extra(img,graphics.canvas_x,graphics.canvas_y)
             graphics.call_thrice(graphics.exit_canvas_mode)
             self.current_tool.canvas_changed()
             #self.current_tool.select()      #go back into tool
@@ -285,7 +285,7 @@ class PaintingEnvironment:
     
     def dialog_fail_2(self,dt=0):
         graphics.set_color_extra(1,1,1,1)
-        graphics.draw_image_extra(self.canvas_image,0,0)
+        draw.image_extra(self.canvas_image,0,0)
         #graphics.call_much_later(self.current_tool.select())
         graphics.call_much_later(self.current_tool.canvas_changed())
     
@@ -314,11 +314,11 @@ class PaintingEnvironment:
         self.busy = False
         if path != None:
             #self.current_tool.unselect()
-            graphics.clear(1,1,1,1)
+            draw.clear(1,1,1,1)
             graphics.set_color_extra(1,1,1,1)
             graphics.call_thrice(graphics.enter_canvas_mode)
             self.canvas_image = pyglet.image.load(path)
-            graphics.draw_image_extra(self.canvas_image,graphics.canvas_x+1,graphics.canvas_y+1)
+            draw.image_extra(self.canvas_image,graphics.canvas_x+1,graphics.canvas_y+1)
             graphics.call_thrice(graphics.exit_canvas_mode)
             #graphics.call_much_later(self.current_tool.select())
             graphics.call_much_later(self.current_tool.canvas_changed)
@@ -352,10 +352,10 @@ class PaintingEnvironment:
         self.busy = False
         if img != None:
             self.current_tool.unselect()
-            graphics.clear(1,1,1,1)
+            draw.clear(1,1,1,1)
             graphics.set_color_extra(1,1,1,1)
             graphics.call_thrice(graphics.enter_canvas_mode)
-            graphics.draw_image_extra(img,graphics.canvas_x+1,graphics.canvas_y+1)
+            draw.image_extra(img,graphics.canvas_x+1,graphics.canvas_y+1)
             graphics.call_thrice(graphics.exit_canvas_mode)
             #graphics.call_much_later(self.current_tool.select())
             graphics.call_much_later(self.current_tool.canvas_changed())
