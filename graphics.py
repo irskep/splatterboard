@@ -534,7 +534,7 @@ def draw_polygon(points, colors=None):
 @command_wrapper
 def draw_quad(points,colors=None):
     if colors == None:
-        pyglet.graphics.draw(4, pyglet.gl.GL_QUADS, ('v2f', args))
+        pyglet.graphics.draw(4, pyglet.gl.GL_QUADS, ('v2f', points))
     else:
         pyglet.graphics.draw(len(points)/2, pyglet.gl.GL_POINTS,('v2f', points),('c4f', colors))
 
