@@ -1,0 +1,4 @@
+-Split graphics.py into graphics.py and primitives.py
+-Force fullscreen into 4:3 and scale loaded images
+-Try some Cairo things
+-Write a "chaser" brush
