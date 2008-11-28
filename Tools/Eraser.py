@@ -16,9 +16,7 @@ class Eraser(tool.Tool):
     
     def start_drawing(self, x, y):
         self.lastx, self.lasty = x, y
-        graphics.set_color(1,1,1,1)
-        graphics.set_line_width(graphics.brush_size)
-        if graphics.brush_size > 1: graphics.draw_points((x,y))
+        self.keep_drawing(x,y,0,0)
         
     def keep_drawing(self, x, y, dx, dy):
         graphics.set_color(1,1,1,1)
@@ -27,7 +25,7 @@ class Eraser(tool.Tool):
         graphics.set_line_width(graphics.brush_size)
         graphics.draw_line(x, y, self.lastx, self.lasty)
         graphics.set_color(0.5,0.5,0.5,1)
-        graphics.set_line_width(1.0)
+        graphics.set_line_width(0.8)
         radius = graphics.brush_size*0.8/2
         graphics.draw_ellipse_outline(x-radius,y-radius,x+radius,y+radius)
         self.lastx, self.lasty = x, y
@@ -36,8 +34,8 @@ class Eraser(tool.Tool):
         graphics.set_color(1,1,1,1)
         self.draw_point(x,y)
     
-    def draw_point(self,x,y):    
-        graphics.set_line_width(graphics.brush_size*0.9)
+    def draw_point(self,x,y):
+        graphics.set_line_width(graphics.brush_size*0.95)
         if graphics.brush_size > 1: graphics.draw_points((x,y))
     
     def start_explode_1(self):

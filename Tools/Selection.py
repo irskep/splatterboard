@@ -30,16 +30,9 @@ class Selection(tool.Tool):
         self.mouse_start_x, self.mouse_start_y = -1, -1
         
         self.button_group = gui.ButtonGroup()
-        self.button_rect = gui.ImageButton(resources.SquareButton, self.select_rect,
-                                            5, 55, image_2 = resources.Selection, 
-                                            parent_group=self.button_group)
-        self.button_ellipse = gui.ImageButton(resources.SquareButton, self.select_ellipse, 
-                                            55, 55, image_2 = resources.SelectEllipse, 
-                                            parent_group=self.button_group)
-        tool.controlspace.add(self.button_rect)
-        tool.controlspace.add(self.button_ellipse)
-        self.button_rect.select()
-        self.button_rect.action()
+        images = [resources.Selection, resources.SelectEllipse]
+        functions = [self.select_rect, self.select_ellipse]
+        tool.generate_button_row(images, functions, self.button_group)
     
     def canvas_changed(self):
         self.select()

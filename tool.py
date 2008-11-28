@@ -143,6 +143,18 @@ def push_undo(canvas_image_to_push=None):
 
 controlspace = ControlSpace()
 
+def generate_button_row(images, functions, button_group=None, start_x=5, start_y=55):
+    buttons = []
+    w, h = resources.SquareButton.width, resources.SquareButton.height
+    for i in xrange(len(functions)):
+        temp_button = gui.ImageButton(resources.SquareButton, functions[i], 5+i*w, h+5,
+                                        image_2=images[i], parent_group=button_group)
+        buttons.append(temp_button)
+        controlspace.add(temp_button)
+    buttons[0].select()
+    buttons[0].action()
+    return buttons
+
 def generate_brush_selector(start_x=5,start_y=5,max_x=-1,max_y=-1):
     """
     Generate a line of buttons that let the user change the brush size. See Brush tool for an example.
@@ -168,7 +180,7 @@ def generate_brush_selector(start_x=5,start_y=5,max_x=-1,max_y=-1):
     
     brush_group = gui.ButtonGroup()
     w, h = resources.SquareButton.width, resources.SquareButton.height
-    if max_x < 0: max_x = min(resources.SquareButton.width*5,controlspace.max_x)
+    if max_x < 0: max_x = min(resources.SquareButton.width*6,controlspace.max_x)
     if max_y < 0: max_y = min(resources.SquareButton.height,controlspace.max_y)
     steps = int(max_x/w)
     current_width = 1.0
@@ -214,11 +226,11 @@ def generate_line_selector(start_x=5, start_y=5, max_x=-1, max_y=-1):
     
     line_group = gui.ButtonGroup()
     w, h = resources.SquareButton.width, resources.SquareButton.height
-    if max_x < 0: max_x = min(resources.SquareButton.width*5,controlspace.max_x)
+    if max_x < 0: max_x = min(resources.SquareButton.width*6,controlspace.max_x)
     if max_y < 0: max_y = min(resources.SquareButton.height,controlspace.max_y)
     steps = int(max_x/w)
     current_width = 1.0
-    max_width = 15.0
+    max_width = 20.0
     width_inc = (max_width-current_width)/float(steps)
     size_set = False
     newbutton = None

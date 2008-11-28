@@ -15,6 +15,7 @@ class PaintingEnvironment:
     
     drawn_this_frame = False
     canvas_image = None
+    busy = False
     
     def __init__(self):
         tool.painting_env = self
@@ -28,8 +29,6 @@ class PaintingEnvironment:
                                         graphics.width-resources.Button.width-3, 5, text='Save')
         self.open_button = gui.Button(resources.Button, self.open, 
                                         self.save_button.x, resources.Button.height+10, text='Open')
-        self.swap_button = gui.ImageButton(resources.ColorSwitch, self.swap_colors,
-                                        graphics.width-440, graphics.canvas_y/2-resources.ColorSwitch.height/2)
         self.undo_button = gui.ImageButton(resources.Rewind, self.undo, 5, graphics.canvas_y+5)
         
         
@@ -45,11 +44,13 @@ class PaintingEnvironment:
         self.fill_outline_button.select()
         
         self.color_button_group = gui.ButtonGroup()
-        self.color_fill_button = gui.ColorButton(graphics.width-410, 10, 35, 35, 
+        self.color_fill_button = gui.ColorButton(graphics.width-380, 10, 35, 35, 
                                                     parent_group = self.color_button_group, which_color=1)
-        self.color_line_button = gui.ColorButton(graphics.width-410, 65, 35, 35, 
+        self.color_line_button = gui.ColorButton(graphics.width-380, 65, 35, 35, 
                                                     parent_group = self.color_button_group, which_color=0)
         self.color_fill_button.select()
+        self.swap_button = gui.ImageButton(resources.ColorSwitch, self.swap_colors,
+                                        graphics.width-410, graphics.canvas_y/2-resources.ColorSwitch.height/2)
         
         self.buttons = [self.save_button, self.open_button, self.swap_button, self.undo_button, 
                         self.outline_button, self.fill_button, self.fill_outline_button,
@@ -71,7 +72,7 @@ class PaintingEnvironment:
         self.load_tools()
         
         #color picker stuff
-        self.colorpicker = colorpicker.ColorPicker(graphics.width-370,10,15*12,15*6,step_x=15,step_y=15)
+        self.colorpicker = colorpicker.ColorPicker(graphics.width-340,10,15*12,15*6,step_x=15,step_y=15)
         #self.colordisplay = gui.ColorDisplay(graphics.width-410, 10, 25, 90)
         graphics.main_window.push_handlers(self.colorpicker)#, self.colordisplay)
         
@@ -104,7 +105,7 @@ class PaintingEnvironment:
             graphics.set_line_width(1.0)
             graphics.call_twice(pyglet.gl.glDisable,pyglet.gl.GL_BLEND)
             graphics.draw_line(0, graphics.canvas_y, graphics.width, graphics.canvas_y)
-            graphics.draw_line(graphics.canvas_x+1, graphics.canvas_y, graphics.canvas_x+1, graphics.height)
+            graphics.draw_line(graphics.canvas_x, graphics.canvas_y, graphics.canvas_x, graphics.height)
             graphics.call_twice(pyglet.gl.glEnable,pyglet.gl.GL_BLEND)
         self.drawn_this_frame = False
     
@@ -119,7 +120,7 @@ class PaintingEnvironment:
         if symbol == key.ESCAPE: return True    #stop Pyglet from quitting
         if symbol == key.F and modifiers & key.MOD_COMMAND or modifiers & key.MOD_ALT:
             graphics.toggle_fullscreen()
-
+    
     def on_key_release(self, symbol, modifiers):
         self.try_redraw()
         if not graphics.drawing and self.current_tool.key_release != tool.Tool.key_release:
@@ -128,7 +129,7 @@ class PaintingEnvironment:
             self.current_tool.key_release(symbol, modifiers)
             graphics.drawing = False
             graphics.exit_canvas_mode()
-
+    
     def on_text(self, text):
         self.try_redraw()
         if not graphics.drawing and self.current_tool.text != tool.Tool.text:
@@ -289,14 +290,17 @@ class PaintingEnvironment:
         graphics.call_much_later(self.current_tool.canvas_changed())
     
     def open(self):
+        if self.busy: return
         self.canvas_image = graphics.get_snapshot()
         if not settings.settings['fullscreen']:
             self.open_2()
             return
         graphics.main_window.set_fullscreen(False)
         pyglet.clock.schedule_once(self.open_2,0.5)
-        
+        self.busy = True
+    
     def open_2(self, dt=0):    
+        self.busy = False
         path = gui.open_file(type_list = resources.supported_image_formats)
         if path == None: self.dialog_fail()
         if not settings.settings['fullscreen']:
@@ -304,8 +308,10 @@ class PaintingEnvironment:
             return
         graphics.main_window.set_fullscreen(settings.settings['fullscreen'])
         pyglet.clock.schedule_once(self.open_3, 0.5, path)
-        
+        self.busy = True
+    
     def open_3(self, dt=0, path=None):
+        self.busy = False
         if path != None:
             #self.current_tool.unselect()
             graphics.clear(1,1,1,1)
@@ -318,6 +324,8 @@ class PaintingEnvironment:
             graphics.call_much_later(self.current_tool.canvas_changed)
     
     def save(self):
+        if self.busy: return
+        
         self.canvas_image = graphics.get_snapshot()
         img = graphics.get_canvas()
         img = img.get_region(1,1,img.width-1,img.height-1)
@@ -326,8 +334,10 @@ class PaintingEnvironment:
             return
         graphics.main_window.set_fullscreen(False)
         pyglet.clock.schedule_once(self.save_2,0.5,img)
+        self.busy = True
     
     def save_2(self, dt=0, img=None):
+        self.busy = False
         path = gui.save_file(default_name="My Picture.png")
         if path == None: self.dialog_fail()
         img.save(path)
@@ -336,8 +346,10 @@ class PaintingEnvironment:
             return
         graphics.main_window.set_fullscreen(settings.settings['fullscreen'])
         pyglet.clock.schedule_once(self.save_3, 0.5, img, path)
+        self.busy = True
     
     def save_3(self, dt=0, img = None, path = None):
+        self.busy = False
         if img != None:
             self.current_tool.unselect()
             graphics.clear(1,1,1,1)
@@ -347,3 +359,4 @@ class PaintingEnvironment:
             graphics.call_thrice(graphics.exit_canvas_mode)
             #graphics.call_much_later(self.current_tool.select())
             graphics.call_much_later(self.current_tool.canvas_changed())
+    

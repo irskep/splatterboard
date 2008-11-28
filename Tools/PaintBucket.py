@@ -3,7 +3,6 @@ from settings import *
 import time, random, math
 
 class NormalPainter:
-    
     def __init__(self):
         self.original_color = (1.0, 1.0, 1.0, 1.0)
         self.threshold = 0.1
@@ -13,17 +12,17 @@ class NormalPainter:
         self.pixels_old = []
         self.pixel_colors_old = []
         self.pixel_data = None
-    
+        
         self.start_x, start_y = 0,0
-
+        
         self.drawing = False
         self.should_init = True
         self.should_stop = False
-    
+        self.allow_undo = True
+        
         self.fill_same_color = False
         self.point_size = 1.0
         self.smooth_points = False
-        self.spread = 25
     
     def init(self):
         if not self.should_init: return
@@ -45,12 +44,14 @@ class NormalPainter:
     
     def get_pixel_array_pos(self,x,y):
         return y * self.canvas_pre.width * 4 + x * 4
-
+    
     def start_drawing(self, x, y):
         if self.drawing:
             self.stop()
+            self.allow_undo = True
         else:
             self.drawing = True
+            self.allow_undo = False
             x -= graphics.canvas_x
             y -= graphics.canvas_y
             self.start_x, self.start_y = x, y
@@ -71,7 +72,7 @@ class NormalPainter:
             self.checked_pixels = [[0 for col in range(self.canvas_pre.height)] 
                                             for row in range(self.canvas_pre.width)]
             pyglet.clock.schedule(self.paint)
-
+    
     def paint(self, dt=0):
         if not self.drawing or len(self.to_check) < 1:
             self.stop()
@@ -109,7 +110,7 @@ class NormalPainter:
             self.pixels, self.pixel_colors = self.pixels_old, self.pixel_colors_old
         else:
             self.draw_fill()
-
+    
     def draw_fill(self):
         graphics.enter_canvas_mode()
         graphics.set_line_width(self.point_size)
@@ -120,7 +121,7 @@ class NormalPainter:
         self.pixels_old, self.pixel_colors_old = self.pixels, self.pixel_colors
         self.pixels, self.pixel_colors = [], []
         graphics.exit_canvas_mode()
-
+    
     def draw_final(self):
         self.draw_fill()
         self.should_init = True
@@ -143,6 +144,7 @@ class NormalPainter:
     
     def point_test(self, x, y):
         return True
+    
 
 class NoisyPainter(NormalPainter):
     def __init__(self):
@@ -158,6 +160,7 @@ class NoisyPainter(NormalPainter):
             fill_color[2]+lightness,
             fill_color[3]
         ]
+    
 
 class CheckerPainter(NormalPainter):
     def __init__(self):
@@ -165,16 +168,17 @@ class CheckerPainter(NormalPainter):
         self.fill_same_color = True
     
     def color_function(self, x, y):
-        if (x/10 + y/10) % 2 == 0:
+        denom = int(graphics.user_line_size)*2
+        if (x/denom + y/denom) % 2 == 0:
             if graphics.fill_rainbow():
-                return graphics.rainbow_colors[(int(x/10)+int(y/10)) % len(graphics.rainbow_colors)]
+                return graphics.rainbow_colors[(int(x/denom)+int(y/denom)) % len(graphics.rainbow_colors)]
             return graphics.get_fill_color()
         if graphics.line_rainbow():
-            return graphics.rainbow_colors[(int(x/10)+int(y/10)) % len(graphics.rainbow_colors)]
+            return graphics.rainbow_colors[(int(x/denom)+int(y/denom)) % len(graphics.rainbow_colors)]
         return graphics.get_line_color()
+    
 
 class TargetPainter(NormalPainter):
-    
     def __init__(self):
         NormalPainter.__init__(self)
         self.fill_same_color = True
@@ -182,11 +186,12 @@ class TargetPainter(NormalPainter):
     def color_function(self, x, y):
         distance = math.sqrt((self.start_x-x)*(self.start_x-x)+(self.start_y-y)*(self.start_y-y))
         if graphics.fill_rainbow():
-            return graphics.rainbow_colors[int(distance*2 / self.spread % len(graphics.rainbow_colors))]
-        if distance % (self.spread*2) < self.spread: return graphics.get_fill_color()
+            return graphics.rainbow_colors[int(distance*0.5 / graphics.user_line_size % len(graphics.rainbow_colors))]
+        if distance % (graphics.user_line_size*2) < graphics.user_line_size: return graphics.get_fill_color()
         if graphics.line_rainbow():
             return graphics.rainbow_colors[(int((x+y)/10)) % len(graphics.rainbow_colors)]
         return graphics.get_line_color()
+    
 
 class DotPainter(NormalPainter):
     def __init__(self):
@@ -196,7 +201,8 @@ class DotPainter(NormalPainter):
         self.smooth_points = True
     
     def point_test(self, x, y):
-        return random.randint(0,self.point_size * self.spread) == 0
+        return random.randint(0,self.point_size * int(graphics.user_line_size)) == 0
+    
 
 class PaintBucket(tool.Tool):
     """Simple paint bucket tool"""
@@ -210,6 +216,9 @@ class PaintBucket(tool.Tool):
         self.painter_target = TargetPainter()
         self.painter_dot = DotPainter()
         self.painter = self.painter_normal
+        
+        tool.generate_line_selector()
+        
         self.button_group = gui.ButtonGroup()
     
         def painter_switch_function(painter):
@@ -242,6 +251,9 @@ class PaintBucket(tool.Tool):
     
     def unselect(self):
         self.painter.stop()
+    
+    def ask_undo(self):
+        return self.painter.allow_undo
 
 default = PaintBucket()
 priority = 69
