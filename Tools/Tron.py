@@ -94,6 +94,6 @@ class Tron(tool.Tool):
 
 default = Tron()
 priority = 95
-group = 'WTF'
+group = 'What?'
 image = resources.Tron
 cursor = graphics.cursor['CURSOR_CROSSHAIR']
