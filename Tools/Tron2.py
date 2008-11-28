@@ -22,13 +22,13 @@ class Tron2(tool.Tool):
         if len(self.x) < 2:
             print "schedule"
             pyglet.clock.schedule(self.do_tron)
-            
+    
     def fxn(self, i):
         return (self.d[i] % 2) * (self.d[i] - 2)
-        
+    
     def fyn(self, i):
         return ((self.d[i] + 1) % 2) * (self.d[i] - 1)
-        
+    
     def do_tron(self, dt=0, iters=2):
         self.canvas_pre = graphics.get_snapshot()
         self.visited = []
@@ -37,7 +37,8 @@ class Tron2(tool.Tool):
             print "unschedule from do_tron"
             pyglet.clock.unschedule(self.do_tron)
             return
-        for x, y, d, ai_enabled, color, i in zip(self.x, self.y, self.d, self.ai_enabled, self.color, xrange(len(self.x) - 1)):
+        for x, y, d, ai_enabled, color, i in zip(self.x, self.y, 
+                self.d, self.ai_enabled, self.color, xrange(len(self.x) - 1)):
             xn = x + self.fxn(i)
             yn = y + self.fyn(i)
             if self.check_ahead(i, 1):
@@ -67,18 +68,18 @@ class Tron2(tool.Tool):
         elif len(self.deletion_queue) == 1:
             self.x, self.y, self.d, self.ai_state, self.color = [], [], [], [], []
         self.do_tron(iters=iters-1)
-            
+    
     def do_tron_ai(self, i):
         if random.randint(0, 19) < 1 or (random.randint(0, 19) < 1 and self.check_ahead(i, random.randint(1, 10))):
             self.turn_randomly(i)
-            
+    
     def check_ahead(self, i, iter):
         if iter < 1: return False
         xn = self.x[i] + iter * self.fxn(i)
         yn = self.y[i] + iter * self.fyn(i)
         cn = graphics.get_pixel_from_image(self.canvas_pre, xn, yn)
         return (self.color[i][0] != cn[0] or self.color[i][1] != cn[1] or self.color[i][2] != cn[2]) or self.check_ahead(i, iter - 1) #or (xn, yn) in self.visited
-            
+    
     def explode(self, i):
         self.canvas_pre = graphics.get_snapshot()
         visited = []
@@ -88,22 +89,22 @@ class Tron2(tool.Tool):
         if len(self.x) < 1:
             pyglet.clock.unschedule(self.do_tron)
             print "unschedule from explode"
-        
+    
     def turn_left(self, i):
         print "L"
         if i < len(self.d):
             self.d[i] = (self.d[i] + 3) % 4
-        
+    
     def turn_right(self, i):
         print "R"
         if i < len(self.d):
             self.d[i] = (self.d[i] + 1) % 4
-        
+    
     def turn_randomly(self, i):
         rnd = random.randint(0, 1)
         print "turning ", (1 + 2 * rnd)
         self.d[i] = (self.d[i] + 1 + 2 * rnd) % 4
-        
+    
     def key_press(self, symbol, modifiers):
         if symbol == key.LEFT:
             self.turn_left(0)
