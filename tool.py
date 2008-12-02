@@ -36,7 +36,7 @@ import gui, resources, graphics, draw
 # = BEGIN TOOL TEMPLATE =
 # =======================
 
-class Tool:
+class Tool(object):
     """Abstract base tool"""
     
     def select(self):
@@ -124,7 +124,7 @@ class ChaserBrush(Tool):
     def draw_increment(self, x, y, angle, ds):
         pass
 
-class ControlSpace:
+class ControlSpace(object):
     """A singleton that allows tools to add GUI elements to the bottom bar"""
 
     controls = []

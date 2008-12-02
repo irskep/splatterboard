@@ -6,7 +6,7 @@ import pyglet, resources, graphics, draw, math
 from settings import settings
 from dialogs import *
 
-class Button():
+class Button(object):
     """Basic button class. Ignore all methods except the constructor."""
     def __init__(self, image, action, x, y, text="", parent_group = None, more_draw = None):
         """
@@ -177,8 +177,7 @@ class ImageButton(Button):
         @param parent_group: L{ButtonGroup} that owns this object
         @param image_2: Second image to draw over background.
         """
-        #For some reason, Python doesn't like me to use super() here.
-        Button.__init__(self, image, action, x, y, "", parent_group, None)
+        super(ImageButton,self).__init__(image, action, x, y, "", parent_group, None)
         self.image_2 = image_2
 
     def draw(self):
@@ -189,7 +188,7 @@ class ImageButton(Button):
         draw.image(self.image,self.x,self.y)
         if self.image_2 != None: draw.image(self.image_2, self.x, self.y)
 
-class ButtonGroup():
+class ButtonGroup(object):
     """
     Radio button behavior. Init with a list of buttons (optional) and add new buttons as necessary.
     """

@@ -31,8 +31,6 @@ class Brush(tool.Tool):
         self.variable = True
     
     def start_drawing(self, x, y):
-        self.lastx1, self.lasty1 = x, y
-        self.lastx2, self.lasty2 = x, y
         self.lastx, self.lasty = x, y
         self.iteration = 0
         if self.calligraphy:
@@ -59,7 +57,7 @@ class Brush(tool.Tool):
             graphics.set_color(color=self.last_color_1)
             self.draw_point(x,y)
             graphics.set_line_width(graphics.brush_size)
-            draw.line(x, y, self.lastx1, self.lasty1)
+            draw.line(x, y, self.lastx, self.lasty)
         self.lastx, self.lasty = x, y
     
     def stop_drawing(self, x, y):

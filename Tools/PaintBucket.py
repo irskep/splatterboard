@@ -2,7 +2,7 @@ import tool, resources, graphics, draw
 import pyglet, gui
 import time, random, math
 
-class NormalPainter:
+class NormalPainter(object):
     def __init__(self):
         self.original_color = (1.0, 1.0, 1.0, 1.0)
         self.threshold = 0.1
@@ -148,7 +148,7 @@ class NormalPainter:
 
 class NoisyPainter(NormalPainter):
     def __init__(self):
-        NormalPainter.__init__(self)
+        super(NoisyPainter,self).__init__()
         self.fill_same_color = True
     
     def color_function(self, x, y):
@@ -164,7 +164,7 @@ class NoisyPainter(NormalPainter):
 
 class CheckerPainter(NormalPainter):
     def __init__(self):
-        NormalPainter.__init__(self)
+        super(CheckerPainter,self).__init__()
         self.fill_same_color = True
     
     def color_function(self, x, y):
@@ -180,7 +180,7 @@ class CheckerPainter(NormalPainter):
 
 class TargetPainter(NormalPainter):
     def __init__(self):
-        NormalPainter.__init__(self)
+        super(TargetPainter,self).__init__()
         self.fill_same_color = True
     
     def color_function(self, x, y):
@@ -195,7 +195,7 @@ class TargetPainter(NormalPainter):
 
 class DotPainter(NormalPainter):
     def __init__(self):
-        NormalPainter.__init__(self)
+        super(DotPainter,self).__init__()
         self.point_size = 5
         self.fill_same_color = True
         self.smooth_points = True

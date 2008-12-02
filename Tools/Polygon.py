@@ -29,7 +29,7 @@ class Polygon(tool.Tool):
                 y_offset = 0
                 if n == 3: y_offset = -5
                 if n % 2 == 1: theta = -math.pi/n/2
-                poly = draw._concat(graphics._iter_ngon(x+w/2,y+h/2+y_offset,(w-10)/2,n,theta))
+                poly = draw._concat(draw._iter_ngon(x+w/2,y+h/2+y_offset,(w-10)/2,n,theta))
                 graphics.set_color(1,1,1,1)
                 draw.polygon(poly)
                 graphics.set_color(0,0,0,1)

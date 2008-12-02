@@ -4,7 +4,7 @@ Just a color picker object. This was in gui, but it was big and encapsulated, so
 
 import pyglet, graphics, draw
 
-class ColorPicker():
+class ColorPicker(object):
     def __init__(self, x, y, width, height, step_x=15,step_y=15):
         """
         @param x, y: Position of the bottom left corner

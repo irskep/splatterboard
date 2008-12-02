@@ -11,7 +11,7 @@ from pyglet.window import key
 import settings
 import collections
 
-class PaintingEnvironment:
+class PaintingEnvironment(object):
     
     drawn_this_frame = False
     canvas_image = None
