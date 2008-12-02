@@ -1,22 +1,12 @@
 import tool, resources, graphics, draw, gui
 import math, random
 
-class ChaserBrush(tool.Tool):
-    x, y = 0, 0
-    angle = 0
-    angle_to_mouse = 0
-    speed = 4.0
-
-class WackyBrush1(ChaserBrush):
+class WackyBrush1(tool.ChaserBrush):
     """Simple brush tool"""
     last_color_1 = (0,0,0,1)
     last_color_2 = (0,0,0,1)
     
-    x, y = 0, 0
-    angle = 0.0
-    angle_set = False
-    speed = 4.0
-    speed_scale = 1.0
+    speed_scale = 4.0
     
     spiral = False
     weave = False
@@ -32,10 +22,10 @@ class WackyBrush1(ChaserBrush):
         tool.generate_brush_selector()
         self.button_group = gui.ButtonGroup()
         
-        images = [  resources.Brush_normal, resources.Brush_spiral, resources.Brush_weave, 
-                    resources.Brush_railroad, resources.Brush_dna]
-        functions = [self.select_normal, self.select_spiral, self.select_weave, 
-                    self.select_railroad, self.select_dna]
+        images = [  resources.Brush_spiral, resources.Brush_weave, 
+                    resources.Brush_railroad, resources.Brush_dna, resources.Brush_normal]
+        functions = [self.select_spiral, self.select_weave, 
+                    self.select_railroad, self.select_dna, self.select_normal]
         tool.generate_button_row(images, functions, self.button_group)
     
     def select_normal(self):
@@ -70,53 +60,42 @@ class WackyBrush1(ChaserBrush):
         self.dna = True
     
     def start_drawing(self, x, y):
-        self.x, self.y = x, y
+        tool.ChaserBrush.start_drawing(self,x,y)
         self.lastx1, self.lasty1 = x, y
         self.lastx2, self.lasty2 = x, y
-        self.lastx, self.lasty = x, y
-        self.iteration = 0
+        self.iteration = 0.0
         self.spiral_radius = max(graphics.brush_size,5)
         self.freq_scale = 1.0/max(graphics.brush_size*2,10.0)
+        self.speed = graphics.brush_size*7.0/38.0 + 1.76
     
-    def keep_drawing(self, x, y, dx, dy):
-        self.angle = math.atan2(y-self.y,x-self.x)
-        ds_real = math.sqrt((x-self.x)*(x-self.x)+(y-self.y)*(y-self.y))
-        if ds_real > self.speed:
-            self.x += self.speed*math.cos(self.angle)
-            self.y += self.speed*math.sin(self.angle)
-            ds = self.speed
-        else:
-            return
-        
+    def draw_increment(self, x, y, angle, ds):
         self.iteration += ds
         if self.railroad or self.dna:
-            self.draw_railroad_dna(self.x,self.y,ds)
+            self.draw_railroad_dna(x,y,angle,ds)
         elif self.spiral or self.weave:
-            self.draw_spiral_weave(self.x,self.y,ds)
+            self.draw_spiral_weave(x,y,angle,ds)
         else:
             self.last_color_1 = graphics.get_line_color()
             graphics.set_color(color=self.last_color_1)
-            self.draw_point(self.x,self.y)
+            self.draw_point(x,y)
             graphics.set_line_width(graphics.brush_size)
-            draw.line(self.x, self.y, self.lastx1, self.lasty1)
-            self.lastx1, self.lasty1 = self.x, self.y
-        self.lastx, self.lasty = self.x, self.y
-        if ds_real > self.speed: self.keep_drawing(x,y,dx,dy)
+            draw.line(x, y, self.lastx1, self.lasty1)
+            self.lastx1, self.lasty1 = x, y
     
     def stop_drawing(self, x, y):
         if self.railroad or self.dna: return
         if self.spiral or self.weave:
-            x1 = self.x + self.spiral_radius*math.cos(self.spiral_angle)
-            y1 = self.y + self.spiral_radius*math.sin(self.spiral_angle)
-            x2 = self.x - self.spiral_radius*math.cos(self.spiral_angle)
-            y2 = self.y - self.spiral_radius*math.sin(self.spiral_angle)
+            x1 = x + self.spiral_radius*math.cos(self.spiral_angle)
+            y1 = y + self.spiral_radius*math.sin(self.spiral_angle)
+            x2 = x - self.spiral_radius*math.cos(self.spiral_angle)
+            y2 = y - self.spiral_radius*math.sin(self.spiral_angle)
             graphics.set_color(color=self.last_color_1)
             self.draw_point(x1,y1)
             graphics.set_color(color=self.last_color_2)
             self.draw_point(x2,y2)
         else:
             graphics.set_color(color=self.last_color_1)
-            self.draw_point(self.x,self.y)
+            self.draw_point(x,y)
     
     def draw_spiral_weave(self, x, y, angle, ds):
         if self.spiral:
@@ -197,7 +176,7 @@ class WackyBrush1(ChaserBrush):
     
 
 default = WackyBrush1()
-priority = 62
+priority = 63
 group = 'Drawing'
-image = resources.Brush
+image = resources.Brush_spiral
 cursor = None

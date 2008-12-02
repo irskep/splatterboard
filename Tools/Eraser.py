@@ -67,7 +67,7 @@ class Eraser(tool.Tool):
             pyglet.clock.unschedule(self.explode_1)
 
 default = Eraser()
-priority = 61
+priority = 62
 group = 'Drawing'
 image = resources.Eraser
 cursor = None

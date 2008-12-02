@@ -102,7 +102,7 @@ class Spray(tool.Tool):
             return color
 
 default = Spray()
-priority = 62
+priority = 64
 group = 'Drawing'
 image = resources.Spraycan
 cursor = None

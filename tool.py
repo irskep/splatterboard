@@ -29,7 +29,7 @@ Adding Buttons
     4. If you want radio button behavior (only one button selected at a time), 
 """
 
-import pyglet
+import pyglet, math
 import gui, resources, graphics, draw
 
 # =======================
@@ -96,6 +96,33 @@ cursor = None       #: Default cursor
 # =====================
 # = END TOOL TEMPLATE =
 # =====================
+
+class ChaserBrush(Tool):
+    """Abstract brush that fills in long strokes in arbitrarily short increments. See WackyBrush1."""
+    speed = 4.0
+    
+    def start_drawing(self, x, y):
+        """Always call this superconstructor."""
+        self.lastx, self.lasty = x, y
+    
+    def keep_drawing(self, x, y, dx, dy):
+        """Calls draw_increment()."""
+        angle = math.atan2(y-self.lasty,x-self.lastx)
+        ds = math.sqrt((x-self.lastx)*(x-self.lastx)+(y-self.lasty)*(y-self.lasty))
+        x_inc = self.speed*math.cos(angle)
+        y_inc = self.speed*math.sin(angle)
+        
+        x, y = self.lastx, self.lasty
+        
+        while ds > self.speed:
+            x += x_inc
+            y += y_inc
+            self.draw_increment(x,y,angle,self.speed)
+            self.lastx, self.lasty = x, y
+            ds -= self.speed
+    
+    def draw_increment(self, x, y, angle, ds):
+        pass
 
 class ControlSpace:
     """A singleton that allows tools to add GUI elements to the bottom bar"""
