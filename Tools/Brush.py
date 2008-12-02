@@ -32,6 +32,8 @@ class Brush(tool.Tool):
     
     def start_drawing(self, x, y):
         self.lastx, self.lasty = x, y
+        self.lastx1, self.lasty1 = x, y
+        self.lastx2, self.lasty2 = x, y
         self.iteration = 0
         if self.calligraphy:
             self.x_mult = math.cos(math.pi/4)
