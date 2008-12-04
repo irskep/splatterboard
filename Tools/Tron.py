@@ -1,5 +1,4 @@
-import tool, resources, graphics, draw
-import pyglet, random
+import tool, resources, graphics, pyglet, random
 from pyglet.window import key
 
 class Tron(tool.Tool):
@@ -41,24 +40,24 @@ class Tron(tool.Tool):
         xn = self.x + self.fxn()
         yn = self.y + self.fyn()
         if self.check_ahead(1):
-            pyglet.clock.unschedule(self.do_tron)
             self.explode()
         else:
             if self.ai_enabled:
                 self.do_tron_ai()
             self.visited.append((self.x, self.y))
             self.x, self.y = xn, yn
+            self.canvas_pre = graphics.get_snapshot()
             graphics.call_thrice(graphics.enter_canvas_mode)
             graphics.call_thrice(pyglet.gl.glDisable, pyglet.gl.GL_POINT_SMOOTH)
             graphics.set_color_extra(color=self.tron_color)
             graphics.set_line_width(1)
-            graphics.call_thrice(draw.points, [self.x, self.y])
+            graphics.call_thrice(graphics.draw_points, [self.x, self.y])
             graphics.call_thrice(pyglet.gl.glEnable, pyglet.gl.GL_POINT_SMOOTH)
             graphics.call_thrice(graphics.exit_canvas_mode)
             self.do_tron(iters=iters-1)
             
     def do_tron_ai(self):
-        if random.randint(0, 80) < 1 or self.check_ahead(random.randint(1, 10)) or self.check_ahead(random.randint(1, 10)):
+        if random.randint(0, 80) < 1 or self.check_ahead(random.randint(1, 6)) or self.check_ahead(random.randint(1, 6)):
             self.turn_randomly()
             
     def check_ahead(self, iter):
@@ -74,8 +73,7 @@ class Tron(tool.Tool):
             
     def explode(self):
         graphics.set_color(1,0,0,1)
-        draw.ellipse(  self.x-self.explode_radius,self.y-self.explode_radius,
-                                self.x+self.explode_radius,self.y+self.explode_radius)
+        graphics.draw_ellipse(self.x - self.explode_radius, self.y - self.explode_radius, self.x + self.explode_radius, self.y + self.explode_radius)
         self.running = False
         
     def turn_left(self):
