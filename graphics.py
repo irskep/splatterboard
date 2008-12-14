@@ -10,7 +10,7 @@ The documentation page for this module is ridiculously mangled due to my use of 
 *Functions are only called once if the program is running on OS X in windowed mode due to platform-specific oddities. This behavior is handled transparently.
 """
 
-import math, sys, random
+import math, sys, random, functools
 import pyglet.graphics, pyglet.image, pyglet.gl
 import settings
 
@@ -59,7 +59,7 @@ def _doublecall_wrapper(func):
     def new_func(*args, **kwargs):
         func(*args, **kwargs)
         canvas_queue.append((func, args, kwargs, _in_canvas_mode))
-    return new_func
+    return functools.update_wrapper(new_func, func)
     
 def _triplecall_wrapper(func):
     """Decorator to wrap all drawing functions in to make them get called three times"""
@@ -67,7 +67,7 @@ def _triplecall_wrapper(func):
         func(*args, **kwargs)
         canvas_queue.append((func, args, kwargs, _in_canvas_mode))
         canvas_queue_2.append((func, args, kwargs, _in_canvas_mode))
-    return new_func
+    return functools.update_wrapper(new_func, func)
 
 if settings.settings['fullscreen']:
     command_wrapper = _doublecall_wrapper
