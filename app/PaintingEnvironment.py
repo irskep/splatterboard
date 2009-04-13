@@ -230,12 +230,12 @@ class PaintingEnvironment(object):
         #Import everything in the Tools directory, shove them in a dictionary
         tools = self.import_libs('Tools')
         #Sort them by their priority property
-        sorted_tools = sorted(tools.values(), key=lambda tool:tool.priority)
+        sorted_tools = sorted(tools.values(), key=lambda t:t.priority)
         
         #Categorize them by group - remain sorted
         self.grouped_tools = collections.defaultdict(list)
-        for tool in sorted_tools:
-            self.grouped_tools[tool.group].append(tool)
+        for t in sorted_tools:
+            self.grouped_tools[t.group].append(t)
         
         #Create appropriate buttons in appropriate locations
         y = graphics.height
@@ -251,8 +251,8 @@ class PaintingEnvironment(object):
             y -= self.toolsize/3+3
             
             i = 0
-            for tool in self.grouped_tools[group]:
-                tool.default.cursor = tool.cursor
+            for t in self.grouped_tools[group]:
+                t.default.cursor = t.cursor
                 i += 1
                 x = self.toolsize + 1
                 #two to a row
@@ -261,15 +261,17 @@ class PaintingEnvironment(object):
                     y -= self.toolsize
                 new_button = gui.ImageButton(
                     resources.SquareButton, 
-                    self.get_toolbar_button_action(tool.default), x,y, 
-                    parent_group = self.toolbar_group,image_2=tool.image
+                    self.get_toolbar_button_action(t.default), x,y, 
+                    parent_group = self.toolbar_group,image_2=t.image
                 )
                 self.toolbar.append(new_button)
         
         self.current_tool = sorted_tools[0].default
         self.toolbar[0].selected = True
         self.toolbar_group.buttons = self.toolbar
-        for tool in self.toolbar: graphics.main_window.push_handlers(tool)
+        for t in self.toolbar: graphics.main_window.push_handlers(t)
+        tool.controlspace.clear()
+        self.current_tool.select()
     
     def get_toolbar_button_action(self, specific_tool):  #decorator for toolbar buttons
         def action():
