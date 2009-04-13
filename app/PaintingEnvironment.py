@@ -33,30 +33,45 @@ class PaintingEnvironment(object):
         
         
         self.fill_outline_button_group = gui.ButtonGroup()
-        self.outline_button = gui.PolygonButton(resources.FillOutlineButton_background, self.set_outline,
-                                        graphics.width-480, 2, fill=False,
-                                        parent_group=self.fill_outline_button_group)
-        self.fill_button = gui.PolygonButton(resources.FillOutlineButton_background, self.set_fill,
-                                        graphics.width-480, 37, outline=False,
-                                        parent_group=self.fill_outline_button_group)
-        self.fill_outline_button = gui.PolygonButton(resources.FillOutlineButton_background, self.set_fill_outline,
-                                        graphics.width-480, 72, parent_group=self.fill_outline_button_group)
+        self.outline_button = gui.PolygonButton(
+            resources.FillOutlineButton_background, self.set_outline,
+            graphics.width-480, 2, fill=False,
+            parent_group=self.fill_outline_button_group
+        )
+        self.fill_button = gui.PolygonButton(
+            resources.FillOutlineButton_background, self.set_fill,
+            graphics.width-480, 37, outline=False,
+            parent_group=self.fill_outline_button_group
+        )
+        self.fill_outline_button = gui.PolygonButton(
+            resources.FillOutlineButton_background, self.set_fill_outline,
+            graphics.width-480, 72, parent_group=self.fill_outline_button_group
+        )
         self.fill_outline_button.select()
         
         self.color_button_group = gui.ButtonGroup()
-        self.color_fill_button = gui.ColorButton(graphics.width-380, 10, 35, 35, 
-                                                    parent_group = self.color_button_group, which_color=1)
-        self.color_line_button = gui.ColorButton(graphics.width-380, 65, 35, 35, 
-                                                    parent_group = self.color_button_group, which_color=0)
+        self.color_fill_button = gui.ColorButton(
+            graphics.width-380, 10, 35, 35, 
+            parent_group = self.color_button_group, which_color=1
+        )
+        self.color_line_button = gui.ColorButton(
+            graphics.width-380, 65, 35, 35, 
+            parent_group = self.color_button_group, which_color=0
+        )
         self.color_fill_button.select()
-        self.swap_button = gui.ImageButton(resources.ColorSwitch, self.swap_colors,
-                                        graphics.width-410, graphics.canvas_y/2-resources.ColorSwitch.height/2)
+        self.swap_button = gui.ImageButton(
+            resources.ColorSwitch, self.swap_colors,
+            graphics.width-410, graphics.canvas_y/2-resources.ColorSwitch.height/2
+        )
         
-        self.buttons = [self.save_button, self.open_button, self.swap_button, self.undo_button, 
-                        self.outline_button, self.fill_button, self.fill_outline_button,
-                        self.color_fill_button, self.color_line_button]
+        self.buttons = [
+            self.save_button, self.open_button, self.swap_button, self.undo_button, 
+            self.outline_button, self.fill_button, self.fill_outline_button,
+            self.color_fill_button, self.color_line_button
+        ]
         
-        for button in self.buttons: graphics.main_window.push_handlers(button)
+        for button in self.buttons:
+            graphics.main_window.push_handlers(button)
         
         #init tool control space
         self.toolbar_group = gui.ButtonGroup()
@@ -72,9 +87,10 @@ class PaintingEnvironment(object):
         self.load_tools()
         
         #color picker stuff
-        self.colorpicker = colorpicker.ColorPicker(graphics.width-340,10,15*12,15*6,step_x=15,step_y=15)
-        #self.colordisplay = gui.ColorDisplay(graphics.width-410, 10, 25, 90)
-        graphics.main_window.push_handlers(self.colorpicker)#, self.colordisplay)
+        self.colorpicker = colorpicker.ColorPicker(
+            graphics.width-340,10,15*12,15*6,step_x=15,step_y=15
+        )
+        graphics.main_window.push_handlers(self.colorpicker)
         
         #white background
         draw.clear(1,1,1,1);
@@ -143,10 +159,12 @@ class PaintingEnvironment(object):
         self.try_redraw()
         lastx, lasty = x-dx, y-dy
         if x > graphics.canvas_x and y > graphics.canvas_y:
-            if not (lastx > graphics.canvas_x and lasty > graphics.canvas_y) and self.current_tool.cursor != None:
+            if not (lastx > graphics.canvas_x and lasty > graphics.canvas_y) \
+                    and self.current_tool.cursor != None:
                 graphics.main_window.set_mouse_cursor(self.current_tool.cursor)
         else:
-            if (lastx > graphics.canvas_x and lasty > graphics.canvas_y) or (lastx > graphics.width) or (lasty > graphics.height):
+            if (lastx > graphics.canvas_x and lasty > graphics.canvas_y) \
+                    or (lastx > graphics.width) or (lasty > graphics.height):
                 graphics.set_cursor(graphics.cursor['CURSOR_DEFAULT'])
     
     def on_mouse_press(self, x, y, button, modifiers):
@@ -158,16 +176,6 @@ class PaintingEnvironment(object):
             graphics.enter_canvas_mode()
             self.current_tool.start_drawing(x,y)
         else:
-            """
-            for button in self.toolbar:
-                #clear selection
-                if button.coords_inside(x,y):
-                    for button2 in self.toolbar:
-                        button2.selected = False
-                    #select proper button
-                    button.selected = True
-                    button.action()
-            """
             #pick a color if click was in color picker
             if self.colorpicker.coords_inside(x,y):
                 graphics.set_selected_color(self.colorpicker.get_color(x,y))

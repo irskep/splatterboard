@@ -80,7 +80,8 @@ class Button(object):
         Check if (x,y) is inside the button.
         @rtype: boolean
         """
-        return x >= self.x and y >= self.y and x <= self.x + self.width and y <= self.y + self.height
+        return x >= self.x and y >= self.y \
+            and x <= self.x + self.width and y <= self.y + self.height
 
 class ColorButton(Button):
     """Used for selecting which color the color picker changes."""
