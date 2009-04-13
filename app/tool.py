@@ -170,12 +170,17 @@ def push_undo(canvas_image_to_push=None):
 
 controlspace = ControlSpace()
 
-def generate_button_row(images, functions, button_group=None, start_x=5, start_y=55):
+def generate_button_row(
+            images, functions, button_group=None, start_x=5, start_y=55, centered=False
+        ):
     buttons = []
     w, h = resources.SquareButton.width, resources.SquareButton.height
     for i in xrange(len(functions)):
-        temp_button = gui.ImageButton(resources.SquareButton, functions[i], 5+i*w, h+5,
-                                        image_2=images[i], parent_group=button_group)
+        temp_button = gui.ImageButton(
+            resources.SquareButton, functions[i], 5+i*w, h+5,
+            image_2=images[i], parent_group=button_group,
+            center_second_img = centered
+        )
         buttons.append(temp_button)
         controlspace.add(temp_button)
     buttons[0].select()

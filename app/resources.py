@@ -152,6 +152,8 @@ def load(resource_paths=['.'], exclude=[]):
     pyglet.resource.path = resource_paths
     pyglet.resource.reindex()
     
+    local_loaded_items = {}
+    
     for path in pyglet.resource.path:
         yaml_objects = []
         loaded_objects = []
@@ -183,6 +185,8 @@ def load(resource_paths=['.'], exclude=[]):
                 stream.close()
                 loaded_objects.extend(parse_yaml(yaml_objects))
         loaded_items[path] = loaded_objects
+        local_loaded_items[path] = loaded_objects
+    return local_loaded_items
 
 def unload(resource_path):
     for name in loaded_items[resource_path]:

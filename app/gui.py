@@ -190,16 +190,21 @@ class ImageButton(Button):
     
     Most ImageButtons will want to use resources.SquareButton as the background image.
     """
-    def __init__(self, image, action, x, y, parent_group = None, image_2=None):
+    def __init__(
+                self, image, action, x, y, parent_group = None, 
+                image_2=None, center_second_img=False
+            ):
         """
         @param image: Button background image
         @param action: Function to call when pressed
         @param x, y: Bottom left corner position
         @param parent_group: L{ButtonGroup} that owns this object
         @param image_2: Second image to draw over background.
+        @param center_second_img: Assume image_2 is centered and draw properly
         """
         super(ImageButton,self).__init__(image, action, x, y, "", parent_group, None)
         self.image_2 = image_2
+        self.centered = center_second_img
 
     def draw(self):
         color = (1,1,1,1)
@@ -209,7 +214,10 @@ class ImageButton(Button):
         draw.image(self.image,self.x,self.y)
         if self.image_2 != None:
             graphics.set_color(1,1,1,1)
-            draw.image(self.image_2, self.x, self.y)
+            if self.centered:
+                draw.image(self.image_2, self.x+self.image.width/2, self.y+self.image.height/2)
+            else:
+                draw.image(self.image_2, self.x, self.y)
 
 class ButtonGroup(object):
     """
