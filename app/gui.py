@@ -187,7 +187,9 @@ class ImageButton(Button):
         if self.pressed: color = (0.7, 0.7, 0.7, 1)
         graphics.set_color(color=color)
         draw.image(self.image,self.x,self.y)
-        if self.image_2 != None: draw.image(self.image_2, self.x, self.y)
+        if self.image_2 != None:
+            graphics.set_color(1,1,1,1)
+            draw.image(self.image_2, self.x, self.y)
 
 class ButtonGroup(object):
     """
