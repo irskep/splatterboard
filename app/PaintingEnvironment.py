@@ -16,6 +16,8 @@ class PaintingEnvironment(object):
     drawn_this_frame = False
     canvas_image = None
     busy = False
+    toolbar_bg_1 = (0.44, 0.73, 0.81, 1)
+    toolbar_bg_2 = (0.85, 0.96, 0.98, 1)
     
     def __init__(self):
         tool.painting_env = self
@@ -34,18 +36,21 @@ class PaintingEnvironment(object):
         
         self.fill_outline_button_group = gui.ButtonGroup()
         self.outline_button = gui.PolygonButton(
-            resources.FillOutlineButton_background, self.set_outline,
+            None, self.set_outline,
             graphics.width-480, 2, fill=False,
-            parent_group=self.fill_outline_button_group
+            parent_group=self.fill_outline_button_group,
+            width=35, height=35
         )
         self.fill_button = gui.PolygonButton(
-            resources.FillOutlineButton_background, self.set_fill,
+            None, self.set_fill,
             graphics.width-480, 37, outline=False,
-            parent_group=self.fill_outline_button_group
+            parent_group=self.fill_outline_button_group,
+            width=35, height=35
         )
         self.fill_outline_button = gui.PolygonButton(
-            resources.FillOutlineButton_background, self.set_fill_outline,
-            graphics.width-480, 72, parent_group=self.fill_outline_button_group
+            None, self.set_fill_outline,
+            graphics.width-480, 72, parent_group=self.fill_outline_button_group,
+            width=35, height=35
         )
         self.fill_outline_button.select()
         
@@ -105,9 +110,18 @@ class PaintingEnvironment(object):
         self.try_redraw()
         if not graphics.drawing:
             #toolbar background
-            graphics.set_color(0.8, 0.8, 0.8, 1)
-            draw.rect(0,graphics.canvas_y,graphics.canvas_x,graphics.height)
-            draw.rect(0,0,graphics.width,graphics.canvas_y)
+            #draw.rect(0,graphics.canvas_y,graphics.canvas_x,graphics.height)
+            draw.gradient(
+                0, graphics.canvas_y, graphics.canvas_x, graphics.height,
+                self.toolbar_bg_1, self.toolbar_bg_2,
+                self.toolbar_bg_2, self.toolbar_bg_1
+            )
+            #draw.rect(0,0,graphics.width,graphics.canvas_y)
+            draw.gradient(
+                0, 0, graphics.width, graphics.canvas_y,
+                self.toolbar_bg_1, self.toolbar_bg_2,
+                self.toolbar_bg_2, self.toolbar_bg_1
+            )
             #buttons
             graphics.set_color(1,1,1,1)
             for button in self.toolbar: button.draw()   #toolbar buttons
@@ -227,23 +241,29 @@ class PaintingEnvironment(object):
         y = graphics.height
         for group in sorted(self.grouped_tools.keys()):
             #group label
-            self.labels.append(pyglet.text.Label(group, x=self.toolsize, y=y-self.toolsize/3-3,
-                                font_size=self.toolsize/4, anchor_x='center',anchor_y='bottom',
-                                color=(0,0,0,255)))
+            self.labels.append(
+                pyglet.text.Label(
+                    group, x=self.toolsize, y=y-self.toolsize/3-3,
+                    font_size=self.toolsize/4, anchor_x='center',anchor_y='bottom',
+                    color=(0,0,0,255)
+                )
+            )
             y -= self.toolsize/3+3
             
             i = 0
             for tool in self.grouped_tools[group]:
                 tool.default.cursor = tool.cursor
                 i += 1
-                x = self.toolsize
+                x = self.toolsize + 1
                 #two to a row
                 if i % 2 != 0:
-                    x = 0
+                    x = 1
                     y -= self.toolsize
-                new_button = gui.ImageButton(resources.SquareButton, 
-                                        self.get_toolbar_button_action(tool.default), x,y, 
-                                        parent_group = self.toolbar_group,image_2=tool.image)
+                new_button = gui.ImageButton(
+                    resources.SquareButton, 
+                    self.get_toolbar_button_action(tool.default), x,y, 
+                    parent_group = self.toolbar_group,image_2=tool.image
+                )
                 self.toolbar.append(new_button)
         
         self.current_tool = sorted_tools[0].default

@@ -8,7 +8,10 @@ from dialogs import *
 
 class Button(object):
     """Basic button class. Ignore all methods except the constructor."""
-    def __init__(self, image, action, x, y, text="", parent_group = None, more_draw = None):
+    def __init__(
+                self, image, action, x, y, text="", parent_group = None, more_draw = None, 
+                width=0, height=0
+            ):
         """
         @param image:   Button background image
         @param action:  Function to call when pressed
@@ -23,24 +26,41 @@ class Button(object):
         self.pressed = False
         self.clicked_here = False
         self.image = image
-        self.label = pyglet.text.Label(text, font_size=20, color=(0,0,0,255),
-                                        x=self.x+self.image.width/2, y=self.y+self.image.height/2,
-                                        anchor_x='center', anchor_y='center')
-        self.width = self.image.width
-        self.height = self.image.height
+        if text != "":
+            self.label = pyglet.text.Label(
+                text, font_size=20, color=(0,0,0,255),
+                x=self.x+self.image.width/2, y=self.y+self.image.height/2,
+                anchor_x='center', anchor_y='center'
+            )
+        else:
+            self.label = None
+        try:
+            self.width = self.image.width
+            self.height = self.image.height
+        except:
+            self.width = width
+            self.height = height
         self.more_draw = more_draw
         self.parent_group = parent_group
         if self.parent_group != None: self.parent_group.add(self)
 
     def draw(self):
         """Internal use only."""
-        color = (1,1,1,1)
-        if self.parent_group != None and self.selected: color = (0.8, 0.8, 0.8, 1)
-        if self.pressed: color = (0.7, 0.7, 0.7, 1)
-        graphics.set_color(color=color)
-        draw.image(self.image,self.x,self.y)
-        graphics.set_color(1,1,1,1)
-        draw.label(self.label)
+        if self.image != None:
+            color = (1,1,1,1)
+            if self.parent_group != None and self.selected: color = (0.8, 0.8, 0.8, 1)
+            if self.pressed: color = (0.7, 0.7, 0.7, 1)
+            graphics.set_color(*color)
+            draw.image(self.image,self.x,self.y)
+        else:
+            color = (0,0,0,0)
+            if self.parent_group != None and self.selected: color = (0,0,0, 0.3)
+            if self.pressed: color = (0,0,0, 0.6)
+            graphics.set_color(*color)
+            draw.rect(self.x, self.y, self.x + self.width, self.y+self.height)
+        if self.label != None:    
+            graphics.set_color(1,1,1,1)
+            draw.label(self.label)
         if self.more_draw != None: self.more_draw()
     
     def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
@@ -74,7 +94,7 @@ class Button(object):
         it the default. The button's action is not called.
         """
         if self.parent_group != None: self.parent_group.select(self)
-
+    
     def coords_inside(self, x, y):
         """
         Check if (x,y) is inside the button.
@@ -82,6 +102,7 @@ class Button(object):
         """
         return x >= self.x and y >= self.y \
             and x <= self.x + self.width and y <= self.y + self.height
+    
 
 class ColorButton(Button):
     """Used for selecting which color the color picker changes."""
@@ -125,18 +146,17 @@ class ColorButton(Button):
 
 class PolygonButton(Button):
     """Used for turning outline/fill on and off."""
-    def __init__(self, image, action, x, y, parent_group = None, fill=True, outline=True, sides=5):
-        Button.__init__(self, image, action, x, y, "", parent_group, None)
+    def __init__(
+                self, image, action, x, y, parent_group = None, fill=True, outline=True, sides=5,
+                width=0, height=0
+            ):
+        Button.__init__(self, image, action, x, y, "", parent_group, None, width, height)
         self.fill = fill
         self.outline = outline
         self.sides = sides
     
     def draw(self):
-        color = (1,1,1,1)
-        if self.parent_group != None and self.selected: color = (0.8, 0.8, 0.8, 1)
-        if self.pressed: color = (0.7, 0.7, 0.7, 1)
-        graphics.set_color(color=color)
-        draw.image(self.image,self.x,self.y)
+        super(PolygonButton, self).draw()
         
         x, y = self.x+self.width/2, self.y+self.height/2
         poly = self.generate_polygon(x,y,x,self.y+self.height*0.9,self.sides)

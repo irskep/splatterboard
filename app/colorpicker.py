@@ -44,7 +44,12 @@ class ColorPicker(object):
                    a = (a-0.5)*2
                    array[x][y] = (r+(1-r)*a,g+(1-g)*a,b+(1-b)*a,1.0)
                 graphics.set_color(color=array[x][y])
-                draw.rect(self.x+x*self.step_x,self.y+y*self.step_y,self.x+(x+1)*self.step_x,self.y+(y+1)*self.step_y)
+                draw.rect(
+                    self.x+x*self.step_x,
+                    self.y+y*self.step_y,
+                    self.x+(x+1)*self.step_x,
+                    self.y+(y+1)*self.step_y
+                )
             if x < array_w/2:
                 a = x*2/(array_w-2)
                 array[x][0] = (a,a,a,1)
@@ -65,11 +70,18 @@ class ColorPicker(object):
             for y in xrange(0,int(self.array_h)):
                 #if y == 0 and x > int(self.array_w/2): break
                 graphics.set_color(color=self.array[x][y])
-                draw.rect(self.x+x*self.step_x,self.y+y*self.step_y,self.x+(x+1)*self.step_x,self.y+(y+1)*self.step_y)
+                draw.rect(
+                    self.x+x*self.step_x,
+                    self.y+y*self.step_y,
+                    self.x+(x+1)*self.step_x,
+                    self.y+(y+1)*self.step_y
+                )
         draw.rainbow(self.x+self.width*0.5,self.y,self.x+self.width*0.75,self.y+self.step_y)
         draw.rainbow(self.x+self.width*0.75,self.y,self.x+self.width,self.y+self.step_y)
         temp_image = pyglet.image.get_buffer_manager().get_color_buffer().get_image_data()
-        self.image = temp_image.get_texture().get_region(self.x, self.y, int(self.width), int(self.height))
+        self.image = temp_image.get_texture().get_region(
+            self.x, self.y, int(self.width), int(self.height)
+        )
     
     def draw(self):
         """Render the image if it has not been rendered yet. Just draw the image if it has."""

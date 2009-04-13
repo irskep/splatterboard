@@ -273,3 +273,21 @@ def rainbow(x1,y1,x2,y2):
         graphics.set_color(*graphics.rainbow_colors[col])
         rect(x,y1,x+x_step,y2)
         col += 1
+
+@command_wrapper
+def gradient(x1, y1, x2, y2, color_1, color_2, color_3, color_4):
+    """
+    Draw a rectangle filled by a gradient.
+    
+    Color order: (x1, y1), (x1, y2), (x2, y2), (x2, y1)
+    This is counter-clockwise starting with the upper left corner if x2 > x1 and y2 > y1.
+    
+    @param x1, y1, x2, y2: Corner points
+    @color_1-color_4: colors at each point
+    """
+    colors = color_1 + color_2 + color_3 + color_4
+    pyglet.graphics.draw(
+        4, pyglet.gl.GL_QUADS, 
+        ('v2f', (x1, y1, x1, y2, x2, y2, x2, y1)), 
+        ('c4f', colors)
+    )

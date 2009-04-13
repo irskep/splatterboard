@@ -1,3 +1,6 @@
 *.DS_Store
 *.pyc
 pyglet/*
+build/*
+dist/*
+py2app*
