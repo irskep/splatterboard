@@ -1,4 +1,4 @@
-import tool, graphics, resources, draw
+from app import tool, graphics, resources, draw
 import pyglet
 from pyglet.window import key
 

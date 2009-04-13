@@ -1,4 +1,4 @@
-import tool, resources, graphics, draw, gui
+from app import tool, resources, graphics, draw, gui
 import math, random
 from pyglet import clock
 

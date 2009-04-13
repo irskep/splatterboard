@@ -1,4 +1,4 @@
-import tool, graphics, resources
+from app import tool, graphics, resources
 
 class Eyedropper(tool.Tool):
 	"""Simple eyedropper tool"""

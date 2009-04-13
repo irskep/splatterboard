@@ -7,10 +7,7 @@ I suppose that in a perfect world, some sort of overall code summary would go he
 """
 
 import pyglet
-import graphics
-import PaintingEnvironment
-import settings
-import resources
+from app import graphics, resources, settings, PaintingEnvironment
 
 class SplatterboardWindow(pyglet.window.Window):
     

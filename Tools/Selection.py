@@ -1,4 +1,4 @@
-import random, tool, resources, graphics, draw, gui
+from app import tool, resources, graphics, draw, gui
 
 class Selection(tool.Tool):
     """

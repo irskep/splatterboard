@@ -1,4 +1,4 @@
-import tool, resources, graphics, draw
+from app import tool, resources, graphics, draw
 
 class Line(tool.Tool):
     """Simple line tool"""

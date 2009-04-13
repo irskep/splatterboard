@@ -1,5 +1,5 @@
 import pyglet, math
-import tool, resources, graphics, gui, draw
+from app import tool, resources, graphics, gui, draw
 
 class Polygon(tool.Tool):
     """Simple polygon tool"""

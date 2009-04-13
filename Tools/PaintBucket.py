@@ -1,5 +1,5 @@
-import tool, resources, graphics, draw
-import pyglet, gui
+from app import tool, resources, graphics, draw, gui
+import pyglet
 import time, random, math
 
 class NormalPainter(object):

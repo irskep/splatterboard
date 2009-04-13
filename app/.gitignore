@@ -1,0 +1,4 @@
+*.DS_Store
+*.pyc
+app/*.pyc
+Tools/*.pyc
