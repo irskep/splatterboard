@@ -14,7 +14,7 @@ class SplatterboardWindow(pyglet.window.Window):
     def __init__(self):
         
         opt = settings.settings #ugly shortcut
-        resources.load()
+        resources.load(['Tools','Resources','Tool Resources'])
         
         #Init window
         screen = pyglet.window.get_platform().get_default_display().get_default_screen()
@@ -28,10 +28,14 @@ class SplatterboardWindow(pyglet.window.Window):
             opt['window_width'] = screen.width-100
             opt['window_height'] = screen.height-100
         if not opt['fullscreen']:
-            super(SplatterboardWindow, self).__init__(width=opt['window_width'], height=opt['window_height'],
-                                                resizable=False, vsync=True, config=config)
+            super(SplatterboardWindow, self).__init__(
+                width=opt['window_width'], height=opt['window_height'],
+                resizable=False, vsync=True, config=config
+            )
         else:
-            super(SplatterboardWindow, self).__init__(fullscreen=True, resizable=False, vsync=True, config=config)
+            super(SplatterboardWindow, self).__init__(
+                fullscreen=True, resizable=False, vsync=True, config=config
+            )
         
         self.update_size_constants()
         graphics.main_window = self
@@ -56,8 +60,10 @@ class SplatterboardWindow(pyglet.window.Window):
         pyglet.gl.glEnable(pyglet.gl.GL_LINE_SMOOTH)
         pyglet.gl.glEnable(pyglet.gl.GL_POINT_SMOOTH)
         #pyglet.gl.glHint(pyglet.gl.GL_LINE_SMOOTH_HINT,pyglet.gl.GL_NICEST)
-        pyglet.gl.glScissor(graphics.canvas_x+1,graphics.canvas_y+1,
-                            self.width-graphics.canvas_x-1,self.height-graphics.canvas_y-1)
+        pyglet.gl.glScissor(
+            graphics.canvas_x+1,graphics.canvas_y+1,
+            self.width-graphics.canvas_x-1,self.height-graphics.canvas_y-1
+        )
     
     def init_cursors(self):
         graphics.cursor['CURSOR_CROSSHAIR'] = self.get_system_mouse_cursor(self.CURSOR_CROSSHAIR)
