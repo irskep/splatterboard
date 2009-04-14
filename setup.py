@@ -16,7 +16,7 @@ setup(
     app=['Splatterboard.py'],
     data_files=[
         'app','pyglet','Resources',
-        'Tool Resources', 'Tools'],
+        'Tool Resources', 'Tools', 'Stamps', 'yaml'],
     options={'py2app': OPTIONS},
     setup_requires=['py2app'],
 )

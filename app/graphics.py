@@ -133,13 +133,13 @@ def call_much_later(func, *args, **kwargs):
 # =================
 def get_line_color():
     """
-    @return: tupe (r, g, b, a)
+    @return: tuple (r, g, b, a)
     """
     return random.choice(rainbow_colors) if line_color[0] == -1 else line_color
 
 def get_fill_color():
     """
-    @return: tupe (r, g, b, a)
+    @return: tuple (r, g, b, a)
     """
     return random.choice(rainbow_colors) if fill_color[0] == -1 else fill_color
 

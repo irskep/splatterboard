@@ -188,7 +188,7 @@ def _iter_ngon(x, y, r, sides, start_angle = 0.0):
         a += da
 
 @command_wrapper
-def ngon(x, y, r, sides, start_angle = 0.0):
+def ngon(x, y, r, sides, start_angle = 0.0, colors=None):
     """
     Draw a polygon of n sides of equal length.
     
@@ -198,7 +198,13 @@ def ngon(x, y, r, sides, start_angle = 0.0):
     @param start_angle: rotation of the entire polygon
     """
     points = _concat(_iter_ngon(x, y, r, sides, start_angle))
-    pyglet.graphics.draw(len(points)/2, pyglet.gl.GL_TRIANGLE_FAN, ('v2f', points))
+    if colors != None:
+        colors = colors[:len(points)/2*4]
+        pyglet.graphics.draw(
+            len(points)/2, pyglet.gl.GL_TRIANGLE_FAN, ('v2f', points), ('c4f', colors)
+        )
+    else:
+        pyglet.graphics.draw(len(points)/2, pyglet.gl.GL_TRIANGLE_FAN, ('v2f', points))
 
 @command_wrapper
 def ngon_outline(x, y, r, sides, start_angle = 0.0):

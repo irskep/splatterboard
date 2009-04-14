@@ -1,6 +1,5 @@
 BIG THINGS
 -Force fullscreen into 4:3 and scale loaded images
--Stamps
 
 LITTLE THINGS
 -Dashed lines, arrows

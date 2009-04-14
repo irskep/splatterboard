@@ -10,6 +10,7 @@ class Polygon(tool.Tool):
     x, y, rx, ry = 0.0, 0.0, 0.0, 0.0
     sides = 3
     num_buttons = 6
+    fill_colors = []
     
     def select(self):
         self.canvas_pre = graphics.get_canvas()
@@ -52,18 +53,23 @@ class Polygon(tool.Tool):
     
     def start_drawing(self, x, y):
         self.x, self.y = x, y
-        self.fill_color = graphics.get_fill_color()
+        #self.fill_color = graphics.get_fill_color()
+        self.fill_colors = []
+        for i in range(self.sides+1):
+            self.fill_colors.extend(graphics.get_fill_color())
         self.line_color = graphics.get_line_color()
     
     def keep_drawing(self, x, y, dx, dy):
         self.rx, self.ry = x, y
-        radius = math.sqrt((self.rx - self.x)*(self.rx - self.x)+(self.ry - self.y)*(self.ry - self.y))
+        radius = math.sqrt(
+            (self.rx - self.x)*(self.rx - self.x)+(self.ry - self.y)*(self.ry - self.y)
+        )
         theta = math.atan2(self.ry-self.y, self.rx-self.x)
         graphics.set_color(1,1,1,1)
         draw.image(self.canvas_pre,graphics.canvas_x,graphics.canvas_y)
         if graphics.fill_shapes:
-                graphics.set_color(color=self.fill_color)
-                draw.ngon(self.x,self.y,radius,self.sides,theta)
+                #graphics.set_color(color=self.fill_color)
+                draw.ngon(self.x,self.y,radius,self.sides,theta, self.fill_colors)
         if graphics.outline_shapes:
             graphics.set_line_width(graphics.user_line_size)
             graphics.set_color(color=self.line_color)

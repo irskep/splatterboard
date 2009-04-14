@@ -4,3 +4,4 @@ pyglet/*
 build/*
 dist/*
 py2app*
+yaml/*
