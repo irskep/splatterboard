@@ -222,10 +222,21 @@ class ImageButton(Button):
         draw.image(self.image,self.x,self.y)
         if self.image_2 != None:
             graphics.set_color(1,1,1,1)
-            if self.centered:
-                draw.image(self.image_2, self.x+self.image.width/2, self.y+self.image.height/2)
+            graphics.call_twice(pyglet.gl.glPushMatrix)
+            if self.image_2.width > self.image.width:
+                scale_factor = float(self.image.width)/self.image_2.width*0.9
+                pyglet.gl.glScalef(scale_factor, scale_factor, scale_factor)
             else:
-                draw.image(self.image_2, self.x, self.y)
+                scale_factor = 1
+            graphics.call_twice(pyglet.gl.glTranslatef, self.x/scale_factor, self.y/scale_factor, 0)
+            if self.centered:
+                graphics.call_twice(
+                    pyglet.gl.glTranslatef,
+                    self.image.width/scale_factor/2, self.image.height/scale_factor/2, 0
+                )
+            draw.image(self.image_2, 0, 0)
+            graphics.call_twice(pyglet.gl.glPopMatrix)
+    
 
 class ButtonGroup(object):
     """
@@ -274,7 +285,7 @@ class ButtonGroup(object):
             self.button_left.visible = False
         else:
             self.button_left.visible = True
-        if self.which_page >= len(self.pages):
+        if self.which_page >= len(self.pages)-1:
             self.button_right.visible = False
         else:
             self.button_right.visible = True
