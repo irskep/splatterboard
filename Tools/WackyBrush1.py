@@ -20,13 +20,12 @@ class WackyBrush1(tool.ChaserBrush):
     
     def select(self):
         tool.generate_brush_selector()
-        self.button_group = gui.ButtonGroup()
         
         images = [  resources.Brush_spiral, resources.Brush_weave, 
                     resources.Brush_railroad, resources.Brush_dna, resources.Brush_normal]
         functions = [self.select_spiral, self.select_weave, 
                     self.select_railroad, self.select_dna, self.select_normal]
-        tool.generate_button_row(images, functions, self.button_group)
+        tool.generate_button_row(images, functions)
     
     def select_normal(self):
         self.spiral = False

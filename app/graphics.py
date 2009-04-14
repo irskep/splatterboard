@@ -175,6 +175,12 @@ def set_cursor(new_cursor):
     """
     main_window.set_mouse_cursor(new_cursor)
 
+def show_cursor():
+    main_window.set_mouse_visible(True)
+
+def hide_cursor():
+    main_window.set_mouse_visible(False)
+
 def disable_line_smoothing():
     pyglet.gl.glDisable(pyglet.gl.GL_LINE_SMOOTH)
 

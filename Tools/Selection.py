@@ -29,10 +29,9 @@ class Selection(tool.Tool):
         self.dragging = False
         self.mouse_start_x, self.mouse_start_y = -1, -1
         
-        self.button_group = gui.ButtonGroup()
         images = [resources.Selection, resources.SelectEllipse]
         functions = [self.select_rect, self.select_ellipse]
-        tool.generate_button_row(images, functions, self.button_group)
+        tool.generate_button_row(images, functions)
     
     def canvas_changed(self):
         self.select()

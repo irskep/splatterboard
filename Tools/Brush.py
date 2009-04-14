@@ -12,11 +12,10 @@ class Brush(tool.Tool):
     
     def select(self):
         tool.generate_brush_selector()
-        self.button_group = gui.ButtonGroup()
         
         images = [resources.Brush_normal, resources.Brush_variable, resources.Brush_calligraphy]
         functions = [self.select_normal, self.select_variable, self.select_calligraphy]
-        tool.generate_button_row(images, functions, self.button_group)
+        tool.generate_button_row(images, functions)
     
     def select_normal(self):
         self.calligraphy = False

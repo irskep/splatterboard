@@ -43,9 +43,11 @@ class Button(object):
         self.more_draw = more_draw
         self.parent_group = parent_group
         if self.parent_group != None: self.parent_group.add(self)
-
+        self.visible = True
+    
     def draw(self):
         """Internal use only."""
+        if not self.visible: return
         if self.image != None:
             color = (1,1,1,1)
             if self.parent_group != None and self.selected: color = (0.8, 0.8, 0.8, 1)
@@ -65,6 +67,7 @@ class Button(object):
     
     def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
         """Internal use only."""
+        if not self.visible: return
         if self.clicked_here and self.coords_inside(x,y):
             self.pressed = True
             self.clicked_here = True
@@ -74,6 +77,7 @@ class Button(object):
     
     def on_mouse_press(self, x, y, button, modifiers):
         """Internal use only."""
+        if not self.visible: return
         if self.coords_inside(x,y):
             self.pressed = True
             self.clicked_here = True
@@ -82,6 +86,7 @@ class Button(object):
     
     def on_mouse_release(self, x, y, button, modifiers):
         """Internal use only."""
+        if not self.visible: return
         if self.pressed and self.clicked_here:
             if self.parent_group != None: self.parent_group.select(self)
             self.action()
@@ -116,6 +121,7 @@ class ColorButton(Button):
         self.clicked_here = False
         self.parent_group = parent_group
         if self.parent_group != None: self.parent_group.add(self)
+        self.visible = True
     
     def draw(self):
         if self.which_color == 0:
@@ -155,7 +161,8 @@ class PolygonButton(Button):
         self.outline = outline
         self.sides = sides
     
-    def draw(self):
+    def draw(self):    
+        if not self.visible: return
         super(PolygonButton, self).draw()
         
         x, y = self.x+self.width/2, self.y+self.height/2
@@ -205,8 +212,9 @@ class ImageButton(Button):
         super(ImageButton,self).__init__(image, action, x, y, "", parent_group, None)
         self.image_2 = image_2
         self.centered = center_second_img
-
+    
     def draw(self):
+        if not self.visible: return
         color = (1,1,1,1)
         if self.parent_group != None and self.selected: color = (0.8, 0.8, 0.8, 1)
         if self.pressed: color = (0.7, 0.7, 0.7, 1)
@@ -223,9 +231,11 @@ class ButtonGroup(object):
     """
     Radio button behavior. Init with a list of buttons (optional) and add new buttons as necessary.
     """
-    def __init__(self, buttons=None):
+    def __init__(self, buttons=None, per_page=0, arrow1_x=0, arrow1_y=0, arrow2_x=0, arrow2_y=0):
         """
         @param buttons: A list of buttons. Please do not be phased by the defaul value of None.
+        @param per_page: Number of buttons per 'page' - if greater than zero, arrows will appear.
+        @param arrow1_x-arrow2_y: Positions of paging arrows
         """
         #Weird shit was going on here. Button groups were somehow inheriting the lists
         #of previous other groups. This little idiom seems to have fixed that problem, 
@@ -236,6 +246,52 @@ class ButtonGroup(object):
             self.buttons[0].selected = True
             for button in self.buttons:
                 button.parent_group = self
+        self.per_page = per_page
+        self.button_left = Button(
+            resources.arrow_left, self.page_left, arrow1_x, arrow1_y, ""
+        )
+        self.button_right = Button(
+            resources.arrow_right, self.page_right, arrow2_x, arrow2_y, ""
+        )
+        self.pages = []
+        self.which_page = 0
+    
+    def page_left(self):
+        if self.which_page > 0:
+            self.page_to(self.which_page - 1)
+    
+    def page_right(self):
+        if self.which_page < len(self.pages)-1:
+            self.page_to(self.which_page + 1)
+    
+    def page_to(self, n):
+        self.which_page = n
+        for button in self.buttons:
+            button.visible = False
+        for button in self.pages[n]:
+            button.visible = True
+        if self.which_page < 1:
+            self.button_left.visible = False
+        else:
+            self.button_left.visible = True
+        if self.which_page >= len(self.pages):
+            self.button_right.visible = False
+        else:
+            self.button_right.visible = True
+    
+    def re_page(self):
+        if self.per_page == 0:
+            self.which_page = 0
+            self.pages = [self.buttons]
+            self.button_left.visible = False
+            self.button_right.visible = False
+            return
+        buttons_left = self.buttons[:]
+        self.pages = []
+        while buttons_left:
+            self.pages.append(buttons_left[0:self.per_page])
+            buttons_left = buttons_left[self.per_page:]
+        self.page_to(0)
     
     def add(self, button):
         self.buttons.append(button)
@@ -248,3 +304,20 @@ class ButtonGroup(object):
                 button.selected = True
             else:
                 button.selected = False
+    
+    def draw(self):
+        self.button_left.draw()
+        self.button_right.draw()
+    
+    def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
+        self.button_right.on_mouse_drag(x,y,dx,dy,buttons,modifiers)
+        self.button_left.on_mouse_drag(x,y,dx,dy,buttons,modifiers)
+    
+    def on_mouse_press(self, x, y, button, modifiers):
+        self.button_right.on_mouse_press(x,y,button,modifiers)
+        self.button_left.on_mouse_press(x,y,button,modifiers)
+    
+    def on_mouse_release(self, x, y, button, modifiers):
+        self.button_right.on_mouse_release(x,y,button,modifiers)
+        self.button_left.on_mouse_release(x,y,button,modifiers)
+    

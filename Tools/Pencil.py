@@ -7,10 +7,9 @@ class Pencil(tool.Tool):
     scribble = False
     
     def select(self):
-        self.button_group = gui.ButtonGroup()
         images = [resources.Pencil, resources.Pencil_scribble]
         functions = [self.select_normal, self.select_scribble]
-        tool.generate_button_row(images, functions, self.button_group)
+        tool.generate_button_row(images, functions)
     
     def select_normal(self):
         self.scribble = False

@@ -10,7 +10,6 @@ class Stamp(tool.Tool):
     
     def select(self):
         self.canvas_pre = graphics.get_canvas()
-        self.button_group = gui.ButtonGroup()
         loaded_items = resources.load(['Stamps'])['Stamps']
         
         def get_stamp_switcher(stamp):
@@ -20,7 +19,7 @@ class Stamp(tool.Tool):
         
         images = [getattr(resources, i) for i in loaded_items]
         functions = [get_stamp_switcher(s) for s in images]
-        tool.generate_button_row(images, functions, self.button_group, centered=True)
+        tool.generate_button_row(images, functions, centered=True, page=True)
         self.this_stamp = images[0]
         
     
@@ -36,6 +35,7 @@ class Stamp(tool.Tool):
         
     def start_drawing(self, x, y):
         self.x, self.y = x, y
+        graphics.hide_cursor()
         self.draw_stamp(x, y)
     
     def keep_drawing(self, x, y, dx, dy):
@@ -47,6 +47,7 @@ class Stamp(tool.Tool):
     def stop_drawing(self, x, y):
         self.keep_drawing(x, y, 0, 0)
         self.canvas_pre = graphics.get_canvas()
+        graphics.show_cursor()
 
 default = Stamp()
 priority = 121

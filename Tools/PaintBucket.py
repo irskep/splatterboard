@@ -229,14 +229,21 @@ class PaintBucket(tool.Tool):
                 painter.init()
             return temp_func
         
-        images = [resources.PaintBucket, resources.PaintBucket_noise, resources.PaintBucket_checker, 
-                    resources.PaintBucket_target, resources.PaintBucket_dot]
-        painters = [self.painter_normal, self.painter_noisy, self.painter_checker, self.painter_target, self.painter_dot]
+        images = [
+            resources.PaintBucket, resources.PaintBucket_noise, resources.PaintBucket_checker, 
+            resources.PaintBucket_target, resources.PaintBucket_dot
+        ]
+        painters = [
+            self.painter_normal, self.painter_noisy, self.painter_checker, 
+            self.painter_target, self.painter_dot
+        ]
         buttons = []
         
         for i in xrange(len(painters)):
-            temp_button = gui.ImageButton(resources.SquareButton, painter_switch_function(painters[i]),
-                                5+i*50, 55, image_2 = images[i], parent_group = self.button_group)
+            temp_button = gui.ImageButton(
+                resources.SquareButton, painter_switch_function(painters[i]),
+                5+i*50, 55, image_2 = images[i], parent_group = self.button_group
+            )
             buttons.append(temp_button)
             tool.controlspace.add(temp_button)
             if painters[i] == self.painter: buttons[i].select()

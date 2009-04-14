@@ -17,11 +17,10 @@ class Spray(tool.Tool):
     def select(self):
         self.canvas_pre = graphics.get_canvas()
         tool.generate_brush_selector()
-        self.button_group = gui.ButtonGroup()
         
         images = [resources.Spray, resources.Spray_double, resources.Spray_bubble]
         functions = [self.select_single, self.select_double, self.select_bubble]
-        tool.generate_button_row(images, functions, self.button_group)
+        tool.generate_button_row(images, functions)
     
     def select_single(self):
         self.dual_color = False

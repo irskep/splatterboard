@@ -73,7 +73,7 @@ class Tool(object):
     def key_release(self, symbol, modifiers):
         """A key has been released. See pyglet documentation on keyboard input for more information."""
         pass
-
+    
     def ask_undo(self):
         """Should return True if the canvas should be grabbed and pushed onto the undo stack. Will almost always be true except when the tool draws temporary borders, like the selection tool. In that case, look at the push_undo() method."""
         return True
@@ -142,12 +142,19 @@ class ControlSpace(object):
         
         @param new_object: GUI object to add to the control space
         """
-        if new_object.x >= 0 and new_object.y >= 0 and new_object.x+new_object.width <= self.max_x and new_object.y+new_object.height <= self.max_y:
+        try:
+            if new_object.x >= 0 and new_object.y >= 0 \
+                    and new_object.x+new_object.width <= self.max_x \
+                    and new_object.y+new_object.height <= self.max_y:
+                self.controls.append(new_object)
+                return True
+            else:
+                print "Attempt to add button failed. Out of bounds."
+                return False
+        except:
+            #probably a ButtonGroup, add it anyway
             self.controls.append(new_object)
             return True
-        else:
-            print "Attempt to add button failed. Out of bounds."
-            return False
 
     def clear(self):
         self.controls = []
@@ -171,20 +178,34 @@ def push_undo(canvas_image_to_push=None):
 controlspace = ControlSpace()
 
 def generate_button_row(
-            images, functions, button_group=None, start_x=5, start_y=55, centered=False
+            images, functions, start_x=5, start_y=55, centered=False, page=False
         ):
     buttons = []
+    if page:
+        per_page = 9
+    else:
+        per_page = 0
+    button_group = gui.ButtonGroup(
+        per_page=per_page, arrow1_x=5, arrow1_y=65, arrow2_x=473, arrow2_y=65
+    )
+    if page and start_x == 5:
+        start_x = 25
     w, h = resources.SquareButton.width, resources.SquareButton.height
+    x = start_x
     for i in xrange(len(functions)):
+        if x > 460: x = start_x
         temp_button = gui.ImageButton(
-            resources.SquareButton, functions[i], 5+i*w, h+5,
+            resources.SquareButton, functions[i], x, h+5,
             image_2=images[i], parent_group=button_group,
             center_second_img = centered
         )
+        x += w
         buttons.append(temp_button)
         controlspace.add(temp_button)
+    button_group.re_page()
     buttons[0].select()
     buttons[0].action()
+    controlspace.add(button_group)
     return buttons
 
 def generate_brush_selector(start_x=5,start_y=5,max_x=-1,max_y=-1):
