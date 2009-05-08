@@ -10,14 +10,13 @@ class Eraser(tool.Tool):
     explode_iter = 0
     
     def select(self):
-        self.bg1 = tool.generate_brush_selector()
+        self.bg = tool.generate_brush_selector()
         self.button_explode_1 = gui.ImageButton(resources.SquareButton, self.start_explode_1,
                                             5, 55, image_2 = resources.Firecracker)
-        self.bg2 = tool.controlspace.add(self.button_explode_1)
+        tool.controlspace.add(self.button_explode_1)
     
     def unselect(self):
-        tool.clean_up(self.bg1)
-        tool.clean_up(self.bg2)
+        tool.clean_up(self.bg)
         del self.button_explode_1
     
     def start_drawing(self, x, y):

@@ -212,6 +212,12 @@ class ImageButton(Button):
         super(ImageButton,self).__init__(image, action, x, y, "", parent_group, None)
         self.image_2 = image_2
         self.centered = center_second_img
+        if self.image_2 != None and self.image_2.width > self.image.width:
+            self.scale_factor = float(self.image.width)*0.9
+            self.scale_factor /= max(self.image_2.width, self.image_2.height)
+            print self.image_2.width, self.image_2.height, self.image_2.instance_name
+        else:
+            self.scale_factor = 1.0
     
     def draw(self):
         if not self.visible: return
@@ -223,17 +229,16 @@ class ImageButton(Button):
         if self.image_2 != None:
             graphics.set_color(1,1,1,1)
             graphics.call_twice(pyglet.gl.glPushMatrix)
-            if self.image_2.width > self.image.width:
-                scale_factor = float(self.image.width)*0.9
-                scale_factor /= max(self.image_2.width, self.image_2.height)
-                pyglet.gl.glScalef(scale_factor, scale_factor, scale_factor)
-            else:
-                scale_factor = 1
-            graphics.call_twice(pyglet.gl.glTranslatef, self.x/scale_factor, self.y/scale_factor, 0)
+            if self.scale_factor != 1.0:
+                pyglet.gl.glScalef(self.scale_factor, self.scale_factor, self.scale_factor)
+            graphics.call_twice(
+                pyglet.gl.glTranslatef, 
+                self.x/self.scale_factor, self.y/self.scale_factor, 0
+            )
             if self.centered:
                 graphics.call_twice(
                     pyglet.gl.glTranslatef,
-                    self.image.width/scale_factor/2, self.image.height/scale_factor/2, 0
+                    self.image.width/self.scale_factor/2, self.image.height/self.scale_factor/2, 0
                 )
             draw.image(self.image_2, 0, 0)
             graphics.call_twice(pyglet.gl.glPopMatrix)
@@ -271,10 +276,14 @@ class ButtonGroup(object):
     def page_left(self):
         if self.which_page > 0:
             self.page_to(self.which_page - 1)
+        else:
+            self.page_to(len(self.pages)-1)
     
     def page_right(self):
         if self.which_page < len(self.pages)-1:
             self.page_to(self.which_page + 1)
+        else:
+            self.page_to(0)
     
     def page_to(self, n):
         self.which_page = n
@@ -282,14 +291,14 @@ class ButtonGroup(object):
             button.visible = False
         for button in self.pages[n]:
             button.visible = True
-        if self.which_page < 1:
-            self.button_left.visible = False
-        else:
-            self.button_left.visible = True
-        if self.which_page >= len(self.pages)-1:
-            self.button_right.visible = False
-        else:
-            self.button_right.visible = True
+        # if self.which_page < 1:
+        #     self.button_left.visible = False
+        # else:
+        #     self.button_left.visible = True
+        # if self.which_page >= len(self.pages)-1:
+        #             self.button_right.visible = False
+        #         else:
+        #             self.button_right.visible = True
     
     def re_page(self):
         if self.per_page == 0:
@@ -303,6 +312,8 @@ class ButtonGroup(object):
         while buttons_left:
             self.pages.append(buttons_left[0:self.per_page])
             buttons_left = buttons_left[self.per_page:]
+        self.button_left.visible = True    
+        self.button_right.visible = True
         self.page_to(0)
     
     def add(self, button):

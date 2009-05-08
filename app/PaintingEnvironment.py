@@ -246,6 +246,7 @@ class PaintingEnvironment(object):
             self.grouped_tools[t.group].append(t)
         
         #Create appropriate buttons in appropriate locations
+        sorted_tools = []
         y = graphics.height
         for group in sorted(self.grouped_tools.keys()):
             #group label
@@ -260,6 +261,7 @@ class PaintingEnvironment(object):
             
             i = 0
             for t in self.grouped_tools[group]:
+                sorted_tools.append(t)
                 t.default.cursor = t.cursor
                 i += 1
                 x = self.toolsize + 1
