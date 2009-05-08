@@ -21,7 +21,6 @@ class Stamp(tool.Tool):
         functions = [get_stamp_switcher(s) for s in images]
         tool.generate_button_row(images, functions, centered=True, page=True)
         self.this_stamp = images[0]
-        
     
     def draw_stamp(self, x, y):    
         graphics.set_color(1,1,1,1)

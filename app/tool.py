@@ -126,16 +126,16 @@ class ChaserBrush(Tool):
 
 class ControlSpace(object):
     """A singleton that allows tools to add GUI elements to the bottom bar"""
-
+    
     controls = []
     max_x = 0
     max_y = 0
-
+    
     def draw(self):
         """Draw all controls added by the tool. Called by the main loop."""
         for control in self.controls:
             control.draw()
-
+    
     def add(self, new_object):
         """
         Add a new button to the control space.
@@ -155,18 +155,19 @@ class ControlSpace(object):
             #probably a ButtonGroup, add it anyway
             self.controls.append(new_object)
             return True
-
+    
     def clear(self):
         self.controls = []
-
+    
     def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
         for control in self.controls: control.on_mouse_drag(x,y,dx,dy,buttons,modifiers)
-
+    
     def on_mouse_press(self, x, y, button, modifiers):
         for control in self.controls: control.on_mouse_press(x,y,button,modifiers)
-
+    
     def on_mouse_release(self, x, y, button, modifiers):
         for control in self.controls: control.on_mouse_release(x,y,button,modifiers)
+    
 
 painting_env = None
 

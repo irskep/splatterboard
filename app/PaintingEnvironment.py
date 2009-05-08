@@ -18,6 +18,7 @@ class PaintingEnvironment(object):
     busy = False
     toolbar_bg_1 = (0.44, 0.73, 0.81, 1)
     toolbar_bg_2 = (0.85, 0.96, 0.98, 1)
+    undo_limit = 5
     
     def __init__(self):
         tool.painting_env = self
@@ -30,7 +31,7 @@ class PaintingEnvironment(object):
         self.save_button = gui.Button(resources.Button, self.save, 
                                         graphics.width-resources.Button.width-3, 5, text='Save')
         self.open_button = gui.Button(resources.Button, self.open, 
-                                        self.save_button.x, resources.Button.height+10, text='Open')
+                                        self.save_button.x, resources.Button.height+5, text='Open')
         self.undo_button = gui.ImageButton(resources.Rewind, self.undo, 5, graphics.canvas_y+5)
         
         
@@ -217,6 +218,10 @@ class PaintingEnvironment(object):
     
     def push_undo(self, snap):
         self.undo_queue.append(snap)
+        if len(self.undo_queue) > self.undo_limit:
+            orig = self.undo_limit[0]
+            self.undo_limit = self.undo_limit[1:]
+            del orig
     
     #------------TOOL THINGS------------#
     def import_libs(self, dir):

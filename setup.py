@@ -9,13 +9,13 @@ from setuptools import setup
 OPTIONS = dict(
     argv_emulation=True,
     #frameworks=['libavbin.dylib','pymunk/libchipmunk.dylib'],
-    #plist = dict(CFBundleIconFile='gw0rp.icns')
+    plist = dict(CFBundleIconFile='Splatterboard.icns')
 )
 
 setup(
     app=['Splatterboard.py'],
     data_files=[
-        'app','pyglet','Resources',
+        'app','pyglet','Resources', 'Splatterboard.icns',
         'Tool Resources', 'Tools', 'Stamps', 'yaml'],
     options={'py2app': OPTIONS},
     setup_requires=['py2app'],

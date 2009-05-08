@@ -224,7 +224,8 @@ class ImageButton(Button):
             graphics.set_color(1,1,1,1)
             graphics.call_twice(pyglet.gl.glPushMatrix)
             if self.image_2.width > self.image.width:
-                scale_factor = float(self.image.width)/self.image_2.width*0.9
+                scale_factor = float(self.image.width)*0.9
+                scale_factor /= max(self.image_2.width, self.image_2.height)
                 pyglet.gl.glScalef(scale_factor, scale_factor, scale_factor)
             else:
                 scale_factor = 1
