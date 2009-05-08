@@ -219,7 +219,6 @@ class PaintingEnvironment(object):
         self.undo_queue.append(snap)
         if len(self.undo_queue) > self.max_undo:
             self.undo_queue = self.undo_queue[1:]
-        print len(self.undo_queue)
     
     #------------TOOL THINGS------------#
     def import_libs(self, dir):
