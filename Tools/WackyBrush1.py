@@ -13,6 +13,8 @@ class WackyBrush1(tool.ChaserBrush):
     dna = False
     dotted = False
     dot_on = False
+    arrow_end = False
+    arrow_angle = 0.0
     spiral_angle = 0.0
     spiral_radius = 10.0
     freq_scale = 1.0
@@ -25,12 +27,12 @@ class WackyBrush1(tool.ChaserBrush):
         images = [
             resources.Brush_spiral, resources.Brush_weave, 
             resources.Brush_railroad, resources.Brush_dna, 
-            resources.Brush_dotted
+            resources.Brush_dotted, resources.Brush_arrow
         ]
         functions = [
             self.select_spiral, self.select_weave, 
             self.select_railroad, self.select_dna, 
-            self.select_dotted
+            self.select_dotted, self.select_arrow
         ]
         self.bg2 = tool.generate_button_row(images, functions)
     
@@ -44,6 +46,15 @@ class WackyBrush1(tool.ChaserBrush):
         self.railroad = False
         self.dna = False
         self.dotted = True
+        self.arrow_end = False
+    
+    def select_arrow(self):
+        self.spiral = False
+        self.weave = False
+        self.railroad = False
+        self.dna = False
+        self.dotted = False
+        self.arrow_end = True
     
     def select_spiral(self):
         self.spiral = True
@@ -52,6 +63,7 @@ class WackyBrush1(tool.ChaserBrush):
         self.railroad = False
         self.dna = False
         self.dotted = False
+        self.arrow_end = False
     
     def select_weave(self):
         self.spiral = False
@@ -59,6 +71,7 @@ class WackyBrush1(tool.ChaserBrush):
         self.railroad = False
         self.dna = False
         self.dotted = False
+        self.arrow_end = False
     
     def select_railroad(self):
         self.spiral = False
@@ -66,6 +79,7 @@ class WackyBrush1(tool.ChaserBrush):
         self.railroad = True
         self.dna = False
         self.dotted = False
+        self.arrow_end = False
     
     def select_dna(self):
         self.spiral = False
@@ -73,6 +87,7 @@ class WackyBrush1(tool.ChaserBrush):
         self.railroad = False
         self.dna = True
         self.dotted = False
+        self.arrow_end = False
     
     def start_drawing(self, x, y):
         tool.ChaserBrush.start_drawing(self,x,y)
@@ -107,6 +122,8 @@ class WackyBrush1(tool.ChaserBrush):
         else:
             graphics.set_color(color=self.last_color_1)
             self.draw_point(x,y)
+            if self.arrow_end:
+                draw.ngon(x, y, max(graphics.brush_size*3, 5), 3, self.arrow_angle)
     
     def draw_spiral_weave(self, x, y, angle, ds):
         if self.spiral:
@@ -185,12 +202,14 @@ class WackyBrush1(tool.ChaserBrush):
             self.dot_on = not self.dot_on
             if not self.dot_on:
                 self.last_color_1 = graphics.get_line_color()
-        if self.dot_on:
+        if self.dot_on or not self.dotted:
             if self.state_flip == 0:
                 self.draw_point(self.lastx1, self.lasty1)
             self.draw_point(x,y)
             graphics.set_line_width(graphics.brush_size)
             draw.line(x, y, self.lastx1, self.lasty1)
+        if self.arrow_end:
+            self.arrow_angle = self.arrow_angle*0.5 + angle*0.5
         self.lastx1, self.lasty1 = x, y
     
     def draw_point(self,x,y,mult = 1):
