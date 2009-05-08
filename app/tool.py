@@ -195,7 +195,7 @@ def generate_button_row(
     for i in xrange(len(functions)):
         if x > 460: x = start_x
         temp_button = gui.ImageButton(
-            resources.SquareButton, functions[i], x, h+5,
+            resources.SquareButton, functions[i], x, start_y,
             image_2=images[i], parent_group=button_group,
             center_second_img = centered
         )
