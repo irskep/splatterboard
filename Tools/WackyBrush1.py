@@ -25,7 +25,7 @@ class WackyBrush1(tool.ChaserBrush):
         images = [
             resources.Brush_spiral, resources.Brush_weave, 
             resources.Brush_railroad, resources.Brush_dna, 
-            resources.Brush_normal
+            resources.Brush_dotted
         ]
         functions = [
             self.select_spiral, self.select_weave, 

@@ -215,7 +215,6 @@ class ImageButton(Button):
         if self.image_2 != None and self.image_2.width > self.image.width:
             self.scale_factor = float(self.image.width)*0.9
             self.scale_factor /= max(self.image_2.width, self.image_2.height)
-            print self.image_2.width, self.image_2.height, self.image_2.instance_name
         else:
             self.scale_factor = 1.0
     
