@@ -217,7 +217,7 @@ class PaintBucket(tool.Tool):
         self.painter_dot = DotPainter()
         self.painter = self.painter_normal
         
-        tool.generate_line_selector()
+        self.bg = tool.generate_line_selector()
         
         self.button_group = gui.ButtonGroup()
     
@@ -248,6 +248,15 @@ class PaintBucket(tool.Tool):
             tool.controlspace.add(temp_button)
             if painters[i] == self.painter: buttons[i].select()
         self.painter.init()
+    
+    def unselect(self):
+        del self.painter_normal
+        del self.painter_noisy
+        del self.painter_checker
+        del self.painter_target
+        del self.painter_dot
+        tool.clean_up(self.bg)
+        tool.clean_up(self.button_group)
     
     def canvas_changed(self):
         self.painter.should_init = True

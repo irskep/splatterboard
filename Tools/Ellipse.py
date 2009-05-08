@@ -11,7 +11,11 @@ class Ellipse(tool.Tool):
     
     def select(self):
         self.canvas_pre = graphics.get_canvas()
-        tool.generate_line_selector()
+        self.bg = tool.generate_line_selector()
+    
+    def unselect(self):
+        del self.canvas_pre
+        tool.clean_up(self.bg)
     
     def canvas_changed(self):
         self.canvas_pre = graphics.get_canvas()

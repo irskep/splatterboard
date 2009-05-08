@@ -34,7 +34,12 @@ class Selection(tool.Tool):
             self.select_rect, self.select_ellipse,
             self.select_rect_copy, self.select_ellipse_copy
         ]
-        tool.generate_button_row(images, functions)
+        self.bg = tool.generate_button_row(images, functions)
+    
+    def unselect(self):
+        del self.canvas_pre
+        del self.undo_image
+        tool.clean_up(self.bg)
     
     def canvas_changed(self):
         self.select()

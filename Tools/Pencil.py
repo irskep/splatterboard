@@ -9,7 +9,10 @@ class Pencil(tool.Tool):
     def select(self):
         images = [resources.Pencil, resources.Pencil_scribble]
         functions = [self.select_normal, self.select_scribble]
-        tool.generate_button_row(images, functions)
+        self.bg = tool.generate_button_row(images, functions)
+    
+    def unselect(self):
+        tool.clean_up(self.bg)
     
     def select_normal(self):
         self.scribble = False

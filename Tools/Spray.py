@@ -17,11 +17,15 @@ class Spray(tool.Tool):
     
     def select(self):
         self.canvas_pre = graphics.get_canvas()
-        tool.generate_brush_selector()
+        self.bg1 = tool.generate_brush_selector()
         
         images = [resources.Spray, resources.Spray_double, resources.Spray_bubble, resources.Fire]
         functions = [self.select_single, self.select_double, self.select_bubble, self.select_fire]
-        tool.generate_button_row(images, functions)
+        self.bg2 = tool.generate_button_row(images, functions)
+    
+    def unselect(self):
+        tool.clean_up(self.bg1)
+        tool.clean_up(self.bg2)
     
     def select_single(self):
         self.dual_color = False

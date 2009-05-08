@@ -178,6 +178,13 @@ def push_undo(canvas_image_to_push=None):
 
 controlspace = ControlSpace()
 
+def clean_up(buttongroup):
+    for b in buttongroup.buttons:
+        del b
+    del buttongroup.button_left    
+    del buttongroup.button_right
+    del buttongroup
+
 def generate_button_row(
             images, functions, start_x=5, start_y=55, centered=False, page=False
         ):
@@ -207,7 +214,7 @@ def generate_button_row(
     buttons[0].select()
     buttons[0].action()
     controlspace.add(button_group)
-    return buttons
+    return button_group
 
 def generate_brush_selector(start_x=5,start_y=5,max_x=-1,max_y=-1):
     """

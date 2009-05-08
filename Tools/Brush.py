@@ -13,9 +13,16 @@ class Brush(tool.Tool):
     def select(self):
         tool.generate_brush_selector()
         
-        images = [resources.Brush_normal, resources.Brush_variable, resources.Brush_calligraphy]
-        functions = [self.select_normal, self.select_variable, self.select_calligraphy]
-        tool.generate_button_row(images, functions)
+        self.images = [
+            resources.Brush_normal, resources.Brush_variable, resources.Brush_calligraphy
+        ]
+        self.functions = [
+            self.select_normal, self.select_variable, self.select_calligraphy
+        ]
+        self.bg = tool.generate_button_row(self.images, self.functions)
+    
+    def unselect(self):
+        tool.clean_up(self.bg)
     
     def select_normal(self):
         self.calligraphy = False

@@ -19,8 +19,13 @@ class Stamp(tool.Tool):
         
         images = [getattr(resources, i) for i in loaded_items]
         functions = [get_stamp_switcher(s) for s in images]
-        tool.generate_button_row(images, functions, centered=True, page=True)
+        self.bg = tool.generate_button_row(images, functions, centered=True, page=True)
         self.this_stamp = images[0]
+    
+    def unload(self):
+        tool.clean_up(self.bg)
+        del self.canvas_pre
+        resources.unload('Stamps')
     
     def draw_stamp(self, x, y):    
         graphics.set_color(1,1,1,1)

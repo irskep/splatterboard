@@ -14,7 +14,7 @@ class Polygon(tool.Tool):
     
     def select(self):
         self.canvas_pre = graphics.get_canvas()
-        tool.generate_line_selector()
+        self.bg = tool.generate_line_selector()
         
         self.button_group = gui.ButtonGroup()
         buttons = []
@@ -47,6 +47,11 @@ class Polygon(tool.Tool):
             tool.controlspace.add(temporary_button)
             buttons[0].select()
             buttons[0].action()
+    
+    def unselect(self):
+        del self.canvas_pre
+        tool.clean_up(self.bg)
+        tool.clean_up(self.button_group)
     
     def canvas_changed(self):
         self.canvas_pre = graphics.get_canvas()

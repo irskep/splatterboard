@@ -19,13 +19,17 @@ class WackyBrush1(tool.ChaserBrush):
     railroad_dna_flip = 0
     
     def select(self):
-        tool.generate_brush_selector()
+        self.bg1 = tool.generate_brush_selector()
         
         images = [  resources.Brush_spiral, resources.Brush_weave, 
                     resources.Brush_railroad, resources.Brush_dna, resources.Brush_normal]
         functions = [self.select_spiral, self.select_weave, 
                     self.select_railroad, self.select_dna, self.select_normal]
-        tool.generate_button_row(images, functions)
+        self.bg2 = tool.generate_button_row(images, functions)
+    
+    def unselect(self):
+        tool.clean_up(self.bg1)
+        tool.clean_up(self.bg2)
     
     def select_normal(self):
         self.spiral = False
