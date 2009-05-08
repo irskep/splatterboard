@@ -24,7 +24,7 @@ class PaintingEnvironment(object):
         
         #set up undo stack
         self.undo_queue = []
-        self.max_undo = 5   #arbitrary
+        self.max_undo = 10   #arbitrary
         
         #init buttons
         self.save_button = gui.Button(resources.Button, self.save, 
