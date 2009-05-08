@@ -87,7 +87,6 @@ class PaintingEnvironment(object):
         #load tools, make toolbar
         self.toolbar = []
         self.labels = []
-        self.current_tool = None
         self.toolsize = resources.SquareButton.width
         self.load_tools()
         
@@ -141,6 +140,15 @@ class PaintingEnvironment(object):
     
     def on_key_press(self, symbol, modifiers):
         self.try_redraw()
+        if modifiers & key.MOD_ACCEL:
+            if symbol == key.F:
+                graphics.toggle_fullscreen()
+            elif symbol == key.Z:
+                self.undo()
+            elif symbol == key.S:
+                self.save()
+            elif symbol == key.O:
+                self.open()
         if not graphics.drawing and self.current_tool.key_press != tool.Tool.key_press:
             graphics.enter_canvas_mode()
             graphics.drawing = True
@@ -148,8 +156,6 @@ class PaintingEnvironment(object):
             graphics.drawing = False
             graphics.exit_canvas_mode()
         if symbol == key.ESCAPE: return True    #stop Pyglet from quitting
-        if symbol == key.F and modifiers & key.MOD_COMMAND or modifiers & key.MOD_ALT:
-            graphics.toggle_fullscreen()
     
     def on_key_release(self, symbol, modifiers):
         self.try_redraw()
@@ -317,7 +323,7 @@ class PaintingEnvironment(object):
         graphics.set_color_extra(1,1,1,1)
         draw.image_extra(self.canvas_image,0,0)
         #graphics.call_much_later(self.current_tool.select())
-        graphics.call_much_later(self.current_tool.canvas_changed())
+        graphics.call_much_later(self.current_tool.canvas_changed)
     
     def open(self):
         if self.busy: return
@@ -332,7 +338,9 @@ class PaintingEnvironment(object):
     def open_2(self, dt=0):    
         self.busy = False
         path = gui.open_file(type_list = resources.supported_image_formats)
-        if path == None: self.dialog_fail()
+        if path == None or os.path.splitext(path)[1][1:] not in resources.supported_image_formats:
+            self.dialog_fail()
+            return
         if not settings.settings['fullscreen']:
             self.open_3(0,path)
             return
@@ -347,8 +355,10 @@ class PaintingEnvironment(object):
             draw.clear(1,1,1,1)
             graphics.set_color_extra(1,1,1,1)
             graphics.call_thrice(graphics.enter_canvas_mode)
+            graphics.call_thrice(pyglet.gl.glEnable, pyglet.gl.GL_BLEND)
             self.canvas_image = pyglet.image.load(path)
             draw.image_extra(self.canvas_image,graphics.canvas_x+1,graphics.canvas_y+1)
+            graphics.call_thrice(pyglet.gl.glDisable, pyglet.gl.GL_BLEND)
             graphics.call_thrice(graphics.exit_canvas_mode)
             #graphics.call_much_later(self.current_tool.select())
             graphics.call_much_later(self.current_tool.canvas_changed)

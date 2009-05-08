@@ -53,7 +53,6 @@ class Polygon(tool.Tool):
     
     def start_drawing(self, x, y):
         self.x, self.y = x, y
-        #self.fill_color = graphics.get_fill_color()
         self.fill_colors = []
         for i in range(self.sides+1):
             self.fill_colors.extend(graphics.get_fill_color())
