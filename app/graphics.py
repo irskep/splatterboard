@@ -88,6 +88,7 @@ def draw_all_again():
                 exit_canvas_mode()
             func(*args,**kwargs)
         canvas_queue = canvas_queue_2
+        del canvas_queue_2
         canvas_queue_2 = []
         if drawing:
             enter_canvas_mode()

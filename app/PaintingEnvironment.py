@@ -18,7 +18,6 @@ class PaintingEnvironment(object):
     busy = False
     toolbar_bg_1 = (0.44, 0.73, 0.81, 1)
     toolbar_bg_2 = (0.85, 0.96, 0.98, 1)
-    undo_limit = 5
     
     def __init__(self):
         tool.painting_env = self
@@ -192,7 +191,7 @@ class PaintingEnvironment(object):
         self.try_redraw()
         if x > graphics.canvas_x and y > graphics.canvas_y:
             if self.current_tool.ask_undo():
-                self.undo_queue.append(graphics.get_canvas())
+                self.push_undo(graphics.get_canvas())
             graphics.drawing = True
             graphics.enter_canvas_mode()
             self.current_tool.start_drawing(x,y)
@@ -218,10 +217,9 @@ class PaintingEnvironment(object):
     
     def push_undo(self, snap):
         self.undo_queue.append(snap)
-        if len(self.undo_queue) > self.undo_limit:
-            orig = self.undo_limit[0]
-            self.undo_limit = self.undo_limit[1:]
-            del orig
+        if len(self.undo_queue) > self.max_undo:
+            self.undo_queue = self.undo_queue[1:]
+        print len(self.undo_queue)
     
     #------------TOOL THINGS------------#
     def import_libs(self, dir):
