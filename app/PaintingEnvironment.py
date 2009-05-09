@@ -10,6 +10,7 @@ import sys, os, time
 from pyglet.window import key
 import settings
 import collections
+import gc
 
 class PaintingEnvironment(object):
     
@@ -295,14 +296,13 @@ class PaintingEnvironment(object):
     #------------BUTTON THINGS------------#        
     def undo(self):
         if len(self.undo_queue) > 0 and self.current_tool.undo():
-            #self.current_tool.unselect()    #exit current tool, just in case
+            img = self.undo_queue.pop()
             graphics.set_color_extra(1,1,1,1)
             graphics.call_thrice(graphics.enter_canvas_mode)
-            img = self.undo_queue.pop()
             draw.image_extra(img,graphics.canvas_x,graphics.canvas_y)
             graphics.call_thrice(graphics.exit_canvas_mode)
             self.current_tool.canvas_changed()
-            #self.current_tool.select()      #go back into tool
+            gc.collect()
     
     def swap_colors(self):
         graphics.fill_color, graphics.line_color = graphics.line_color, graphics.fill_color

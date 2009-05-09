@@ -79,7 +79,8 @@ else:
 
 def draw_all_again():
     """Call all functions in the queue. Used internally, do not call this."""
-    if settings.settings['fullscreen'] == True or settings.settings['disable_buffer_fix_in_windowed'] == False:
+    if settings.settings['fullscreen'] == True or \
+            settings.settings['disable_buffer_fix_in_windowed'] == False:
         global canvas_queue, canvas_queue_2
         for func, args, kwargs, go_to_cm in canvas_queue:
             if go_to_cm:

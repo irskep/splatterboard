@@ -207,7 +207,7 @@ class Stamp(Tool):
         self.x2, self.y2 = x, y
         self.rot = math.degrees(-math.atan2(y-self.start_y, x-self.start_x))
         self.scale = math.sqrt((x-self.start_x)*(x-self.start_x)+(y-self.start_y)*(y-self.start_y))
-        self.scale /= self.this_stamp.width
+        self.scale /= self.this_stamp.width//2
         graphics.set_color(1,1,1,1)
         draw.image(self.canvas_pre,graphics.canvas_x,graphics.canvas_y)
         self.draw_stamp(x, y)
